@@ -206,6 +206,8 @@ html.no-pre .pre { display: none; }
 .giant span { display: inline-block; }
 .giant { grid-column: 1 / -1; font: 800 18vw/.86 var(--mark); letter-spacing: -.06em; color: var(--ink); padding-top: 40px; white-space: nowrap; overflow: hidden; }
 .ft .bottom { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; padding-top: 12px; }
+.ft .bottom .links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.ft .bottom a:hover { color: var(--green); }
 .ft .bottom > :nth-child(1) { grid-column: 1 / span 2; } .ft .bottom > :nth-child(2) { grid-column: 3 / span 4; } .ft .bottom > :nth-child(3) { grid-column: 7 / -1; }
 @media (max-width: 800px) { .ft .bottom > :nth-child(1) { grid-column: 1 / span 3; } .ft .bottom > :nth-child(2) { grid-column: 4 / span 3; } .ft .bottom > :nth-child(3) { grid-column: 1 / -1; } }
 
@@ -356,7 +358,7 @@ html.no-pre .pre { display: none; }
 <footer class="foot-wrap" id="kontakt">
   <div class="ft grid">
     <p class="lbl c1">TMBingo</p>
-    <p class="lbl c3">Kreativni tim<br>u jednom paketu.<br>© 2026 TMBingo.</p>
+    <p class="lbl c3">TMBingo je usluga obrta<br>Studio23k, vl. Tonći Morić<br>OIB 13393375189<br>Jakova Gotovca 18, Zadar<br>© 2026 TMBingo.</p>
     <div class="c7w">
       <p class="lbl dim">Kontakt</p>
       <p class="mail" id="mail">info@tmbingo.com</p>
@@ -374,7 +376,7 @@ html.no-pre .pre { display: none; }
       <div class="partner"><dt>Partneri projekta</dt><dd><a href="https://zdguide.com" target="_blank" rel="noopener"><img src="assets/partner-zdr.png" alt="ZDR guide"></a></dd></div>
     </dl>
     <p class="giant" aria-hidden="true"><span>tmbingo</span></p>
-    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><a href="#vrh">Natrag na vrh ↑</a></div>
+    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><span class="links"><a href="privatnost.html">Privatnost</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
   </div>
 </footer>
 
