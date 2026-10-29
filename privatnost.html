@@ -7,9 +7,7 @@
 <meta name="description" content="Pravila privatnosti i podaci o obrtu za stranicu tmbingo.com.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Chakra+Petch:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <style>
 html, body { margin: 0; }
 :root {
@@ -38,6 +36,12 @@ h1 { grid-column: 1 / -1; margin: 0 0 80px; font: 500 clamp(40px, 5vw, 72px)/1 v
 .doc dt { color: var(--mid); }
 .doc dd { margin: 0; }
 @media (max-width: 800px) { .side, .doc { grid-column: 1 / -1; } .side { margin-bottom: 40px; } header { padding-bottom: 64px; } .doc dl { grid-template-columns: 1fr; } .doc dd { margin-bottom: 8px; } }
+.doc table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 0 0 12px; }
+.doc th, .doc td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+.doc th { font: 400 12px/1.4 var(--tech); text-transform: uppercase; letter-spacing: .09em; color: var(--mid); }
+.doc .form { border: 1px solid var(--line); padding: 16px; margin: 12px 0; }
+.doc .form p { margin: 0 0 8px; }
+@media (max-width: 800px) { .doc table, .doc tbody, .doc tr, .doc td { display: block; } .doc thead { display: none; } .doc td { border: 0; padding: 2px 0; } .doc tr { border-bottom: 1px solid var(--line); padding: 8px 0; } }
 </style>
 </head>
 <body>
@@ -50,7 +54,7 @@ h1 { grid-column: 1 / -1; margin: 0 0 80px; font: 500 clamp(40px, 5vw, 72px)/1 v
     <dl>
       <dt>Obrt</dt><dd>Studio23k, vl. Tonći Morić</dd>
       <dt>OIB</dt><dd>13393375189</dd>
-      <dt>Adresa</dt><dd>Jakova Gotovca 18, Zadar</dd>
+      <dt>Adresa</dt><dd>Jakova Gotovca 18, 23000 Zadar</dd>
       <dt>E-mail</dt><dd>info@tmbingo.com</dd>
       <dt>PDV</dt><dd>Obveznik nije u sustavu PDV-a, PDV nije obračunat temeljem čl. 90. st. 1. i st. 2. Zakona o PDV-u (NN 73/13).</dd>
     </dl>
@@ -62,7 +66,7 @@ h1 { grid-column: 1 / -1; margin: 0 0 80px; font: 500 clamp(40px, 5vw, 72px)/1 v
       <li><b>Kad rezerviraš video poziv:</b> ime, e-mail i odabrani termin, preko Google kalendara.</li>
       <li><b>Kad posjetiš stranicu:</b> poslužitelj bilježi tehničke podatke (IP adresa, preglednik, vrijeme posjeta) radi sigurnosti i rada stranice.</li>
     </ul>
-    <p>Stranica ne koristi kolačiće za praćenje ni analitiku.</p>
+    <p>Stranica ne koristi kolačiće za praćenje, analitiku ni oglase. Sve o tome piše na stranici <a href="kolacici.html">Kolačići</a>.</p>
 
     <h2>Zašto ih koristimo</h2>
     <ul>
@@ -78,8 +82,8 @@ h1 { grid-column: 1 / -1; margin: 0 0 80px; font: 500 clamp(40px, 5vw, 72px)/1 v
     <h2>Kome podaci idu</h2>
     <p>Koristimo provjerene vanjske usluge koje podatke obrađuju u naše ime:</p>
     <ul>
-      <li>Google (Gmail, Google kalendar, Google Fonts) za e-poštu, termine i fontove na stranici</li>
-      <li>Netlify za smještaj stranice</li>
+      <li>Google (Gmail i Google kalendar) za e-poštu i termine</li>
+      <li>Netlify za smještaj stranice (fontovi i skripte također su kod nas, pa posjet stranici ne šalje podatke drugim servisima)</li>
       <li>pružatelja AI usluge za pripremu tekstova i odgovora</li>
       <li>Figma za dijeljenje dizajna s tobom</li>
     </ul>
@@ -91,6 +95,7 @@ h1 { grid-column: 1 / -1; margin: 0 0 80px; font: 500 clamp(40px, 5vw, 72px)/1 v
     <h2>Tvoja prava</h2>
     <p>Možeš zatražiti pristup svojim podacima, ispravak, brisanje, ograničenje obrade ili prijenos podataka te uložiti prigovor. Piši na info@tmbingo.com i odgovorit ćemo u roku od 30 dana.</p>
     <p>Ako misliš da podatke obrađujemo protivno propisima, možeš podnijeti pritužbu Agenciji za zaštitu osobnih podataka (azop.hr).</p>
+    <p class="dim lbl" style="margin-top:48px">Vidi i: <a href="uvjeti.html">Uvjeti poslovanja</a> · <a href="kolacici.html">Kolačići</a></p>
   </div>
 </main>
 </body>

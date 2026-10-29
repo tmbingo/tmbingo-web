@@ -11,17 +11,20 @@
 <meta property="og:locale" content="hr_HR">
 <meta property="og:url" content="https://tmbingo.com/">
 <meta property="og:title" content="TMBingo · Tvoj kreativni tim u jednom paketu">
-<meta property="og:description" content="Web, dizajn i društvene mreže za 399 € mjesečno. Bez ugovora.">
+<meta property="og:description" content="Web, dizajn i društvene mreže za 399 € mjesečno. Bez obveze trajanja.">
 <meta property="og:image" content="https://tmbingo.com/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Chakra+Petch:wght@400;500&family=Syne:wght@700;800&display=swap">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <style>
 html, body { margin: 0; }
 [hidden] { display: none !important; }
+.cookie { position: fixed; z-index: 70; left: var(--gx, 16px); bottom: max(16px, env(safe-area-inset-bottom, 0px)); max-width: min(380px, calc(100vw - 32px)); background: var(--black); color: var(--white); padding: 16px; display: grid; gap: 12px; font-size: 14px; line-height: 1.45; }
+.cookie p { margin: 0; }
+.cookie a { color: inherit; }
+.cookie button { justify-self: start; background: var(--white); color: var(--black); border: 0; padding: 8px 14px; font: 400 12px/1 var(--tech); letter-spacing: .09em; text-transform: uppercase; cursor: pointer; }
+.cookie button:hover { background: var(--green); color: var(--white); }
 /* Layout: monochrome editorial on a 12-column grid (in the spirit of esrbespoke.au) — tiny technical
    uppercase labels in the first columns, large grotesk statements, full-bleed photography, one green accent. */
 :root {
@@ -232,7 +235,7 @@ html.no-pre .pre { display: none; }
   <nav class="grid" aria-label="Izbornik"><div class="links full">
     <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="#kontakt">Kontakt</a>
   </div></nav>
-  <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez ugovora · 399 € / mj</span></div>
+  <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez obveze trajanja · 399 € / mj</span></div>
 </div>
 
 <header class="hero" id="vrh">
@@ -292,7 +295,7 @@ html.no-pre .pre { display: none; }
   <div class="dark" id="paket">
     <section class="paket grid">
       <p class="lbl c1" data-scramble>TMBingo paket</p>
-      <p class="lbl c3 dim" data-scramble>Bez ugovora.<br>Pauza ili otkaz bilo kada.</p>
+      <p class="lbl c3 dim" data-scramble>Bez obveze trajanja.<br>Pauza ili otkaz bilo kada.</p>
       <h2 class="large">Svaki rad prvo dobiješ u Figmi. Kad ga odobriš, uz pomoć AI-ja kreće kodiranje. Objave za društvene mreže radi dizajner, ne AI, da se istakneš iz mase novih AI sadržaja.</h2>
       <p class="price">399 €<small>mjesečno · umjesto 1890 € (prosječna neto plaća web dizajnera)</small></p>
       <div class="slots">
@@ -350,7 +353,7 @@ html.no-pre .pre { display: none; }
       <details><summary><span class="lbl">02</span>Zašto je tako povoljno?</summary><p>Administraciju, tekstove i komunikaciju radi AI, pa Tonći svaki dan dizajnira umjesto da piše mailove. Ušteda ide tebi.</p></details>
       <details><summary><span class="lbl">03</span>Zašto samo 10 klijenata mjesečno?</summary><p>Jer dizajn radi čovjek. Preko 10 ne bismo stigli raditi kvalitetno. Kad su mjesta popunjena, stavljamo te na listu za idući mjesec.</p></details>
       <details><summary><span class="lbl">04</span>Zašto komunikacija ide e-mailom?</summary><p>Zbog transparentnosti. Svaki dogovor, rok i izmjena ostaju zapisani.</p></details>
-      <details><summary><span class="lbl">05</span>Mogu li pauzirati ili otkazati?</summary><p>Da, u bilo kojem trenutku i bez penala. Nema ugovora.</p></details>
+      <details><summary><span class="lbl">05</span>Mogu li pauzirati ili otkazati?</summary><p>Da, u bilo kojem trenutku i bez penala. Nema dugoročnog ugovora ni minimalnog trajanja, otkaz vrijedi od idućeg mjeseca. Detalji su u <a href="uvjeti.html">uvjetima poslovanja</a>.</p></details>
     </div>
   </section>
 </main>
@@ -358,7 +361,7 @@ html.no-pre .pre { display: none; }
 <footer class="foot-wrap" id="kontakt">
   <div class="ft grid">
     <p class="lbl c1">TMBingo</p>
-    <p class="lbl c3">TMBingo je usluga obrta<br>Studio23k, vl. Tonći Morić<br>OIB 13393375189<br>Jakova Gotovca 18, Zadar<br>© 2026 TMBingo.</p>
+    <p class="lbl c3">TMBingo je usluga obrta<br>Studio23k, vl. Tonći Morić<br>OIB 13393375189<br>Jakova Gotovca 18, 23000 Zadar<br>© 2026 TMBingo.</p>
     <div class="c7w">
       <p class="lbl dim">Kontakt</p>
       <p class="mail" id="mail">info@tmbingo.com</p>
@@ -376,11 +379,16 @@ html.no-pre .pre { display: none; }
       <div class="partner"><dt>Partneri projekta</dt><dd><a href="https://zdguide.com" target="_blank" rel="noopener"><img src="assets/partner-zdr.png" alt="ZDR guide"></a></dd></div>
     </dl>
     <p class="giant" aria-hidden="true"><span>tmbingo</span></p>
-    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><span class="links"><a href="privatnost.html">Privatnost</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
+    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><span class="links"><a href="uvjeti.html">Uvjeti</a><a href="privatnost.html">Privatnost</a><a href="kolacici.html">Kolačići</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
   </div>
 </footer>
 
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<div class="cookie" id="cookie" role="region" aria-label="Obavijest o kolačićima" hidden>
+  <p>Ne koristimo kolačiće za praćenje, analitiku ni oglase. Fontovi i skripte učitavaju se s našeg servera. <a href="kolacici.html">Više o kolačićima</a></p>
+  <button type="button" id="cookieOk">U redu</button>
+</div>
+
+<script src="assets/js/lenis.min.js"></script>
 <script>
 /* BROJ SLOBODNIH MJESTA: Tonći ovdje upisuje koliko je mjesta još slobodno ovaj mjesec (0 do 10). */
 var SLOBODNA_MJESTA = 10;
@@ -482,6 +490,15 @@ var MJESEC = 'studeni 2026';
   addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
 
   /* copy */
+  /* cookie notice: informational only (no tracking); the dismissal is remembered in localStorage */
+  var ck = document.getElementById('cookie'), seen = false;
+  try { seen = localStorage.getItem('tmb-obavijest') === '1'; } catch (e) {}
+  if (!seen) ck.hidden = false;
+  document.getElementById('cookieOk').addEventListener('click', function () {
+    ck.hidden = true;
+    try { localStorage.setItem('tmb-obavijest', '1'); } catch (e) {}
+  });
+
   document.getElementById('copyMail').addEventListener('click', function () {
     var btn = this, txt = document.getElementById('mail');
     var done = function () { btn.textContent = 'Kopirano'; setTimeout(function () { btn.textContent = 'Kopiraj adresu'; }, 1600); };
