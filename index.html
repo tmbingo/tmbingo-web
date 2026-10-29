@@ -202,6 +202,10 @@ html.no-pre .pre { display: none; }
 .btn { font: 400 12px/1 var(--tech); letter-spacing: .09em; text-transform: uppercase; padding: 10px 12px; background: var(--ink); color: var(--white); border: 0; cursor: pointer; display: inline-flex; align-items: center; }
 .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
 .btn:hover { background: var(--green); color: var(--white); box-shadow: none; }
+.btn.light { background: var(--white); color: var(--ink); }
+.btn.ghost.light { background: transparent; color: var(--white); box-shadow: inset 0 0 0 1px var(--white); }
+.btn.light:hover { background: var(--green); color: var(--white); box-shadow: none; }
+.slots .cta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .ft dl { margin: 0; display: grid; gap: 18px; }
 .ft dt { color: var(--mid); }
 .ft dd { margin: 4px 0 0; }
@@ -233,7 +237,7 @@ html.no-pre .pre { display: none; }
 <div class="menu" id="menu" aria-hidden="true">
   <div class="grid"><span class="lbl c1">TMBingo</span><span class="lbl c3">Izbornik</span><button class="lbl close c11" type="button" id="closeMenu">Zatvori</button></div>
   <nav class="grid" aria-label="Izbornik"><div class="links full">
-    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="#kontakt">Kontakt</a>
+    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="#kontakt">Kontakt</a><a href="/app/">Prijava</a>
   </div></nav>
   <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez obveze trajanja · 399 € / mj</span></div>
 </div>
@@ -302,6 +306,7 @@ html.no-pre .pre { display: none; }
         <p class="lbl">Najviše 10 novih klijenata mjesečno</p>
         <div class="slot-grid" id="slotGrid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <p class="lbl dim" id="slotText">Slobodna mjesta ovaj mjesec</p>
+        <p class="cta"><a class="btn light" href="/paket/">Uzmi paket</a><a class="btn ghost light" href="/app/">Prijava za klijente</a></p>
       </div>
     </section>
     <section class="list grid" aria-label="Kako radimo">
@@ -379,7 +384,7 @@ html.no-pre .pre { display: none; }
       <div class="partner"><dt>Partneri projekta</dt><dd><a href="https://zdguide.com" target="_blank" rel="noopener"><img src="assets/partner-zdr.png" alt="ZDR guide"></a></dd></div>
     </dl>
     <p class="giant" aria-hidden="true"><span>tmbingo</span></p>
-    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><span class="links"><a href="uvjeti.html">Uvjeti</a><a href="privatnost.html">Privatnost</a><a href="kolacici.html">Kolačići</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
+    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><span class="links"><a href="/app/">Prijava za klijente</a><a href="uvjeti.html">Uvjeti</a><a href="privatnost.html">Privatnost</a><a href="kolacici.html">Kolačići</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
   </div>
 </footer>
 
@@ -399,9 +404,14 @@ var MJESEC = 'studeni 2026';
   var root = document.documentElement;
 
   /* slots */
-  var free = Math.max(0, Math.min(10, SLOBODNA_MJESTA));
-  document.querySelectorAll('#slotGrid i').forEach(function (el, i) { el.classList.add(i < 10 - free ? 'taken' : 'free'); });
-  document.getElementById('slotText').textContent = free > 0 ? 'Slobodno za ' + MJESEC + ': ' + free + ' od 10' : 'Za ' + MJESEC + ' smo popunjeni · lista čekanja';
+  function slots(n, mjesec) {
+    var free = Math.max(0, Math.min(10, n));
+    document.querySelectorAll('#slotGrid i').forEach(function (el, i) { el.classList.toggle('taken', i < 10 - free); el.classList.toggle('free', i >= 10 - free); });
+    document.getElementById('slotText').textContent = free > 0 ? 'Slobodno za ' + mjesec + ': ' + free + ' od 10' : 'Za ' + mjesec + ' smo popunjeni · lista čekanja';
+  }
+  slots(SLOBODNA_MJESTA, MJESEC);
+  /* kad je CRM spojen na bazu, broj mjesta se računa iz narudžbi */
+  fetch('/api/narudzba').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) { if (d && !d.demo) slots(d.slobodno, d.mjesec); }).catch(function () {});
 
   /* text effects: scramble labels, type the headline */
   var chars = 'ABCDEFGHIJKLMNOPRSTUVZ0123456789';

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Uzmi TMBingo paket</title>
+<meta name="description" content="Naruči TMBingo paket: web, dizajn i društvene mreže za 399 € mjesečno, bez obveze trajanja.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://tmbingo.com/paket/">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/app/app.css">
+<style>
+.order { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: start; }
+.sum { display: grid; gap: 24px; position: sticky; top: 80px; }
+.price { font: 700 clamp(56px, 7vw, 96px)/.9 var(--mark); letter-spacing: -.05em; }
+.price small { display: block; font: 400 13px/1.4 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--mid); margin-top: 10px; }
+.inc li { border-top: 1px solid var(--line); padding: 10px 0; display: flex; gap: 12px; }
+.inc li::before { content: "+"; font-family: var(--tech); color: var(--green); }
+.slots { display: flex; gap: 4px; }
+.slots i { width: 100%; height: 6px; background: var(--grey); }
+.slots i.free { background: var(--green); }
+.next { counter-reset: n; display: grid; gap: 0; margin-top: 32px; max-width: 760px; }
+.next li { counter-increment: n; display: grid; grid-template-columns: 48px 1fr; border-top: 1px solid var(--line); padding: 14px 0; }
+.next li::before { content: "0" counter(n); font: 400 13px/1.6 var(--tech); color: var(--mid); }
+@media (max-width: 900px) { .order { grid-template-columns: 1fr; gap: 40px; } .sum { position: static; } }
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap in"><a class="logo" href="/"><img src="/assets/logo-light.png" alt="TMBingo" width="63" height="20"></a><nav class="lbl" aria-label="Izbornik"><a href="/">Naslovna</a><a href="/#paket">Paket</a></nav><div class="me lbl"><a href="/app/" style="text-decoration:none">Prijava</a></div></div></header>
+
+<main class="wrap" id="vrh">
+  <div class="head"><p class="lbl dim">TMBingo paket</p><h1 id="naslov">Tvoj kreativni tim, od ovog mjeseca</h1></div>
+
+  <div class="order" id="order">
+    <aside class="sum">
+      <p class="price">399 €<small>mjesečno · bez obveze trajanja</small></p>
+      <ul class="inc">
+        <li>Web stranice, hosting i održavanje</li>
+        <li>Logo, branding i tiskani materijali</li>
+        <li>Društvene mreže, web banneri i newsletter</li>
+        <li>Objave dizajnira čovjek, ne AI</li>
+        <li>Svaki rad prvo dobiješ u Figmi na odobrenje</li>
+        <li>Zadaci, poruke i datoteke na jednom mjestu</li>
+      </ul>
+      <div><p class="lbl" id="slotTxt">Najviše 10 novih klijenata mjesečno</p><div class="slots" id="slots" aria-hidden="true"></div></div>
+    </aside>
+
+    <form class="form" id="f" novalidate>
+      <div class="two">
+        <label class="field"><span class="lbl">Ime i prezime</span><input class="input" name="ime" autocomplete="name" required maxlength="100"></label>
+        <label class="field"><span class="lbl">E-mail</span><input class="input" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="200"></label>
+      </div>
+      <div class="two">
+        <label class="field"><span class="lbl">Tvrtka ili obrt <span class="dim">(nije obavezno)</span></span><input class="input" name="tvrtka" autocomplete="organization" maxlength="120"></label>
+        <label class="field"><span class="lbl">OIB <span class="dim">(za račun tvrtki)</span></span><input class="input" name="oib" inputmode="numeric" maxlength="11" pattern="\d{11}"></label>
+      </div>
+      <div class="two">
+        <label class="field"><span class="lbl">Adresa <span class="dim">(za uplatnicu)</span></span><input class="input" name="adresa" autocomplete="street-address" maxlength="120"></label>
+        <label class="field"><span class="lbl">Mjesto</span><input class="input" name="mjesto" autocomplete="address-level2" maxlength="80" placeholder="npr. 23000 Zadar"></label>
+      </div>
+      <label class="field"><span class="lbl">Što ti najviše treba? <span class="dim">(nije obavezno)</span></span><textarea class="input" name="napomena" maxlength="2000" placeholder="Npr. novi web za apartmane i objave za Instagram."></textarea></label>
+      <input type="text" name="web" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+      <label class="check"><input type="checkbox" name="uvjeti" required><span>Prihvaćam <a href="/uvjeti.html" target="_blank">uvjete poslovanja</a> i <a href="/privatnost.html" target="_blank">pravila privatnosti</a>.</span></label>
+      <label class="check"><input type="checkbox" name="odmah"><span>Želim da s radom počnete odmah nakon uplate. Znam da kao potrošač tada za već obavljeni dio plaćam razmjerni iznos ako raskinem ugovor u roku od 14 dana.</span></label>
+      <p class="err" id="e" hidden></p>
+      <div><button class="btn" type="submit">Naruči i prikaži uplatu</button></div>
+      <p class="hint">Plaćaš uplatom na račun (barkod ili QR kod). Čim uplata stigne, na e-mail dobiješ link za prijavu.</p>
+    </form>
+  </div>
+
+  <section id="done" hidden>
+    <p class="lbl ok" style="margin-bottom:16px">Narudžba je zaprimljena</p>
+    <div id="slip"></div>
+    <ol class="next">
+      <li><span>Uplati 399 € skeniranjem barkoda ili QR koda, ili ručno prema podacima iznad. Iste podatke smo ti poslali i na e-mail.</span></li>
+      <li><span>Čim uplata stigne, potvrdimo je i pošaljemo ti link za prijavu u TMBingo prostor.</span></li>
+      <li><span>Dodaš prvi zadatak, a mi ti se javljamo istog dana.</span></li>
+    </ol>
+  </section>
+</main>
+
+<script src="/app/uplata.js"></script>
+<script>
+(function () {
+  var f = document.getElementById('f'), e = document.getElementById('e');
+  function slots(free, max, mjesec) {
+    var g = document.getElementById('slots'); g.innerHTML = '';
+    for (var i = 0; i < max; i++) { var el = document.createElement('i'); if (i >= max - free) el.className = 'free'; g.appendChild(el); }
+    document.getElementById('slotTxt').textContent = free > 0 ? 'Slobodno za ' + mjesec + ': ' + free + ' od ' + max : 'Za ' + mjesec + ' smo popunjeni';
+  }
+  slots(10, 10, 'ovaj mjesec');
+  fetch('/api/narudzba').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) { if (d && !d.demo) slots(d.slobodno, d.max, d.mjesec); }).catch(function () {});
+
+  f.onsubmit = async function (ev) {
+    ev.preventDefault();
+    e.hidden = true;
+    var d = Object.fromEntries(new FormData(f).entries());
+    var msg = d.ime.trim().length < 2 ? 'Upiši ime i prezime.'
+      : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email.trim()) ? 'Upiši ispravnu e-mail adresu.'
+      : d.oib && !/^\d{11}$/.test(d.oib.trim()) ? 'OIB ima 11 znamenki.'
+      : !f.uvjeti.checked ? 'Za narudžbu treba prihvatiti uvjete poslovanja.' : '';
+    if (msg) { e.textContent = msg; e.hidden = false; return; }
+    d.uvjeti = true;
+    if (f.odmah.checked) d.napomena = '[Traži početak odmah, prije isteka 14 dana] ' + (d.napomena || '');
+    delete d.odmah;
+    var b = f.querySelector('button[type=submit]'); b.disabled = true; b.textContent = 'Šaljem…';
+    try {
+      var r = await fetch('/api/narudzba', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d) });
+      var j = await r.json().catch(function () { return {}; });
+      if (!r.ok) throw new Error(j.greska || 'Narudžba nije poslana. Pokušaj ponovno ili piši na info@tmbingo.com.');
+      document.getElementById('slip').innerHTML = window.TMB_UPLATA(j.uplata);
+      document.getElementById('order').hidden = true;
+      document.getElementById('done').hidden = false;
+      document.getElementById('naslov').textContent = 'Hvala, još samo uplata';
+      window.scrollTo(0, 0);
+    } catch (err) {
+      e.textContent = err.message; e.hidden = false; b.disabled = false; b.textContent = 'Naruči i prikaži uplatu';
+    }
+  };
+})();
+</script>
+</body>
+</html>

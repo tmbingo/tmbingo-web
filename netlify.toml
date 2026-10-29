@@ -2,6 +2,11 @@
 [build]
   publish = "."
 
+# CRM: funkcije za narudžbe, potvrdu uplate i e-mail obavijesti (adrese /api/...)
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 [[headers]]
   for = "/assets/*"
   [headers.values]

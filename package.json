@@ -1,0 +1,11 @@
+{
+  "name": "tmbingo-web",
+  "private": true,
+  "type": "module",
+  "description": "tmbingo.com: stranica i CRM (Netlify funkcije)",
+  "dependencies": {
+    "@supabase/supabase-js": "2.118.0",
+    "bwip-js": "4.11.4",
+    "nodemailer": "7.0.10"
+  }
+}

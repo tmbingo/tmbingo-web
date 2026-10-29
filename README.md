@@ -41,3 +41,7 @@ pa otvori http://localhost:8000.
 - `kolacici.html` – kolačići (stranica ih ne postavlja)
 
 Fontovi (`assets/fonts/`) i Lenis (`assets/js/`) su na našem serveru, bez učitavanja s Googlea ili unpkg-a. Ako dodaš analitiku ili chat, prvo treba dodati traženje pristanka.
+
+## TMBingo prostor (CRM)
+
+Narudžba paketa (`/paket/`), prostor za klijente i admin (`/app/`), Netlify funkcije (`netlify/`) i baza (`supabase/schema.sql`). Postavljanje i svakodnevni rad opisani su u [CRM.md](CRM.md).
