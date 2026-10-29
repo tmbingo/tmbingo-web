@@ -33,3 +33,11 @@ python3 -m http.server 8000
 ```
 
 pa otvori http://localhost:8000.
+
+## Pravne stranice
+
+- `uvjeti.html` – uvjeti poslovanja, pravo na raskid i obrazac
+- `privatnost.html` – privatnost i podaci o obrtu
+- `kolacici.html` – kolačići (stranica ih ne postavlja)
+
+Fontovi (`assets/fonts/`) i Lenis (`assets/js/`) su na našem serveru, bez učitavanja s Googlea ili unpkg-a. Ako dodaš analitiku ili chat, prvo treba dodati traženje pristanka.

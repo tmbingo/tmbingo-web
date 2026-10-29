@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kolačići · TMBingo</title>
+<meta name="description" content="Koje kolačiće i lokalnu pohranu koristi stranica tmbingo.com.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+html, body { margin: 0; }
+:root {
+  --ink: #0b0b0b; --white: #ffffff; --mid: #8a8a8a; --line: rgba(0,0,0,.14); --green: #3faf7f;
+  --body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --tech: "Chakra Petch", "Eurostile", ui-monospace, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--white); color: var(--ink); font: 400 17px/1.6 var(--body); }
+a { color: inherit; }
+a:hover { color: var(--green); }
+.lbl { font: 400 14px/1.4 var(--tech); text-transform: uppercase; letter-spacing: .09em; }
+.dim { color: var(--mid); }
+.wrap { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 16px; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 80px max(16px, env(safe-area-inset-left, 0px)); }
+header { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 16px; padding-bottom: 120px; }
+header a { text-decoration: none; }
+h1 { grid-column: 1 / -1; margin: 0 0 80px; font: 500 clamp(40px, 5vw, 72px)/1 var(--body); letter-spacing: -.01em; }
+.side { grid-column: 1 / span 4; }
+.doc { grid-column: 7 / -1; max-width: 68ch; }
+.doc h2 { font: 400 14px/1.4 var(--tech); text-transform: uppercase; letter-spacing: .09em; margin: 48px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+.doc h2:first-child { margin-top: 0; }
+.doc p, .doc ul { margin: 0 0 12px; }
+.doc ul { padding-left: 20px; }
+.doc dl { margin: 0; display: grid; grid-template-columns: 9em 1fr; gap: 6px 16px; }
+.doc dt { color: var(--mid); }
+.doc dd { margin: 0; }
+@media (max-width: 800px) { .side, .doc { grid-column: 1 / -1; } .side { margin-bottom: 40px; } header { padding-bottom: 64px; } .doc dl { grid-template-columns: 1fr; } .doc dd { margin-bottom: 8px; } }
+.doc table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 0 0 12px; }
+.doc th, .doc td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+.doc th { font: 400 12px/1.4 var(--tech); text-transform: uppercase; letter-spacing: .09em; color: var(--mid); }
+.doc .form { border: 1px solid var(--line); padding: 16px; margin: 12px 0; }
+.doc .form p { margin: 0 0 8px; }
+@media (max-width: 800px) { .doc table, .doc tbody, .doc tr, .doc td { display: block; } .doc thead { display: none; } .doc td { border: 0; padding: 2px 0; } .doc tr { border-bottom: 1px solid var(--line); padding: 8px 0; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="lbl"><a href="index.html">TMBingo</a><a href="index.html">← Natrag na stranicu</a></header>
+  <h1>Kolačići</h1>
+  <p class="side lbl dim">Vrijedi od 29. 10. 2026.</p>
+  <div class="doc">
+    <h2>Ukratko</h2>
+    <p>Stranica tmbingo.com ne postavlja kolačiće. Nema analitike, oglasa, Facebook piksela ni drugih alata za praćenje. Fontovi i skripte učitavaju se s našeg servera, pa posjet stranici ne šalje tvoje podatke Googleu ni drugim servisima.</p>
+
+    <h2>Što su kolačići</h2>
+    <p>Kolačići su male datoteke koje stranica sprema u tvoj preglednik. Slično radi i lokalna pohrana preglednika (localStorage). Za sve što nije nužno za rad stranice zakon traži tvoj prethodni pristanak.</p>
+
+    <h2>Što spremamo u tvoj preglednik</h2>
+    <table>
+      <thead><tr><th>Naziv</th><th>Vrsta</th><th>Svrha</th><th>Trajanje</th></tr></thead>
+      <tbody>
+        <tr><td>tmb-obavijest</td><td>Lokalna pohrana, nužno</td><td>Pamti da si zatvorio ili zatvorila obavijest o kolačićima, da ti ne iskače na svakoj posjeti. Sadrži samo vrijednost „1“ i ne šalje se nikome.</td><td>Dok ga ne obrišeš</td></tr>
+      </tbody>
+    </table>
+    <p>Taj zapis možeš obrisati u postavkama preglednika (brisanje podataka web stranica). Obavijest će se tada opet prikazati.</p>
+
+    <h2>Vanjske stranice</h2>
+    <p>Kad klikneš na rezervaciju video poziva, otvara se Google kalendar. To je Googleova stranica s Googleovim kolačićima i pravilima (policies.google.com). Isto vrijedi za poveznice na druge stranice, npr. studio23k.eu ili zdguide.com.</p>
+
+    <h2>Ako nešto promijenimo</h2>
+    <p>Ako jednog dana dodamo analitiku ili chat na stranicu, prije toga ćemo zatražiti tvoj pristanak i ažurirati ovu stranicu.</p>
+
+    <h2>Propisi</h2>
+    <p>Pravila o kolačićima propisuje Zakon o elektroničkim komunikacijama (NN 76/22), a obradu osobnih podataka Opća uredba o zaštiti podataka (GDPR). Više o osobnim podacima piše na stranici <a href="privatnost.html">Privatnost</a>.</p>
+    <p>Pitanja šalji na info@tmbingo.com.</p>
+    <p class="dim lbl" style="margin-top:48px">Vidi i: <a href="uvjeti.html">Uvjeti poslovanja</a> · <a href="privatnost.html">Privatnost</a></p>
+  </div>
+</main>
+</body>
+</html>
