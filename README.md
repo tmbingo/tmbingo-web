@@ -1,0 +1,35 @@
+# tmbingo.com
+
+Web stranica TMBingo, „Tvoj kreativni tim u jednom paketu“. Statička stranica (HTML, CSS i JS u jednoj datoteci), bez builda.
+
+## Struktura
+
+- `index.html` – cijela stranica
+- `assets/` – fotografije, logo, favicon i slika za dijeljenje (og-image)
+- `netlify.toml` – postavke za Netlify
+
+## Broj slobodnih mjesta
+
+Na dnu `index.html` promijeni ova dva retka:
+
+```js
+var SLOBODNA_MJESTA = 10;   // koliko je mjesta još slobodno ovaj mjesec (0 do 10)
+var MJESEC = 'studeni 2026';
+```
+
+Commit na `main` i Netlify sam objavi novu verziju za minutu.
+
+## Objava na Netlify
+
+1. Netlify → Add new site → Import an existing project → GitHub → `tmbingo/tmbingo-web`.
+2. Build command: prazno. Publish directory: `.` (već piše u `netlify.toml`).
+3. Deploy. Provjeri testnu adresu (`*.netlify.app`).
+4. Domena: Site configuration → Domain management → Add domain → `tmbingo.com`, pa promijeni DNS kod registra prema uputama Netlifyja.
+
+## Lokalni pregled
+
+```sh
+python3 -m http.server 8000
+```
+
+pa otvori http://localhost:8000.

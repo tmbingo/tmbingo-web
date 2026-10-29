@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TMBingo · Tvoj kreativni tim u jednom paketu</title>
+<meta name="description" content="TMBingo paket: web, dizajn i društvene mreže za 399 € mjesečno. AI vodi tekstove i dogovor, Tonći dizajnira i izrađuje. Najviše 10 klijenata mjesečno.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://tmbingo.com/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="hr_HR">
+<meta property="og:url" content="https://tmbingo.com/">
+<meta property="og:title" content="TMBingo · Tvoj kreativni tim u jednom paketu">
+<meta property="og:description" content="Web, dizajn i društvene mreže za 399 € mjesečno. Bez ugovora.">
+<meta property="og:image" content="https://tmbingo.com/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Chakra+Petch:wght@400;500&family=Syne:wght@700;800&display=swap">
+<style>
+html, body { margin: 0; }
+[hidden] { display: none !important; }
+/* Layout: monochrome editorial on a 12-column grid (in the spirit of esrbespoke.au) — tiny technical
+   uppercase labels in the first columns, large grotesk statements, full-bleed photography, one green accent. */
+:root {
+  --black: #000000;
+  --ink: #0b0b0b;
+  --white: #ffffff;
+  --grey: #d4d4d4;
+  --mid: #8a8a8a;
+  --line: rgba(0,0,0,.14);
+  --line-d: rgba(255,255,255,.18);
+  --green: #3faf7f;
+  --body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --tech: "Chakra Petch", "Eurostile", "DIN Alternate", ui-monospace, monospace;
+  --mark: "Syne", "Avenir Next", system-ui, sans-serif;
+  --gx: max(16px, env(safe-area-inset-left, 0px));
+  --gy: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+body { background: var(--white); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--black); }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+img { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+.lbl { font: 400 14px/1.4 var(--tech); text-transform: uppercase; letter-spacing: .09em; }
+.lbl.dim { color: var(--mid); }
+.grid {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 16px;
+  padding-left: var(--gx); padding-right: var(--gy);
+}
+.c1 { grid-column: 1 / span 2; } .c3 { grid-column: 3 / span 4; } .c7 { grid-column: 7 / span 4; } .c11 { grid-column: 11 / span 2; }
+.c7w { grid-column: 7 / -1; } .full { grid-column: 1 / -1; }
+@media (max-width: 800px) {
+  .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .c1 { grid-column: 1 / span 3; } .c3 { grid-column: 4 / span 3; } .c7, .c7w { grid-column: 1 / -1; } .c11 { grid-column: 4 / span 3; }
+}
+
+/* Preloader */
+.pre { position: fixed; inset: 0; z-index: 80; background: var(--black); color: var(--white); display: grid; align-content: end; padding: 0 var(--gy) 40px var(--gx); transition: transform .9s cubic-bezier(.77,0,.18,1); }
+.pre.out { transform: translateY(-100%); }
+.pre .row { display: flex; gap: 10vw; margin-bottom: 18px; }
+.pre .mask { overflow: hidden; }
+.pre img { height: clamp(64px, 12vw, 150px); width: auto; transform: translateY(105%); animation: rise .9s .15s cubic-bezier(.2,.8,.2,1) forwards; }
+@keyframes rise { to { transform: translateY(0); } }
+html.no-pre .pre { display: none; }
+
+/* Header */
+.top { position: absolute; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 20; color: var(--white); padding-top: 16px; }
+.top nav ul { display: grid; gap: 2px; }
+.top nav a:hover, .menu a:hover { color: var(--green); }
+.burger { justify-self: end; width: 22px; height: 14px; display: grid; align-content: space-between; background: none; border: 0; padding: 0; cursor: pointer; color: inherit; }
+.burger i { display: block; height: 1.5px; background: currentColor; }
+.chip {
+  position: fixed; z-index: 40; top: calc(env(safe-area-inset-top, 0px) + 14px); right: var(--gy);
+  display: flex; gap: 4px; transform: translateY(-160%); transition: transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.chip.on { transform: none; }
+.chip a, .chip button { background: #2b2b2b; color: var(--white); font: 400 12px/1 var(--tech); letter-spacing: .09em; text-transform: uppercase; padding: 8px 10px; border: 0; cursor: pointer; display: grid; place-items: center; }
+.chip button { width: 32px; padding: 8px; }
+.chip button span { width: 14px; height: 9px; display: grid; align-content: space-between; }
+.chip button span i { display: block; height: 1.5px; background: currentColor; }
+
+/* Menu overlay */
+.menu { position: fixed; inset: 0; z-index: 70; background: var(--black); color: var(--white); display: grid; grid-template-rows: auto 1fr auto; padding-block: calc(env(safe-area-inset-top, 0px) + 16px) 24px; clip-path: inset(0 0 100% 0); transition: clip-path .7s cubic-bezier(.77,0,.18,1); }
+.menu.open { clip-path: inset(0 0 0 0); }
+.menu .links { align-self: center; display: grid; gap: 4px; }
+.menu .links a { font: 500 clamp(40px, 7vw, 92px)/1 var(--body); letter-spacing: -.01em; }
+.menu .close { justify-self: end; background: none; border: 0; color: inherit; cursor: pointer; }
+
+/* Hero */
+.hero { position: relative; background: var(--black); color: var(--white); height: min(100svh, 900px); min-height: 560px; overflow: hidden; }
+.hero .bg { position: absolute; inset: 0; }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 65%, rgba(0,0,0,.5) 100%); pointer-events: none; }
+.hero .bg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.6s ease; transform: scale(1.08); }
+.hero .bg img.on { opacity: .5; animation: drift 9s linear forwards; }
+@keyframes drift { from { transform: scale(1.12); } to { transform: scale(1.0); } }
+.hero .stage { position: relative; z-index: 2; height: 100%; grid-template-rows: 1fr auto; padding-bottom: 16px; }
+.hero h1 { grid-column: 1 / span 6; align-self: center; font: 700 clamp(34px, 4.2vw, 62px)/1.02 var(--mark); letter-spacing: -.04em; max-width: 16ch; text-wrap: balance; }
+.hero .side { grid-column: 7 / span 3; align-self: center; max-width: 30ch; }
+.hero .foot { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: end; }
+.hero .foot > :first-child { grid-column: 1 / span 6; }
+.hero .foot > :last-child { grid-column: 7 / span 6; }
+@media (max-width: 800px) { .top nav { display: none; } .top .burger { grid-column: 6; } .hero h1 { grid-column: 1 / -1; } .hero .side { display: none; } .hero .foot > :first-child { grid-column: 1 / span 3; } .hero .foot > :last-child { grid-column: 4 / span 3; } }
+
+/* Intro */
+.intro { padding-block: 16px 64px; row-gap: 160px; }
+.intro .large { grid-column: 1 / -1; }
+.large { font: 500 clamp(26px, 2.8vw, 40px)/1.02 var(--body); letter-spacing: -.01em; text-wrap: pretty; max-width: 60ch; }
+.large .g { color: var(--green); }
+@media (max-width: 800px) { .intro { row-gap: 96px; } }
+
+/* Full-bleed photos */
+.bleed { position: relative; height: min(80vw, 760px); overflow: hidden; background: #1a1a1a; }
+.bleed img { position: absolute; inset: -8% 0; width: 100%; height: 116%; object-fit: cover; will-change: transform; }
+.bleed .lbl { position: absolute; left: var(--gx); top: 16px; z-index: 2; color: var(--white); background: #000; padding: 2px 6px; }
+
+/* Services list (scroll-linked) */
+.svc { padding-block: 16px 140px; }
+.svc .head { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; margin-bottom: 120px; }
+.svc .head > :first-child { grid-column: 1 / span 6; }
+.svc .head > :last-child { grid-column: 7 / span 3; }
+.svc ol { grid-column: 1 / span 6; list-style: none; margin: 0; padding: 0; }
+.svc li { font: 500 clamp(40px, 5.4vw, 80px)/1 var(--body); letter-spacing: -.01em; color: var(--grey); transition: color .35s ease; }
+.svc li.on { color: var(--ink); }
+.svc .thumbs { grid-column: 7 / span 2; position: sticky; top: 40vh; align-self: start; aspect-ratio: 1; max-width: 100%; }
+.svc .thumbs img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .35s ease; }
+.svc .thumbs img.on { opacity: 1; }
+@media (max-width: 800px) { .svc ol { grid-column: 1 / span 4; } .svc .thumbs { grid-column: 5 / span 2; } .svc .head > :first-child { grid-column: 1 / span 3; } .svc .head > :last-child { grid-column: 4 / span 3; } }
+
+/* Dark package section */
+.dark { background: var(--black); color: var(--white); }
+.paket { padding-block: 16px 80px; row-gap: 160px; }
+.paket .large { grid-column: 1 / -1; }
+.price { grid-column: 1 / span 6; font: 500 clamp(64px, 9vw, 140px)/.9 var(--body); letter-spacing: -.03em; }
+.price small { display: block; margin-top: 14px; font: 400 14px/1.4 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--mid); }
+.slots { grid-column: 7 / span 6; display: grid; gap: 14px; align-content: end; }
+.slot-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; max-width: 420px; }
+.slot-grid i { aspect-ratio: 1; border: 1px solid var(--line-d); }
+.slot-grid i.taken { background: var(--white); border-color: var(--white); }
+.slot-grid i.free { background: var(--green); border-color: var(--green); }
+@media (max-width: 800px) { .price, .slots { grid-column: 1 / -1; } }
+
+.list { padding-block: 0 120px; }
+.list > .lbl { grid-column: 1 / span 6; padding-top: 18px; border-top: 1px solid var(--line-d); }
+.list ol { grid-column: 7 / -1; list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-d); }
+.list li { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: baseline; padding-block: 18px; border-bottom: 1px solid var(--line-d); font: 500 20px/1.2 var(--body); }
+.list li .lbl { color: var(--mid); font-size: 12px; }
+.list li em { font-style: normal; font: 400 12px/1 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--green); }
+.light .list > .lbl, .light .list ol { border-color: var(--line); }
+.light .list li { border-color: var(--line); }
+@media (max-width: 800px) { .list > .lbl { grid-column: 1 / -1; border-top: 0; } .list ol { grid-column: 1 / -1; margin-top: 12px; } .list li { grid-template-columns: 40px 1fr; } .list li em { grid-column: 2; } }
+
+/* Work */
+.work { padding-block: 16px 140px; row-gap: 16px; }
+.work .head { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; margin-bottom: 104px; }
+.work .head > :first-child { grid-column: 1 / span 6; }
+.work .head > :last-child { grid-column: 7 / span 3; }
+.shot { position: relative; overflow: hidden; background: #eee; aspect-ratio: 4 / 5; max-width: 100%; }
+.shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+.shot:hover img { transform: scale(1.04); }
+.shot .lbl { position: absolute; left: 10px; bottom: 10px; background: #000; color: #fff; padding: 2px 6px; font-size: 12px; }
+.w1 { grid-column: 1 / span 4; } .w2 { grid-column: 5 / span 4; } .w3 { grid-column: 9 / span 4; }
+.w2 { background: #d9a2a3; } .w1 { background: #fff; } .w1 img { object-fit: contain; }
+.projects { grid-column: 7 / -1; margin-top: 64px; border-top: 1px solid var(--line); }
+.projects li { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding-block: 16px; border-bottom: 1px solid var(--line); font: 500 20px/1.2 var(--body); }
+.projects li span { font: 400 12px/1.6 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--mid); }
+.clients { grid-column: 1 / span 5; margin-top: 64px; display: grid; gap: 18px; }
+.clients p { font-size: 15px; color: #444; max-width: 46ch; }
+@media (max-width: 800px) { .work .head > :first-child { grid-column: 1 / span 3; } .work .head > :last-child { grid-column: 4 / span 3; } .w1, .w2, .w3 { grid-column: span 6; } .w3 { display: none; } .projects, .clients { grid-column: 1 / -1; } }
+
+/* FAQ */
+.faq { padding-block: 16px 140px; }
+.faq > .lbl { grid-column: 1 / span 6; }
+.faq .qs { grid-column: 7 / -1; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 56px 1fr 20px; gap: 12px; padding-block: 18px; font: 500 20px/1.25 var(--body); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary .lbl { color: var(--mid); font-size: 12px; padding-top: 4px; }
+.faq summary::after { content: "+"; font: 400 18px/1 var(--tech); text-align: right; padding-top: 3px; }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { padding: 0 0 22px 68px; color: #444; max-width: 60ch; }
+@media (max-width: 800px) { .faq > .lbl { grid-column: 1 / -1; margin-bottom: 40px; } .faq .qs { grid-column: 1 / -1; } .faq summary { grid-template-columns: 40px 1fr 20px; } .faq details p { padding-left: 52px; } }
+
+/* Footer */
+.foot-wrap { border-top: 1px solid var(--line); }
+.ft { padding-block: 16px 16px; row-gap: 40px; }
+.ft .c3 p, .ft .c7 p { line-height: 1.5; }
+.ft .mail { font: 500 clamp(28px, 3.4vw, 48px)/1.05 var(--body); letter-spacing: -.01em; overflow-wrap: anywhere; user-select: all; }
+.ft .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.btn { font: 400 12px/1 var(--tech); letter-spacing: .09em; text-transform: uppercase; padding: 10px 12px; background: var(--ink); color: var(--white); border: 0; cursor: pointer; display: inline-flex; align-items: center; }
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.btn:hover { background: var(--green); color: var(--white); box-shadow: none; }
+.ft dl { margin: 0; display: grid; gap: 18px; }
+.ft dt { color: var(--mid); }
+.ft dd { margin: 4px 0 0; }
+.ft .partner img { height: 34px; width: auto; margin-top: 8px; }
+.giant span { display: inline-block; }
+.giant { grid-column: 1 / -1; font: 800 18vw/.86 var(--mark); letter-spacing: -.06em; color: var(--ink); padding-top: 40px; white-space: nowrap; overflow: hidden; }
+.ft .bottom { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; padding-top: 12px; }
+.ft .bottom > :nth-child(1) { grid-column: 1 / span 2; } .ft .bottom > :nth-child(2) { grid-column: 3 / span 4; } .ft .bottom > :nth-child(3) { grid-column: 7 / -1; }
+@media (max-width: 800px) { .ft .bottom > :nth-child(1) { grid-column: 1 / span 3; } .ft .bottom > :nth-child(2) { grid-column: 4 / span 3; } .ft .bottom > :nth-child(3) { grid-column: 1 / -1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .pre { display: none; }
+  .hero .bg img.on { animation: none; transform: none; }
+  .menu, .chip, .svc li, .svc .thumbs img { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="pre" id="pre" aria-hidden="true">
+  <div class="row lbl"><span data-type>TMBingo</span><span data-type>Kreativni tim</span></div>
+  <div class="mask"><img src="assets/logo-light.png" alt=""></div>
+</div>
+
+<div class="chip" id="chip"><a href="#kontakt">Kontakt</a><button type="button" class="open-menu" aria-label="Otvori izbornik"><span><i></i><i></i></span></button></div>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="grid"><span class="lbl c1">TMBingo</span><span class="lbl c3">Izbornik</span><button class="lbl close c11" type="button" id="closeMenu">Zatvori</button></div>
+  <nav class="grid" aria-label="Izbornik"><div class="links full">
+    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="#kontakt">Kontakt</a>
+  </div></nav>
+  <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez ugovora · 399 € / mj</span></div>
+</div>
+
+<header class="hero" id="vrh">
+  <div class="bg" id="heroBg" aria-hidden="true">
+    <img class="on" src="assets/hero-1.jpg" alt="">
+    <img src="assets/hero-2.jpg" alt="">
+    <img src="assets/hero-3.jpg" alt="">
+    <img src="assets/hero-4.jpg" alt="">
+    <img src="assets/hero-5.jpg" alt="">
+  </div>
+  <div class="top grid">
+    <a class="lbl c1" href="#vrh">TMBingo</a>
+    <span class="lbl c3">Kreativni tim</span>
+    <nav class="lbl c7" aria-label="Glavna navigacija"><ul><li><a href="#usluge">Usluge</a></li><li><a href="#paket">Paket</a></li><li><a href="#radovi">Radovi</a></li><li><a href="#pitanja">Pitanja</a></li><li><a href="#kontakt">Kontakt</a></li></ul></nav>
+    <button class="burger c11 open-menu" type="button" aria-label="Otvori izbornik"><i></i><i></i></button>
+  </div>
+  <div class="grid stage">
+    <h1 data-type-h>Tvoj kreativni tim u jednom paketu</h1>
+    <p class="side lbl">Web, dizajn i društvene mreže. Dvadeset godina iskustva, jedna mjesečna cijena.</p>
+    <div class="foot"><span class="lbl">399 € / mjesečno</span><a class="lbl" href="#tim">Kako radimo</a></div>
+  </div>
+</header>
+
+<main>
+  <section class="intro grid" id="tim">
+    <p class="lbl c1" data-scramble>AI + čovjek</p>
+    <p class="lbl c3" data-scramble>Tonći · 20 godina<br>dizajna i programiranja</p>
+    <h2 class="large">AI asistent piše tekstove, odgovara na upite i dogovara posao. Tonći, dizajner i programer s 20 godina iskustva, osobno dizajnira i izrađuje svaki rad. Zato cijeli kreativni tim dobivaš za <span class="g">399 € mjesečno</span>.</h2>
+  </section>
+
+  <div class="bleed" aria-hidden="true"><span class="lbl">Studio</span><img data-parallax src="assets/team-2.jpg" alt=""></div>
+
+  <section class="svc grid" id="usluge">
+    <div class="head"><p class="lbl" data-scramble>Usluge</p><p class="lbl" data-scramble>Sve što brendu treba, u jednom paketu.</p></div>
+    <ol id="svcList">
+      <li data-img="0">Web stranice</li>
+      <li data-img="1">Logo</li>
+      <li data-img="2">Branding</li>
+      <li data-img="3">Društvene mreže</li>
+      <li data-img="4">Tiskani materijali</li>
+      <li data-img="5">Web banneri</li>
+      <li data-img="1">Newsletter</li>
+      <li data-img="0">SEO</li>
+      <li data-img="2">Hosting</li>
+      <li data-img="5">Održavanje</li>
+    </ol>
+    <div class="thumbs" id="thumbs" aria-hidden="true">
+      <img class="on" src="assets/rad-2.jpg" alt="">
+      <img src="assets/hero-4.jpg" alt="">
+      <img src="assets/rad-3.jpg" alt="">
+      <img src="assets/hero-2.jpg" alt="">
+      <img src="assets/hero-3.jpg" alt="">
+      <img src="assets/team-3.jpg" alt="">
+    </div>
+  </section>
+
+  <div class="dark" id="paket">
+    <section class="paket grid">
+      <p class="lbl c1" data-scramble>TMBingo paket</p>
+      <p class="lbl c3 dim" data-scramble>Bez ugovora.<br>Pauza ili otkaz bilo kada.</p>
+      <h2 class="large">Svaki rad prvo dobiješ u Figmi. Kad ga odobriš, uz pomoć AI-ja kreće kodiranje. Objave za društvene mreže radi dizajner, ne AI, da se istakneš iz mase novih AI sadržaja.</h2>
+      <p class="price">399 €<small>mjesečno · umjesto 1890 € (prosječna neto plaća web dizajnera)</small></p>
+      <div class="slots">
+        <p class="lbl">Najviše 10 novih klijenata mjesečno</p>
+        <div class="slot-grid" id="slotGrid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <p class="lbl dim" id="slotText">Slobodna mjesta ovaj mjesec</p>
+      </div>
+    </section>
+    <section class="list grid" aria-label="Kako radimo">
+      <p class="lbl">Kako radimo</p>
+      <ol>
+        <li><span class="lbl">01</span>Upit e-mailom i brief<em>AI</em></li>
+        <li><span class="lbl">02</span>Figma prijedlog<em>Tonći</em></li>
+        <li><span class="lbl">03</span>Tvoje odobrenje i ispravci<em>Ti</em></li>
+        <li><span class="lbl">04</span>Kodiranje uz pomoć AI-ja<em>Tonći + AI</em></li>
+        <li><span class="lbl">05</span>Objava, hosting i održavanje<em>Tonći</em></li>
+      </ol>
+    </section>
+    <section class="list grid" aria-label="U paketu">
+      <p class="lbl">U paketu</p>
+      <ol>
+        <li><span class="lbl">01</span>Jedan zahtjev dnevno</li>
+        <li><span class="lbl">02</span>Objave gotove za 48 sati</li>
+        <li><span class="lbl">03</span>Neograničeno brendova i slika</li>
+        <li><span class="lbl">04</span>Logo s neograničenim revizijama</li>
+        <li><span class="lbl">05</span>Dva korisnika</li>
+        <li><span class="lbl">06</span>Nismo u sustavu PDV-a, cijena je konačna</li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="bleed" aria-hidden="true"><span class="lbl">Rad</span><img data-parallax src="assets/team-1.jpg" alt=""></div>
+
+  <section class="work grid" id="radovi">
+    <div class="head"><p class="lbl" data-scramble>Radovi</p><p class="lbl" data-scramble>Izdvojeni projekti Studija Studio23k, gdje Tonći radi.</p></div>
+    <div class="shot w1"><img src="assets/rad-1.jpg" alt="Mobilna web stranica"><span class="lbl">Web</span></div>
+    <div class="shot w2"><img src="assets/rad-2.jpg" alt="Web trgovina na laptopu"><span class="lbl">Web trgovina</span></div>
+    <div class="shot w3"><img src="assets/rad-3.jpg" alt="Stranice web trgovine obuće"><span class="lbl">E-commerce</span></div>
+    <div class="clients">
+      <p class="lbl dim">Klijenti</p>
+      <p>Riva Rafting Centar, Zrmanja Adventures, Mićanovi Dvori, DizajnPro, LanaMar, ZadarSub, Goveer, Focx, Skroće, Malta, Lastavica, Protex, SolHome, L-Design, Dalmatica Mobility, Calimero Sport, Rildo, Marco Polo's, Manhatta.</p>
+    </div>
+    <ul class="projects">
+      <li>Antuntun<span>Identitet · Web</span></li>
+      <li>Zadar City Guide<span>Identitet · Web</span></li>
+      <li>Mile<span>Identitet</span></li>
+      <li>TST Group<span>Identitet</span></li>
+    </ul>
+  </section>
+
+  <section class="faq grid" id="pitanja">
+    <p class="lbl" data-scramble>Česta pitanja</p>
+    <div class="qs">
+      <details><summary><span class="lbl">01</span>Razgovaram li s čovjekom ili s AI-jem?</summary><p>Upite, ponude i dogovor vodi AI asistent i uvijek se tako predstavi. Dizajn i izradu radi Tonći osobno.</p></details>
+      <details><summary><span class="lbl">02</span>Zašto je tako povoljno?</summary><p>Administraciju, tekstove i komunikaciju radi AI, pa Tonći svaki dan dizajnira umjesto da piše mailove. Ušteda ide tebi.</p></details>
+      <details><summary><span class="lbl">03</span>Zašto samo 10 klijenata mjesečno?</summary><p>Jer dizajn radi čovjek. Preko 10 ne bismo stigli raditi kvalitetno. Kad su mjesta popunjena, stavljamo te na listu za idući mjesec.</p></details>
+      <details><summary><span class="lbl">04</span>Zašto komunikacija ide e-mailom?</summary><p>Zbog transparentnosti. Svaki dogovor, rok i izmjena ostaju zapisani.</p></details>
+      <details><summary><span class="lbl">05</span>Mogu li pauzirati ili otkazati?</summary><p>Da, u bilo kojem trenutku i bez penala. Nema ugovora.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer class="foot-wrap" id="kontakt">
+  <div class="ft grid">
+    <p class="lbl c1">TMBingo</p>
+    <p class="lbl c3">Kreativni tim<br>u jednom paketu.<br>© 2026 TMBingo.</p>
+    <div class="c7w">
+      <p class="lbl dim">Kontakt</p>
+      <p class="mail" id="mail">info@tmbingo.com</p>
+      <div class="acts">
+        <button class="btn" type="button" id="copyMail">Kopiraj adresu</button>
+        <a class="btn ghost" href="https://calendar.app.google/usQc7qxTB229WQip9" target="_blank" rel="noopener">Video poziv 30 min</a>
+      </div>
+    </div>
+    <dl class="lbl c3">
+      <div><dt>Odgovor</dt><dd>AI asistent, isti dan</dd></div>
+      <div><dt>Dizajn i izrada</dt><dd>Tonći</dd></div>
+    </dl>
+    <dl class="lbl c7">
+      <div><dt>Made by</dt><dd><a href="https://studio23k.eu" target="_blank" rel="noopener">Studio23k</a></dd></div>
+      <div class="partner"><dt>Partneri projekta</dt><dd><a href="https://zdguide.com" target="_blank" rel="noopener"><img src="assets/partner-zdr.png" alt="ZDR guide"></a></dd></div>
+    </dl>
+    <p class="giant" aria-hidden="true"><span>tmbingo</span></p>
+    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><a href="#vrh">Natrag na vrh ↑</a></div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+/* BROJ SLOBODNIH MJESTA: Tonći ovdje upisuje koliko je mjesta još slobodno ovaj mjesec (0 do 10). */
+var SLOBODNA_MJESTA = 10;
+var MJESEC = 'studeni 2026';
+
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+
+  /* slots */
+  var free = Math.max(0, Math.min(10, SLOBODNA_MJESTA));
+  document.querySelectorAll('#slotGrid i').forEach(function (el, i) { el.classList.add(i < 10 - free ? 'taken' : 'free'); });
+  document.getElementById('slotText').textContent = free > 0 ? 'Slobodno za ' + MJESEC + ': ' + free + ' od 10' : 'Za ' + MJESEC + ' smo popunjeni · lista čekanja';
+
+  /* text effects: scramble labels, type the headline */
+  var chars = 'ABCDEFGHIJKLMNOPRSTUVZ0123456789';
+  function scramble(el) {
+    if (el.dataset.done) return; el.dataset.done = 1;
+    var nodes = []; (function walk(n) { n.childNodes.forEach(function (c) { if (c.nodeType === 3) nodes.push([c, c.textContent]); else walk(c); }); })(el);
+    var t0 = performance.now(), dur = 700;
+    (function frame(t) {
+      var p = Math.min(1, (t - t0) / dur);
+      nodes.forEach(function (pair) {
+        var s = pair[1], n = Math.floor(s.length * p), out = s.slice(0, n);
+        for (var i = n; i < s.length; i++) out += /\s/.test(s[i]) ? s[i] : (i < n + 4 ? chars[(Math.random() * chars.length) | 0] : '');
+        pair[0].textContent = out;
+      });
+      if (p < 1) requestAnimationFrame(frame);
+    })(t0);
+  }
+  function type(el, speed) {
+    var full = el.textContent; el.textContent = ''; var i = 0;
+    (function step() { el.textContent = full.slice(0, ++i); if (i < full.length) setTimeout(step, speed); })();
+  }
+
+  /* preloader */
+  var pre = document.getElementById('pre');
+  function startPage() {
+    var h = document.querySelector('[data-type-h]');
+    if (!reduce && h) type(h, 38);
+  }
+  if (reduce) { root.classList.add('no-pre'); }
+  else {
+    pre.querySelectorAll('[data-type]').forEach(function (el) { scramble(el); });
+    setTimeout(function () { pre.classList.add('out'); setTimeout(startPage, 250); }, 1300);
+  }
+
+  /* labels scramble on enter */
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { scramble(e.target); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('[data-scramble]').forEach(function (el) { io.observe(el); });
+  }
+
+  /* hero crossfade */
+  var hs = document.querySelectorAll('#heroBg img'), hi = 0;
+  if (!reduce) setInterval(function () { hs[hi].classList.remove('on'); hi = (hi + 1) % hs.length; hs[hi].classList.add('on'); }, 6000);
+
+  /* smooth scroll */
+  var lenis = null;
+  if (!reduce && window.Lenis) {
+    lenis = new Lenis({ lerp: 0.09 });
+    (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href'); var target = id === '#' ? null : document.querySelector(id);
+      if (!target) return; e.preventDefault(); closeMenu();
+      if (lenis) lenis.scrollTo(target, { offset: 0 }); else target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+
+  /* menu */
+  var menu = document.getElementById('menu');
+  function openMenu() { menu.classList.add('open'); menu.setAttribute('aria-hidden', 'false'); if (lenis) lenis.stop(); }
+  function closeMenu() { menu.classList.remove('open'); menu.setAttribute('aria-hidden', 'true'); if (lenis) lenis.start(); }
+  document.querySelectorAll('.open-menu').forEach(function (b) { b.addEventListener('click', openMenu); });
+  document.getElementById('closeMenu').addEventListener('click', closeMenu);
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+
+  /* scroll-driven: sticky chip, services highlight, parallax */
+  var chip = document.getElementById('chip'), hero = document.querySelector('.hero');
+  var items = document.querySelectorAll('#svcList li'), thumbs = document.querySelectorAll('#thumbs img');
+  var par = document.querySelectorAll('[data-parallax]');
+  function onScroll() {
+    var vh = innerHeight;
+    chip.classList.toggle('on', hero.getBoundingClientRect().bottom < 60);
+    var mid = vh * 0.5, best = 0, bd = Infinity;
+    items.forEach(function (li, i) { var r = li.getBoundingClientRect(); var d = Math.abs(r.top + r.height / 2 - mid); if (d < bd) { bd = d; best = i; } });
+    items.forEach(function (li, i) { li.classList.toggle('on', i === best); });
+    var img = +items[best].dataset.img; thumbs.forEach(function (t, i) { t.classList.toggle('on', i === img); });
+    if (!reduce) par.forEach(function (im) { var r = im.parentNode.getBoundingClientRect(); if (r.bottom < 0 || r.top > vh) return; var p = (r.top + r.height / 2 - vh / 2) / vh; im.style.transform = 'translate3d(0,' + (p * -8) + '%,0)'; });
+  }
+  /* fit the giant footer wordmark to the row width */
+  var giant = document.querySelector('.giant');
+  var gspan = giant.querySelector('span');
+  function fitGiant() { giant.style.fontSize = '100px'; var w = giant.clientWidth, sw = gspan.getBoundingClientRect().width; if (sw) giant.style.fontSize = Math.floor(100 * w / sw * 0.99) + 'px'; }
+  fitGiant(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitGiant); addEventListener('resize', fitGiant);
+
+  addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
+
+  /* copy */
+  document.getElementById('copyMail').addEventListener('click', function () {
+    var btn = this, txt = document.getElementById('mail');
+    var done = function () { btn.textContent = 'Kopirano'; setTimeout(function () { btn.textContent = 'Kopiraj adresu'; }, 1600); };
+    var fallback = function () { var r = document.createRange(); r.selectNodeContents(txt); var s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+    try { navigator.clipboard.writeText(txt.textContent).then(done, fallback); } catch (err) { fallback(); }
+  });
+})();
+</script>
+</body>
+</html>
