@@ -10,6 +10,7 @@ create table public.profiles (
   ime         text,
   tvrtka      text,
   is_admin    boolean not null default false,
+  paket       text,
   aktivan_do  date,
   created_at  timestamptz not null default now()
 );
@@ -49,13 +50,16 @@ create table public.narudzbe (
   napomena    text,
   user_id     uuid references public.profiles on delete set null,
   novi        boolean not null default true,
-  iznos_centi integer not null default 39900 check (iznos_centi > 0),
+  paket       text not null default 'tmbingo' check (paket in ('start', 'tmbingo', 'pro', 'web')),
+  period      text not null default 'mjesecno' check (period in ('mjesecno', 'godisnje', 'jednokratno')),
+  mjesta      integer not null default 1 check (mjesta between 1 and 10),
+  iznos_centi integer not null check (iznos_centi > 0),
   status      text not null default 'ceka_uplatu' check (status in ('ceka_uplatu', 'placeno', 'otkazano')),
   placeno_at  timestamptz,
   created_at  timestamptz not null default now()
 );
 
-create or replace function public.narudzba_poziv() returns trigger language plpgsql as $$
+create or replace function public.narudzba_poziv() returns trigger language plpgsql set search_path = public as $$
 begin
   new.poziv := to_char(now(), 'YYYY') || '-' || new.id;
   new.email := lower(new.email);
@@ -83,7 +87,7 @@ create table public.zadaci (
 );
 create index zadaci_klijent on public.zadaci (klijent_id, created_at desc);
 
-create or replace function public.zadatak_vremena() returns trigger language plpgsql as $$
+create or replace function public.zadatak_vremena() returns trigger language plpgsql set search_path = public as $$
 begin
   new.updated_at := now();
   if new.status is distinct from old.status then
@@ -139,6 +143,13 @@ alter table public.poruke   enable row level security;
 alter table public.prilozi  enable row level security;
 
 revoke all on public.profiles, public.narudzbe, public.zadaci, public.poruke, public.prilozi from anon;
+
+-- pomoćne funkcije: okidač nitko ne poziva izravno, provjere uloge samo prijavljeni (trebaju ih pravila ispod)
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+revoke execute on function public.is_admin() from public, anon;
+revoke execute on function public.is_active() from public, anon;
+grant execute on function public.is_admin() to authenticated;
+grant execute on function public.is_active() to authenticated;
 
 create policy "profil: svoj ili admin" on public.profiles for select to authenticated
   using (id = auth.uid() or public.is_admin());

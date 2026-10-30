@@ -7,6 +7,8 @@
   var me = null, timer = null, filter = 'otvoreni';
 
   var STATUS = { novo: 'Novo', prihvaceno: 'Prihvaćeno', u_izradi: 'U izradi', zavrseno: 'Završeno' };
+  var PAKET = { start: 'Start', tmbingo: 'TMBingo paket', pro: 'Pro', web: 'Web za 14 dana' };
+  function nazivPaketa(k) { return PAKET[k] || 'Paket'; }
   var NARUDZBA = { ceka_uplatu: 'Čeka uplatu', placeno: 'Plaćeno', otkazano: 'Otkazano' };
 
   /* ---------- pomoćne ---------- */
@@ -112,7 +114,7 @@
     var note = '';
     if (!me.is_admin) {
       note = aktivan(me)
-        ? '<div class="note"><p>Paket je aktivan do <b>' + dan(me.aktivan_do) + '</b>.</p><a class="btn ghost small" href="#/paket">Plati idući mjesec</a></div>'
+        ? '<div class="note"><p>' + esc(nazivPaketa(me.paket)) + ' je aktivan do <b>' + dan(me.aktivan_do) + '</b>.</p><a class="btn ghost small" href="#/paket">Produlji paket</a></div>'
         : '<div class="note warn"><p>' + (me.aktivan_do ? 'Paket je istekao ' + dan(me.aktivan_do) + '.' : 'Paket još nije aktivan.') + ' Stari zadaci su ti i dalje dostupni, a nove možeš dodavati čim uplata stigne.</p><a class="btn small" href="#/paket">Plati paket</a></div>';
     }
     app.innerHTML =
@@ -279,15 +281,18 @@
   /* ---------- paket (klijent: produljenje) ---------- */
   async function viewPaket() {
     app.className = 'wrap';
-    app.innerHTML = '<div class="head"><a class="back lbl" href="#/">← Zadaci</a><h1>TMBingo paket</h1>' +
-      '<p>' + (aktivan(me) ? 'Aktivan je do <b>' + dan(me.aktivan_do) + '</b>. Uplatom ga produljuješ za još mjesec dana.' : 'Uplati paket i odmah nakon potvrde uplate možeš dodavati nove zadatke.') + ' 399 € mjesečno, bez obveze trajanja.</p></div>' +
-      '<div><button class="btn" type="button" id="go">Prikaži podatke za uplatu</button></div><div id="out"></div>';
+    app.innerHTML = '<div class="head"><a class="back lbl" href="#/">← Zadaci</a><h1>Paket</h1>' +
+      '<p>' + (aktivan(me) ? 'Pristup je aktivan do <b>' + dan(me.aktivan_do) + '</b>. Uplatom ga produljuješ za još mjesec ili godinu dana, a možeš i promijeniti paket.' : 'Uplati paket i odmah nakon potvrde uplate možeš dodavati nove zadatke.') + '</p></div>' +
+      '<div class="picker" id="picker"></div><div><button class="btn" type="button" id="go">Prikaži podatke za uplatu</button></div><div id="out"></div>';
+    var m = await import('/app/odabir.mjs');
+    var izbor = m.odabir($('#picker'), { paket: me.paket || 'tmbingo', samoMjesecni: true });
     $('#go').onclick = async function () {
       var b = this; busy(b, true, 'Pripremam…');
       try {
-        var r = await api.renew();
+        var r = await api.renew(izbor.get());
         b.parentNode.remove();
-        $('#out').innerHTML = window.TMB_UPLATA(r.uplata) + '<p class="hint" style="margin-top:20px">Podatke smo poslali i na tvoj e-mail. Čim uplata stigne, paket se produljuje i dobiješ potvrdu.</p>';
+        $('#picker').remove();
+        $('#out').innerHTML = (r.naziv ? '<p class="lbl" style="margin-bottom:12px">' + esc(r.naziv) + '</p>' : '') + window.TMB_UPLATA(r.uplata) + '<p class="hint" style="margin-top:20px">Podatke smo poslali i na tvoj e-mail. Čim uplata stigne, pristup se produljuje i dobiješ potvrdu.</p>';
       } catch (err) { toast(err.message); busy(b, false); }
     };
   }
@@ -313,7 +318,7 @@
         return '<div class="row"><span class="lbl">' + esc(n.poziv) + '<small>' + datum(n.created_at) + '</small></span>' +
           '<span>' + esc(n.ime) + (n.tvrtka ? '<small>' + esc(n.tvrtka) + '</small>' : '') + (n.napomena ? '<small>„' + esc(n.napomena) + '“</small>' : '') + '</span>' +
           '<span><a href="mailto:' + esc(n.email) + '">' + esc(n.email) + '</a><small>' + (n.novi ? 'Novi klijent' : 'Produljenje') + (n.oib ? ' · OIB ' + esc(n.oib) : '') + '</small></span>' +
-          '<span class="lbl">' + (n.iznos_centi / 100).toFixed(2).replace('.', ',') + ' €</span>' + st(n.status, NARUDZBA) +
+          '<span class="lbl">' + (n.iznos_centi / 100).toLocaleString('hr-HR') + ' €<small>' + esc(nazivPaketa(n.paket)) + (n.period === 'godisnje' ? ', godišnje' : n.period === 'jednokratno' ? '' : ', mjesečno') + '</small></span>' + st(n.status, NARUDZBA) +
           '<span class="acts">' + (n.status === 'ceka_uplatu' ? '<button class="btn small green" data-ok="' + n.id + '">Potvrdi uplatu</button><button class="btn ghost small" data-no="' + n.id + '">Otkaži</button>' : n.placeno_at ? '<span class="lbl dim">' + datum(n.placeno_at) + '</span>' : '') + '</span></div>';
       }).join('') : '<p class="empty">Još nema narudžbi.</p>') + '</div>';
     $$('[data-ok]').forEach(function (b) {
@@ -345,7 +350,7 @@
         var mine = tasks.filter(function (z) { return z.klijent_id === c.id; });
         var done = mine.filter(function (z) { return z.status === 'zavrseno'; }).length;
         var min = mine.reduce(function (s, z) { return s + (z.minuta || 0); }, 0);
-        return '<div class="row cl"><span>' + esc(c.ime || c.email) + (c.tvrtka ? '<small>' + esc(c.tvrtka) + '</small>' : '') + '</span><span><a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a></span>' +
+        return '<div class="row cl"><span>' + esc(c.ime || c.email) + '<small>' + esc([c.tvrtka, c.paket && nazivPaketa(c.paket)].filter(Boolean).join(' · ')) + '</small></span><span><a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a></span>' +
           (aktivan(c) ? '<span class="st placeno">Do ' + dan(c.aktivan_do) + '</span>' : '<span class="st otkazano">' + (c.aktivan_do ? 'Istekao ' + dan(c.aktivan_do) : 'Nije aktivan') + '</span>') +
           '<span class="lbl">' + done + ' / ' + mine.length + '<small>završeno</small></span><span class="r lbl">' + trajanje(min) + '</span></div>';
       }).join('') : '<p class="empty">Još nema klijenata.</p>') + '</div>';

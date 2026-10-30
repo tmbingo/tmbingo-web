@@ -6,7 +6,6 @@ export const env = (k, d = '') => (process.env[k] ?? d).trim();
 export const SITE = () => env('SITE_URL', 'https://tmbingo.com').replace(/\/$/, '');
 export const ADMIN_EMAIL = () => env('ADMIN_EMAIL', 'tmbingo@gmail.com');
 export const MAX_KLIJENATA = () => parseInt(env('MAX_KLIJENATA', '10'), 10) || 10;
-export const IZNOS_CENTI = () => parseInt(env('IZNOS_CENTI', '39900'), 10) || 39900;
 
 // Bez Supabase postavki funkcije rade u demo načinu (ništa se ne sprema ni ne šalje).
 export const demo = () => !env('SUPABASE_URL') || !env('SUPABASE_SERVICE_ROLE_KEY');
@@ -61,11 +60,13 @@ export function trajanje(min) {
 // Koliko je mjesta za nove klijente još slobodno ovaj mjesec.
 export async function slobodnaMjesta() {
   if (demo()) return MAX_KLIJENATA();
-  const { count } = await baza()
+  // Pro paket zauzima dva mjesta, zato se zbrajaju mjesta, a ne narudžbe
+  const { data } = await baza()
     .from('narudzbe')
-    .select('id', { count: 'exact', head: true })
+    .select('mjesta')
     .eq('novi', true)
     .neq('status', 'otkazano')
     .gte('created_at', pocetakMjeseca().toISOString());
-  return Math.max(0, MAX_KLIJENATA() - (count || 0));
+  const zauzeto = (data || []).reduce((s, n) => s + (n.mjesta || 1), 0);
+  return Math.max(0, MAX_KLIJENATA() - zauzeto);
 }

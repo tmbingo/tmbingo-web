@@ -95,7 +95,7 @@
       confirmOrder: async function (id) { return postApi('/api/potvrdi-uplatu', { id: id }, await token()); },
       cancelOrder: async function (id) { check(await sb.from('narudzbe').update({ status: 'otkazano' }).eq('id', id)); },
       listClients: async function () { return check(await sb.from('profiles').select('*').eq('is_admin', false).order('created_at', { ascending: false })); },
-      renew: async function () { return postApi('/api/narudzba', {}, await token()); },
+      renew: async function (izbor) { return postApi('/api/narudzba', izbor || {}, await token()); },
     };
   }
 
@@ -105,8 +105,8 @@
     var iso = function (t) { return new Date(t).toISOString(); };
     var inDays = function (n) { var d = new Date(now + n * D); return d.toISOString().slice(0, 10); };
     var admin = { id: 'a', email: 'tmbingo@gmail.com', ime: 'Tonći', tvrtka: 'TMBingo', is_admin: true };
-    var ana = { id: 'k1', email: 'ana@kavana-zadar.hr', ime: 'Ana Kovač', tvrtka: 'Kavana Forum', is_admin: false, aktivan_do: inDays(19), created_at: iso(now - 40 * D) };
-    var ivan = { id: 'k2', email: 'ivan@apartmani-bibinje.hr', ime: 'Ivan Perić', tvrtka: 'Apartmani Perić', is_admin: false, aktivan_do: inDays(-3), created_at: iso(now - 70 * D) };
+    var ana = { id: 'k1', email: 'ana@kavana-zadar.hr', ime: 'Ana Kovač', tvrtka: 'Kavana Forum', is_admin: false, paket: 'tmbingo', aktivan_do: inDays(19), created_at: iso(now - 40 * D) };
+    var ivan = { id: 'k2', email: 'ivan@apartmani-bibinje.hr', ime: 'Ivan Perić', tvrtka: 'Apartmani Perić', is_admin: false, paket: 'start', aktivan_do: inDays(-3), created_at: iso(now - 70 * D) };
     var profiles = [admin, ana, ivan];
     var role = 'klijent';
     try { role = sessionStorage.getItem('tmb-demo-uloga') || 'klijent'; } catch (e) {}
@@ -130,9 +130,9 @@
       { id: 3, zadatak_id: 14, poruka_id: 1, vrsta: 'datoteka', naziv: 'objave-v1.pdf', velicina: 2.4 * 1024 * 1024, putanja: 'demo' },
     ];
     var narudzbe = [
-      { id: 3, poziv: '2026-3', email: 'marija@frizerski-studio.hr', ime: 'Marija Jurić', tvrtka: 'Frizerski studio M', status: 'ceka_uplatu', novi: true, iznos_centi: 39900, created_at: iso(now - 5 * H) },
-      { id: 2, poziv: '2026-2', email: ana.email, ime: ana.ime, tvrtka: ana.tvrtka, status: 'placeno', novi: false, iznos_centi: 39900, created_at: iso(now - 11 * D), placeno_at: iso(now - 10 * D) },
-      { id: 1, poziv: '2026-1', email: ivan.email, ime: ivan.ime, tvrtka: ivan.tvrtka, status: 'placeno', novi: true, iznos_centi: 39900, created_at: iso(now - 33 * D), placeno_at: iso(now - 33 * D) },
+      { id: 3, poziv: '2026-3', email: 'marija@frizerski-studio.hr', ime: 'Marija Jurić', tvrtka: 'Frizerski studio M', status: 'ceka_uplatu', novi: true, paket: 'pro', period: 'mjesecno', iznos_centi: 74900, created_at: iso(now - 5 * H) },
+      { id: 2, poziv: '2026-2', email: ana.email, ime: ana.ime, tvrtka: ana.tvrtka, status: 'placeno', novi: false, paket: 'tmbingo', period: 'mjesecno', iznos_centi: 39900, created_at: iso(now - 11 * D), placeno_at: iso(now - 10 * D) },
+      { id: 1, poziv: '2026-1', email: ivan.email, ime: ivan.ime, tvrtka: ivan.tvrtka, status: 'placeno', novi: true, paket: 'start', period: 'godisnje', iznos_centi: 199000, created_at: iso(now - 33 * D), placeno_at: iso(now - 33 * D) },
     ];
     var blobs = {};
     var me = function () { return role === 'admin' ? admin : ana; };
@@ -191,8 +191,8 @@
       },
       cancelOrder: function (oid) { narudzbe.find(function (x) { return x.id === oid; }).status = 'otkazano'; return wait(); },
       listClients: function () { return wait(profiles.filter(function (p) { return !p.is_admin; })); },
-      renew: async function () {
-        try { return await postApi('/api/narudzba', { ime: me().ime, email: me().email, tvrtka: me().tvrtka, uvjeti: true }); }
+      renew: async function (izbor) {
+        try { return await postApi('/api/narudzba', Object.assign({ ime: me().ime, email: me().email, tvrtka: me().tvrtka, uvjeti: true }, izbor)); }
         catch (e) { return { demo: true, uplata: { iznos: '399,00 €', iban: 'HR1210010051863000160', model: 'HR00', poziv: 'DEMO-1', opis: 'TMBingo paket', primatelj: { ime: 'Studio23k, vl. Tonći Morić', adresa: 'Jakova Gotovca 18', mjesto: '23000 Zadar' }, primjer: true } }; }
       },
     };

@@ -18,3 +18,9 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "SAMEORIGIN"
+
+# ES moduli (paketi, odabir paketa) moraju imati JavaScript MIME tip
+[[headers]]
+  for = "/app/*.mjs"
+  [headers.values]
+    Content-Type = "text/javascript; charset=utf-8"

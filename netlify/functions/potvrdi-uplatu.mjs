@@ -2,6 +2,7 @@
 // Označi narudžbu plaćenom, otvori ili produlji pristup klijentu i pošalji mu link za prijavu.
 import { baza, demo, json, tijelo, prijavljeni, plusMjeseci, isoDatum, hrDatum, SITE } from '../lib/zajednicko.mjs';
 import { posalji, predlozak } from '../lib/posta.mjs';
+import { PAKETI, MJESECNI } from '../../app/paketi.mjs';
 
 export const config = { path: '/api/potvrdi-uplatu' };
 
@@ -31,9 +32,11 @@ export default async (req) => {
   const danas = new Date();
   danas.setHours(0, 0, 0, 0);
   const od = profil.aktivan_do && new Date(profil.aktivan_do) >= danas ? new Date(profil.aktivan_do) : danas;
-  const aktivanDo = isoDatum(plusMjeseci(od, 1));
+  const aktivanDo = isoDatum(plusMjeseci(od, n.period === 'godisnje' ? 12 : 1));
+  // jednokratni web ne mijenja mjesečni paket koji klijent možda već ima
+  const paket = MJESECNI.includes(n.paket) || !profil.paket ? n.paket : profil.paket;
 
-  await db.from('profiles').update({ aktivan_do: aktivanDo, ime: profil.ime || n.ime, tvrtka: profil.tvrtka || n.tvrtka }).eq('id', profil.id);
+  await db.from('profiles').update({ aktivan_do: aktivanDo, paket, ime: profil.ime || n.ime, tvrtka: profil.tvrtka || n.tvrtka }).eq('id', profil.id);
   await db.from('narudzbe').update({ status: 'placeno', placeno_at: new Date().toISOString(), user_id: profil.id }).eq('id', n.id);
 
   let poslano = false;
@@ -45,7 +48,7 @@ export default async (req) => {
     const mail = predlozak({
       naslov: n.novi ? 'Dobro došli u TMBingo' : 'Uplata je stigla',
       odlomci: [
-        `Bok ${(profil.ime || n.ime).split(' ')[0]}, uplata ${n.poziv} je stigla. Paket je aktivan do ${hrDatum(aktivanDo)}.`,
+        `Bok ${(profil.ime || n.ime).split(' ')[0]}, uplata ${n.poziv} (${PAKETI[n.paket]?.naziv || 'TMBingo'}) je stigla. Pristup TMBingo prostoru aktivan je do ${hrDatum(aktivanDo)}.`,
         'U TMBingo prostoru dodaješ zadatke, šalješ datoteke i pratiš kako napreduje izrada. Link ispod te odmah prijavljuje i vrijedi jednom, a kasnije se prijavljuješ na tmbingo.com/app upisom e-maila.',
       ],
       gumb: { tekst: 'Otvori TMBingo prostor', href: link.properties.action_link },

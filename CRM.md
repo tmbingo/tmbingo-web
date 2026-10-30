@@ -2,7 +2,7 @@
 
 Klijent naruči paket na `/paket/` i dobije uplatnicu s HUB3 barkodom i QR kodom. Kad potvrdiš uplatu, dobije e-mail s linkom za prijavu. U prostoru na `/app/` dodaje zadatke, šalje datoteke do 10 MB (ili WeTransfer link) i dopisuje se s tobom. Ti u adminu prihvaćaš zadatke, upisuješ vrijeme i označavaš ih kao završene, a klijent tada dobije e-mail.
 
-Dok Supabase nije spojen, `/app/` radi u demo načinu s izmišljenim podacima. Gore u zelenoj traci možeš prebaciti prikaz između klijenta i admina.
+Demo s izmišljenim podacima otvaraš na `/app/?demo`. Gore u zelenoj traci možeš prebaciti prikaz između klijenta i admina.
 
 ## Kako radi
 
@@ -20,8 +20,8 @@ Pravila pristupa su u bazi: klijent vidi samo svoje zadatke, poruke i datoteke. 
 
 ### 1. Supabase
 
-1. Na [supabase.com](https://supabase.com) otvori račun i novi projekt. Regija: **Central EU (Frankfurt)**.
-2. **SQL Editor** → New query → zalijepi cijeli `supabase/schema.sql` → Run.
+1. Projekt „TMBingo paket“ (`edspnavvakpmcrwyjzes`, Pariz, EU) već postoji.
+2. ✓ Baza je postavljena: `supabase/schema.sql` je pokrenut preko Supabase konektora (tablice, pravila pristupa i spremište `prilozi`). Za novi projekt: **SQL Editor** → zalijepi cijelu datoteku → Run.
 3. **Authentication → Sign In / Providers**: isključi **Allow new users to sign up**. Račune otvara samo potvrda uplate.
 4. **Authentication → URL Configuration**:
    - Site URL: `https://tmbingo.com`
@@ -33,7 +33,7 @@ Pravila pristupa su u bazi: klijent vidi samo svoje zadatke, poruke i datoteke. 
    ```sql
    update public.profiles set is_admin = true where email = 'tmbingo@gmail.com';
    ```
-8. **Project Settings → API**: kopiraj *Project URL*, *anon public* ključ i *service_role* ključ.
+8. **Project Settings → API Keys**: *Publishable* ključ je već u `app/config.js`. *Secret* ključ (ili stari *service_role*) ide samo u Netlify.
 
 ### 2. Gmail lozinka za aplikacije
 
@@ -46,10 +46,10 @@ Netlify → Site configuration → **Environment variables**:
 | Ime | Vrijednost |
 | --- | --- |
 | `SUPABASE_URL` | Project URL iz Supabasea |
-| `SUPABASE_SERVICE_ROLE_KEY` | service_role ključ (tajan, samo ovdje) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret ključ (`sb_secret_…`) ili stari service_role (tajan, samo ovdje) |
 | `SMTP_USER` | `tmbingo@gmail.com` |
 | `SMTP_PASS` | lozinka za aplikacije |
-| `IBAN` | IBAN računa na koji stižu uplate |
+| `IBAN` | (nije obavezno) zadano je `HR7824070001100756977` (OTP banka) |
 | `REVOLUT_LINK` | (nije obavezno) Revolut Business link za plaćanje karticom |
 | `ADMIN_EMAIL` | (nije obavezno) kamo stižu obavijesti, zadano `tmbingo@gmail.com` |
 | `SITE_URL` | (nije obavezno) zadano `https://tmbingo.com` |
@@ -59,7 +59,13 @@ Nakon spremanja: Deploys → Trigger deploy.
 
 ### 4. Javni ključ u stranici
 
-U `app/config.js` upiši `supabaseUrl` i `supabaseAnonKey` (anon ključ je javan po namjeni) i commitaj. Tada `/app/` prestaje biti demo.
+✓ `app/config.js` već ima Project URL i Publishable ključ (javan po namjeni). Demo i dalje možeš otvoriti na `/app/?demo`.
+
+## Paketi i cijene
+
+Paketi su u `app/paketi.mjs` (naziv, cijena mjesečno, godišnje ili jednokratno, opis i koliko od 10 mjesečnih mjesta zauzima). Iz te datoteke čitaju stranica za narudžbu, CRM i server, koji računa iznos na uplatnici. Naslovna (`index.html`, sekcija `#paket`) i tablica u `uvjeti.html` imaju iste cijene upisane ručno, pa ih kod promjene ispravi i tamo.
+
+Godišnja uplata produljuje pristup za 12 mjeseci, mjesečna i jednokratna za mjesec dana. Pro zauzima 2 mjesta.
 
 ## Predložak e-maila za prijavu (Supabase → Magic Link)
 

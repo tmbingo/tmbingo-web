@@ -1,8 +1,9 @@
 // GET  /api/narudzba  → koliko je mjesta slobodno ovaj mjesec
 // POST /api/narudzba  → nova narudžba paketa (ili produljenje za prijavljenog klijenta) i podaci za uplatu
 import {
-  baza, demo, json, tijelo, prijavljeni, slobodnaMjesta, mjesecNaziv, IZNOS_CENTI, MAX_KLIJENATA, ADMIN_EMAIL, SITE,
+  baza, demo, json, tijelo, prijavljeni, slobodnaMjesta, mjesecNaziv, MAX_KLIJENATA, ADMIN_EMAIL, SITE,
 } from '../lib/zajednicko.mjs';
+import { PAKETI, cijena } from '../../app/paketi.mjs';
 import { podaciZaUplatu, png } from '../lib/uplatnica.mjs';
 import { posalji, predlozak, esc } from '../lib/posta.mjs';
 
@@ -38,14 +39,18 @@ export default async (req) => {
   }
   if (podaci.oib && podaci.oib.length !== 11) return json(400, { greska: 'OIB ima 11 znamenki.' });
 
+  const paket = PAKETI[b.paket] ? b.paket : 'tmbingo';
+  const p = PAKETI[paket];
+  const period = p.jednokratno ? 'jednokratno' : b.period === 'godisnje' ? 'godisnje' : 'mjesecno';
+  const centi = cijena(paket, period);
   const mjesec = mjesecNaziv();
-  const opis = `TMBingo paket ${mjesec}`;
-  const centi = IZNOS_CENTI();
+  const opis = period === 'mjesecno' ? `${p.uplata} ${mjesec}` : period === 'godisnje' ? `${p.uplata} godisnje` : p.uplata;
+  const naziv = `${p.naziv}${period === 'godisnje' ? ', godišnje' : period === 'mjesecno' ? ', mjesečno' : ''}`;
 
   if (demo()) {
     const u = podaciZaUplatu({ centi, platitelj: podaci, poziv: 'DEMO-1', opis });
     delete u._tekst;
-    return json(200, { ok: true, demo: true, uplata: u });
+    return json(200, { ok: true, demo: true, naziv, uplata: u });
   }
 
   const db = baza();
@@ -53,12 +58,12 @@ export default async (req) => {
   const { count: placenih } = await db.from('narudzbe').select('id', { count: 'exact', head: true })
     .eq('email', podaci.email).eq('status', 'placeno');
   const novi = !profil && !placenih;
-  if (novi && (await slobodnaMjesta()) <= 0) {
+  if (novi && (await slobodnaMjesta()) < p.mjesta) {
     return json(409, { greska: `Za ${mjesec} su sva mjesta popunjena. Javi nam se na info@tmbingo.com i stavit ćemo te na listu za idući mjesec.`, puno: true });
   }
 
   const { data: n, error } = await db.from('narudzbe')
-    .insert({ ...podaci, user_id: profil?.id ?? null, novi, iznos_centi: centi })
+    .insert({ ...podaci, user_id: profil?.id ?? null, novi, paket, period, mjesta: p.mjesta, iznos_centi: centi })
     .select('*').single();
   if (error) {
     console.error(error);
@@ -81,7 +86,7 @@ export default async (req) => {
     const mail = predlozak({
       naslov: 'Hvala na narudžbi',
       odlomci: [
-        `Bok ${podaci.ime.split(' ')[0]}, zaprimili smo narudžbu za TMBingo paket (${mjesec}).`,
+        `Bok ${podaci.ime.split(' ')[0]}, zaprimili smo narudžbu: ${naziv}.`,
         'Uplatu možeš skenirati barkodom ili QR kodom u aplikaciji banke, ili je upisati ručno:',
         { html: tablica, text: `Iznos: ${u.iznos}\nIBAN: ${u.iban}\nPoziv na broj: ${u.model} ${u.poziv}\nOpis: ${u.opis}` },
         u.revolut ? { html: `Možeš platiti i karticom preko Revoluta: <a href="${esc(u.revolut)}">${esc(u.revolut)}</a>`, text: `Plaćanje karticom: ${u.revolut}` } : '',
@@ -89,10 +94,11 @@ export default async (req) => {
       ].filter(Boolean),
       dodatak: kodovi,
     });
-    await posalji({ to: podaci.email, subject: `TMBingo paket: podaci za uplatu (${n.poziv})`, ...mail, attachments: prilozi });
+    await posalji({ to: podaci.email, subject: `TMBingo: podaci za uplatu (${n.poziv})`, ...mail, attachments: prilozi });
     const zaAdmina = predlozak({
       naslov: `Nova narudžba ${n.poziv}`,
       odlomci: [
+        `${naziv}: ${u.iznos}`,
         `${podaci.ime}${podaci.tvrtka ? ', ' + podaci.tvrtka : ''} (${podaci.email})`,
         novi ? 'Novi klijent.' : 'Produljenje postojećeg klijenta.',
         podaci.napomena ? 'Napomena: ' + podaci.napomena : '',
@@ -105,5 +111,5 @@ export default async (req) => {
     console.error('[narudzba] e-mail nije poslan', e);
   }
 
-  return json(200, { ok: true, uplata: u });
+  return json(200, { ok: true, naziv, uplata: u });
 };

@@ -4,13 +4,15 @@ import { env, demo } from './zajednicko.mjs';
 
 // Primjer IBAN-a iz HUB3 uputa, samo za demo (stranica ga jasno označava kao primjer).
 const DEMO_IBAN = 'HR1210010051863000160';
+// Račun obrta Studio23k (OTP banka). Može se promijeniti varijablom IBAN u Netlifyju.
+const IBAN = 'HR7824070001100756977';
 
 export function primatelj() {
   return {
     ime: env('PRIMATELJ_IME', 'Studio23k, vl. T. Morić'),
     adresa: env('PRIMATELJ_ADRESA', 'Jakova Gotovca 18'),
     mjesto: env('PRIMATELJ_MJESTO', '23000 Zadar'),
-    iban: env('IBAN', demo() ? DEMO_IBAN : '').replace(/\s+/g, '').toUpperCase(),
+    iban: env('IBAN', demo() ? DEMO_IBAN : IBAN).replace(/\s+/g, '').toUpperCase(),
     revolut: env('REVOLUT_LINK'),
   };
 }
@@ -28,7 +30,7 @@ const ascii = (s, max) =>
     .trim()
     .slice(0, max);
 
-export const iznosTekst = (centi) => (centi / 100).toFixed(2).replace('.', ',') + ' €';
+export const iznosTekst = (centi) => (centi / 100).toLocaleString('hr-HR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 
 // Format HRVHUB30, polja i duljine prema HUB3 standardu (HUB, 2. 2020.).
 export function hub3({ centi, platitelj, poziv, opis }) {
