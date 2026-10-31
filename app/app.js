@@ -1,4 +1,4 @@
-/* TMBingo prostor: prijava, zadaci, poruke, datoteke, a za admina i narudžbe i klijenti. */
+/* TMBingo CRM: prijava, zadaci, poruke, datoteke, a za admina i narudžbe i klijenti. */
 (function () {
   var api = window.TMB_API, MAX = window.TMB_MAX;
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -66,7 +66,7 @@
   /* ---------- prijava ---------- */
   function viewLogin() {
     app.className = 'wrap login';
-    app.innerHTML = '<div><p class="lbl dim" style="margin-bottom:16px">TMBingo prostor</p><h1>Prijava</h1>' +
+    app.innerHTML = '<div><p class="lbl dim" style="margin-bottom:16px">TMBingo CRM</p><h1>Prijava</h1>' +
       '<form class="form" id="f" novalidate><p>Upiši e-mail s kojim si uzeo ili uzela paket. Poslat ćemo ti link za prijavu, bez lozinke.</p>' +
       '<label class="field"><span class="lbl">E-mail</span><input class="input" type="email" name="email" autocomplete="email" required inputmode="email"></label>' +
       '<p class="err" id="e" hidden></p><div><button class="btn" type="submit">Pošalji link za prijavu</button></div>' +
@@ -118,7 +118,7 @@
         : '<div class="note warn"><p>' + (me.aktivan_do ? 'Paket je istekao ' + dan(me.aktivan_do) + '.' : 'Paket još nije aktivan.') + ' Stari zadaci su ti i dalje dostupni, a nove možeš dodavati čim uplata stigne.</p><a class="btn small" href="#/paket">Plati paket</a></div>';
     }
     app.innerHTML =
-      '<div class="head"><p class="lbl dim">' + (me.is_admin ? 'Admin' : esc(me.tvrtka || 'Tvoj prostor')) + '</p>' +
+      '<div class="head"><p class="lbl dim">' + (me.is_admin ? 'Admin' : esc(me.tvrtka || 'TMBingo CRM')) + '</p>' +
       '<div class="hrow"><h1>' + (me.is_admin ? 'Svi zadaci' : 'Bok, ' + esc((me.ime || '').split(' ')[0] || 'dobro došao')) + '</h1>' +
       (canAdd ? '<a class="btn" href="#/novi">+ Novi zadatak</a>' : '') + '</div></div>' +
       note + stats(list) +

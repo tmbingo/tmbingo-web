@@ -49,10 +49,10 @@ export default async (req) => {
     const mail = predlozak({
       naslov: n.novi ? 'Dobro došli u TMBingo' : 'Uplata je stigla',
       odlomci: [
-        `Bok ${(profil.ime || n.ime).split(' ')[0]}, uplata ${n.poziv} (${PAKETI[n.paket]?.naziv || 'TMBingo'}) je stigla. Pristup TMBingo prostoru aktivan je do ${hrDatum(aktivanDo)}.`,
-        'U TMBingo prostoru dodaješ zadatke, šalješ datoteke i pratiš kako napreduje izrada. Link ispod te odmah prijavljuje i vrijedi jednom, a kasnije se prijavljuješ na tmbingo.com/app upisom e-maila.',
+        `Bok ${(profil.ime || n.ime).split(' ')[0]}, uplata ${n.poziv} (${PAKETI[n.paket]?.naziv || 'TMBingo'}) je stigla. Pristup TMBingo CRM-u aktivan je do ${hrDatum(aktivanDo)}.`,
+        'U TMBingo CRM-u dodaješ zadatke, šalješ datoteke i pratiš kako napreduje izrada. Link ispod te odmah prijavljuje i vrijedi jednom, a kasnije se prijavljuješ na tmbingo.com/app upisom e-maila.',
       ],
-      gumb: { tekst: 'Otvori TMBingo prostor', href: link.properties.action_link },
+      gumb: { tekst: 'Otvori TMBingo CRM', href: link.properties.action_link },
     });
     poslano = await posalji({ to: n.email, subject: n.novi ? 'Dobro došli u TMBingo: link za prijavu' : 'TMBingo: uplata je stigla', ...mail });
   } catch (e) {

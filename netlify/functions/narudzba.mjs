@@ -91,7 +91,7 @@ export default async (req) => {
         'Uplatu možeš skenirati barkodom ili QR kodom u aplikaciji banke, ili je upisati ručno:',
         { html: tablica, text: `Iznos: ${u.iznos}\nIBAN: ${u.iban}\nPoziv na broj: ${u.model} ${u.poziv}\nOpis: ${u.opis}` },
         u.revolut ? { html: `Možeš platiti i karticom preko Revoluta: <a href="${esc(u.revolut)}">${esc(u.revolut)}</a>`, text: `Plaćanje karticom: ${u.revolut}` } : '',
-        'Čim uplata stigne, na ovaj e-mail šaljemo link za prijavu u TMBingo prostor, gdje dodaješ zadatke i pratiš njihovu izradu.',
+        'Čim uplata stigne, na ovaj e-mail šaljemo link za prijavu u TMBingo CRM, gdje dodaješ zadatke i pratiš njihovu izradu.',
       ].filter(Boolean),
       dodatak: kodovi,
     });

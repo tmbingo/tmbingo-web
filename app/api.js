@@ -1,4 +1,4 @@
-/* Podatkovni sloj za TMBingo prostor: pravi (Supabase) i demo (u memoriji preglednika, za pregled bez baze). */
+/* Podatkovni sloj za TMBingo CRM: pravi (Supabase) i demo (u memoriji preglednika, za pregled bez baze). */
 (function () {
   var MAX = 10 * 1024 * 1024;
   var cfg = window.TMB_CONFIG || {};

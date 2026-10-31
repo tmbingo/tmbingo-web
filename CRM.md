@@ -1,6 +1,6 @@
-# TMBingo prostor (CRM)
+# TMBingo CRM
 
-Klijent naruči paket na `/paket/` i dobije uplatnicu s HUB3 barkodom i QR kodom. Kad potvrdiš uplatu, dobije e-mail s linkom za prijavu. U prostoru na `/app/` dodaje zadatke, šalje datoteke do 10 MB (ili WeTransfer link) i dopisuje se s tobom. Ti u adminu prihvaćaš zadatke, upisuješ vrijeme i označavaš ih kao završene, a klijent tada dobije e-mail.
+Klijent naruči paket na `/paket/` i dobije uplatnicu s HUB3 barkodom i QR kodom. Kad potvrdiš uplatu, dobije e-mail s linkom za prijavu. U CRM-u na `/app/` dodaje zadatke, šalje datoteke do 10 MB (ili WeTransfer link) i dopisuje se s tobom. Ti u adminu prihvaćaš zadatke, upisuješ vrijeme i označavaš ih kao završene, a klijent tada dobije e-mail.
 
 Demo s izmišljenim podacima otvaraš na `/app/?demo`. Gore u zelenoj traci možeš prebaciti prikaz između klijenta i admina.
 
@@ -9,7 +9,7 @@ Demo s izmišljenim podacima otvaraš na `/app/?demo`. Gore u zelenoj traci mož
 | Dio | Gdje |
 | --- | --- |
 | Narudžba i uplatnica | `paket/index.html` → `/api/narudzba` |
-| Prostor za klijente i admin | `app/` (HTML, CSS, JS, bez builda) |
+| CRM za klijente i admin | `app/` (HTML, CSS, JS, bez builda) |
 | Baza, prijava i datoteke | Supabase (`supabase/schema.sql`) |
 | Potvrda uplate | `/api/potvrdi-uplatu` (samo admin) |
 | E-mail obavijesti | `/api/obavijest`, šalje se preko Gmaila |
@@ -75,7 +75,7 @@ Naslov: `Tvoj link za prijavu u TMBingo`
 <div style="font-family:Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;color:#0b0b0b">
   <div style="background:#000;color:#fff;padding:18px 24px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:13px">TMBingo</div>
   <div style="padding:28px 24px">
-    <h1 style="font-size:26px;margin:0 0 18px">Prijava u TMBingo prostor</h1>
+    <h1 style="font-size:26px;margin:0 0 18px">Prijava u TMBingo CRM</h1>
     <p style="font-size:16px;line-height:1.55">Klikni na gumb i odmah si prijavljen. Link vrijedi sat vremena i može se iskoristiti jednom.</p>
     <p style="margin:24px 0"><a href="{{ .ConfirmationURL }}" style="background:#0b0b0b;color:#fff;text-decoration:none;padding:14px 18px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:600">Prijavi se</a></p>
     <p style="font-size:14px;color:#8a8a8a">Ako nisi tražio ili tražila prijavu, slobodno zanemari ovaj e-mail.</p>

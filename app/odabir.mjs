@@ -1,4 +1,4 @@
-// Odabir paketa i načina plaćanja (mjesečno ili godišnje). Koriste ga /paket/ i TMBingo prostor.
+// Odabir paketa i načina plaćanja (mjesečno ili godišnje). Koriste ga /paket/ i TMBingo CRM.
 import { PAKETI, MJESECNI, cijena, euri } from './paketi.mjs';
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);

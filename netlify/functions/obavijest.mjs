@@ -33,7 +33,7 @@ export default async (req) => {
     const { data: p } = await db.from('poruke').select('*').eq('id', poruka_id).eq('zadatak_id', z.id).single();
     if (!p || p.autor_id !== ja.id) return json(404, { greska: 'Poruka ne postoji.' });
     poruka = ja.is_admin
-      ? { to: z.klijent.email, subject: `TMBingo: nova poruka u zadatku #${z.id}`, ...predlozak({ naslov: `Nova poruka: ${z.naslov}`, odlomci: [isjecak(p.tekst) || 'Poslali smo ti datoteku.'], gumb: { tekst: 'Odgovori u TMBingo prostoru', href: link } }) }
+      ? { to: z.klijent.email, subject: `TMBingo: nova poruka u zadatku #${z.id}`, ...predlozak({ naslov: `Nova poruka: ${z.naslov}`, odlomci: [isjecak(p.tekst) || 'Poslali smo ti datoteku.'], gumb: { tekst: 'Odgovori u TMBingo CRM-u', href: link } }) }
       : { to: ADMIN_EMAIL(), replyTo: z.klijent.email, subject: `Poruka #${z.id} od ${klijent}: ${z.naslov}`, ...predlozak({ naslov: `Nova poruka od ${klijent}`, odlomci: [z.naslov, isjecak(p.tekst) || 'Poslana je datoteka.'], gumb: { tekst: 'Otvori zadatak', href: link } }) };
   } else if (vrsta === 'zavrseno' && ja.is_admin && z.status === 'zavrseno') {
     poruka = {
