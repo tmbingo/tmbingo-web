@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TMBingo · Tvoj kreativni tim u jednom paketu</title>
-<meta name="description" content="TMBingo paket: web, dizajn i društvene mreže za 399 € mjesečno. AI vodi tekstove i dogovor, Tonći dizajnira i izrađuje. Najviše 10 klijenata mjesečno.">
+<meta name="description" content="TMBingo paketi: web, dizajn i društvene mreže od 199 € mjesečno. AI vodi tekstove i dogovor, Tonći dizajnira i izrađuje. Najviše 10 klijenata mjesečno.">
 <meta name="theme-color" content="#000000">
 <link rel="canonical" href="https://tmbingo.com/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="hr_HR">
 <meta property="og:url" content="https://tmbingo.com/">
 <meta property="og:title" content="TMBingo · Tvoj kreativni tim u jednom paketu">
-<meta property="og:description" content="Web, dizajn i društvene mreže za 399 € mjesečno. Bez obveze trajanja.">
+<meta property="og:description" content="Web, dizajn i društvene mreže od 199 € mjesečno. Bez obveze trajanja.">
 <meta property="og:image" content="https://tmbingo.com/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -146,11 +146,29 @@ html.no-pre .pre { display: none; }
 .price { grid-column: 1 / span 6; font: 500 clamp(64px, 9vw, 140px)/.9 var(--body); letter-spacing: -.03em; }
 .price small { display: block; margin-top: 14px; font: 400 14px/1.4 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--mid); }
 .slots { grid-column: 7 / span 6; display: grid; gap: 14px; align-content: end; }
+.plans-l { display: grid; gap: 20px; }
+.per { display: inline-flex; justify-self: start; border: 1px solid var(--line-d); }
+.per button { white-space: nowrap; background: transparent; color: var(--white); border: 0; padding: 10px 12px; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.per button span { color: var(--green); margin-left: 6px; }
+.per button.on { background: var(--white); color: var(--ink); }
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.card { border-top: 1px solid var(--line-d); padding-top: 14px; display: grid; gap: 10px; align-content: start; color: var(--white); }
+.card.featured { border-top: 3px solid var(--green); padding-top: 12px; }
+.card em { font-style: normal; color: var(--green); margin-left: 8px; }
+.card .amt { font: 500 clamp(44px, 5vw, 80px)/.9 var(--body); letter-spacing: -.03em; }
+.card .sub { font-size: 18px; }
+.card ul { display: grid; color: var(--mid); }
+.card li { border-top: 1px solid var(--line-d); padding: 7px 0; }
+.card .go { margin-top: 6px; }
+.card:hover .go, .card:hover .amt { color: var(--green); }
+@media (max-width: 1000px) { .cards { grid-template-columns: 1fr 1fr; row-gap: 40px; } }
+@media (max-width: 560px) { .cards { grid-template-columns: 1fr; } }
 .slot-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; max-width: 420px; }
 .slot-grid i { aspect-ratio: 1; border: 1px solid var(--line-d); }
 .slot-grid i.taken { background: var(--white); border-color: var(--white); }
 .slot-grid i.free { background: var(--green); border-color: var(--green); }
 @media (max-width: 800px) { .price, .slots { grid-column: 1 / -1; } }
+.paket .slots { grid-column: 1 / -1; }
 
 .list { padding-block: 0 120px; }
 .list > .lbl { grid-column: 1 / span 6; padding-top: 18px; border-top: 1px solid var(--line-d); }
@@ -202,6 +220,10 @@ html.no-pre .pre { display: none; }
 .btn { font: 400 12px/1 var(--tech); letter-spacing: .09em; text-transform: uppercase; padding: 10px 12px; background: var(--ink); color: var(--white); border: 0; cursor: pointer; display: inline-flex; align-items: center; }
 .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
 .btn:hover { background: var(--green); color: var(--white); box-shadow: none; }
+.btn.light { background: var(--white); color: var(--ink); }
+.btn.ghost.light { background: transparent; color: var(--white); box-shadow: inset 0 0 0 1px var(--white); }
+.btn.light:hover { background: var(--green); color: var(--white); box-shadow: none; }
+.slots .cta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .ft dl { margin: 0; display: grid; gap: 18px; }
 .ft dt { color: var(--mid); }
 .ft dd { margin: 4px 0 0; }
@@ -233,9 +255,9 @@ html.no-pre .pre { display: none; }
 <div class="menu" id="menu" aria-hidden="true">
   <div class="grid"><span class="lbl c1">TMBingo</span><span class="lbl c3">Izbornik</span><button class="lbl close c11" type="button" id="closeMenu">Zatvori</button></div>
   <nav class="grid" aria-label="Izbornik"><div class="links full">
-    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="#kontakt">Kontakt</a>
+    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="#kontakt">Kontakt</a><a href="/app/">Prijava</a>
   </div></nav>
-  <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez obveze trajanja · 399 € / mj</span></div>
+  <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez obveze trajanja · od 199 € / mj</span></div>
 </div>
 
 <header class="hero" id="vrh">
@@ -255,7 +277,7 @@ html.no-pre .pre { display: none; }
   <div class="grid stage">
     <h1 data-type-h>Tvoj kreativni tim u jednom paketu</h1>
     <p class="side lbl">Web, dizajn i društvene mreže. Dvadeset godina iskustva, jedna mjesečna cijena.</p>
-    <div class="foot"><span class="lbl">399 € / mjesečno</span><a class="lbl" href="#tim">Kako radimo</a></div>
+    <div class="foot"><span class="lbl">od 199 € / mjesečno</span><a class="lbl" href="#tim">Kako radimo</a></div>
   </div>
 </header>
 
@@ -294,14 +316,23 @@ html.no-pre .pre { display: none; }
 
   <div class="dark" id="paket">
     <section class="paket grid">
-      <p class="lbl c1" data-scramble>TMBingo paket</p>
+      <p class="lbl c1" data-scramble>TMBingo paketi</p>
       <p class="lbl c3 dim" data-scramble>Bez obveze trajanja.<br>Pauza ili otkaz bilo kada.</p>
       <h2 class="large">Svaki rad prvo dobiješ u Figmi. Kad ga odobriš, uz pomoć AI-ja kreće kodiranje. Objave za društvene mreže radi dizajner, ne AI, da se istakneš iz mase novih AI sadržaja.</h2>
-      <p class="price">399 €<small>mjesečno · umjesto 1890 € (prosječna neto plaća web dizajnera)</small></p>
+      <div class="plans-l full">
+        <div class="per lbl" role="radiogroup" aria-label="Način plaćanja"><button type="button" data-per="mjesecno" class="on" aria-checked="true" role="radio">Mjesečno</button><button type="button" data-per="godisnje" aria-checked="false" role="radio">Godišnje <span>2 mjeseca gratis</span></button></div>
+        <div class="cards">
+          <a class="card" href="/paket/?p=start" data-p="start"><span class="lbl">Start</span><b class="amt" data-m="199 €" data-g="1.990 €">199 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><span class="sub">Društvene mreže i održavanje weba</span><ul><li>8 objava mjesečno</li><li>Održavanje postojećeg weba</li><li>Jedan zadatak u isto vrijeme</li></ul><span class="go lbl">Odaberi →</span></a>
+          <a class="card featured" href="/paket/?p=tmbingo" data-p="tmbingo"><span class="lbl">TMBingo paket <em>Najčešći izbor</em></span><b class="amt" data-m="399 €" data-g="3.990 €">399 €</b><small class="lbl dim" data-m="mjesečno · umjesto 1890 € plaće dizajnera" data-g="godišnje · umjesto 1890 € plaće dizajnera mjesečno">mjesečno · umjesto 1890 € plaće dizajnera</small><span class="sub">Web, dizajn i društvene mreže</span><ul><li>Web, hosting i održavanje</li><li>Logo, branding, tiskovine</li><li>Zadaci redom, jedan po jedan</li></ul><span class="go lbl">Odaberi →</span></a>
+          <a class="card" href="/paket/?p=pro" data-p="pro"><span class="lbl">Pro</span><b class="amt" data-m="749 €" data-g="7.490 €">749 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><span class="sub">Kad treba više i brže</span><ul><li>Sve iz TMBingo paketa</li><li>Dva zadatka u isto vrijeme</li><li>Prednost i mjesečni plan</li></ul><span class="go lbl">Odaberi →</span></a>
+          <a class="card" href="/paket/?p=web" data-p="web"><span class="lbl">Web za 14 dana</span><b class="amt">1.490 €</b><small class="lbl dim">jednokratno</small><span class="sub">Nova web stranica, bez pretplate</span><ul><li>Gotovo za 14 dana</li><li>Dizajn prvo u Figmi</li><li>Plaća se jednom</li></ul><span class="go lbl">Odaberi →</span></a>
+        </div>
+      </div>
       <div class="slots">
         <p class="lbl">Najviše 10 novih klijenata mjesečno</p>
         <div class="slot-grid" id="slotGrid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <p class="lbl dim" id="slotText">Slobodna mjesta ovaj mjesec</p>
+        <p class="cta"><a class="btn light" href="/paket/">Odaberi paket</a><a class="btn ghost light" href="/app/">Prijava za klijente</a></p>
       </div>
     </section>
     <section class="list grid" aria-label="Kako radimo">
@@ -379,7 +410,7 @@ html.no-pre .pre { display: none; }
       <div class="partner"><dt>Partneri projekta</dt><dd><a href="https://zdguide.com" target="_blank" rel="noopener"><img src="assets/partner-zdr.png" alt="ZDR guide"></a></dd></div>
     </dl>
     <p class="giant" aria-hidden="true"><span>tmbingo</span></p>
-    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><span class="links"><a href="uvjeti.html">Uvjeti</a><a href="privatnost.html">Privatnost</a><a href="kolacici.html">Kolačići</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
+    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><span class="links"><a href="/app/">Prijava za klijente</a><a href="uvjeti.html">Uvjeti</a><a href="privatnost.html">Privatnost</a><a href="kolacici.html">Kolačići</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
   </div>
 </footer>
 
@@ -399,9 +430,26 @@ var MJESEC = 'studeni 2026';
   var root = document.documentElement;
 
   /* slots */
-  var free = Math.max(0, Math.min(10, SLOBODNA_MJESTA));
-  document.querySelectorAll('#slotGrid i').forEach(function (el, i) { el.classList.add(i < 10 - free ? 'taken' : 'free'); });
-  document.getElementById('slotText').textContent = free > 0 ? 'Slobodno za ' + MJESEC + ': ' + free + ' od 10' : 'Za ' + MJESEC + ' smo popunjeni · lista čekanja';
+  function slots(n, mjesec) {
+    var free = Math.max(0, Math.min(10, n));
+    document.querySelectorAll('#slotGrid i').forEach(function (el, i) { el.classList.toggle('taken', i < 10 - free); el.classList.toggle('free', i >= 10 - free); });
+    document.getElementById('slotText').textContent = free > 0 ? 'Slobodno za ' + mjesec + ': ' + free + ' od 10' : 'Za ' + mjesec + ' smo popunjeni · lista čekanja';
+  }
+  slots(SLOBODNA_MJESTA, MJESEC);
+
+  /* paketi: mjesečno ili godišnje (cijene su i u app/paketi.mjs) */
+  document.querySelectorAll('.per button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var g = b.dataset.per === 'godisnje';
+      document.querySelectorAll('.per button').forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); });
+      document.querySelectorAll('.cards [data-m]').forEach(function (el) { el.textContent = el.getAttribute(g ? 'data-g' : 'data-m'); });
+      document.querySelectorAll('.cards .card').forEach(function (c) {
+        if (c.dataset.p !== 'web') c.href = '/paket/?p=' + c.dataset.p + (g ? '&period=godisnje' : '');
+      });
+    });
+  });
+  /* kad je CRM spojen na bazu, broj mjesta se računa iz narudžbi */
+  fetch('/api/narudzba').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) { if (d && !d.demo) slots(d.slobodno, d.mjesec); }).catch(function () {});
 
   /* text effects: scramble labels, type the headline */
   var chars = 'ABCDEFGHIJKLMNOPRSTUVZ0123456789';
