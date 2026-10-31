@@ -206,3 +206,42 @@ create policy "prilozi: šalji u svoje ili admin" on storage.objects for insert 
 -- Nakon prve prijave postavi sebe za admina (upiši svoj e-mail):
 --   update public.profiles set is_admin = true where email = 'tmbingo@gmail.com';
 -- ---------------------------------------------------------------------------
+
+-- ---------------------------------------------------------------------------
+-- Nepročitano: kad je tko zadnji put otvorio zadatak, i koliko novoga ima od tada
+-- ---------------------------------------------------------------------------
+create table public.procitano (
+  user_id     uuid not null default auth.uid() references public.profiles on delete cascade,
+  zadatak_id  bigint not null references public.zadaci on delete cascade,
+  at          timestamptz not null default now(),
+  primary key (user_id, zadatak_id)
+);
+alter table public.procitano enable row level security;
+revoke all on public.procitano from anon;
+create policy "procitano: svoje" on public.procitano for all to authenticated
+  using (user_id = auth.uid())
+  with check (user_id = auth.uid() and exists (select 1 from public.zadaci z where z.id = zadatak_id));
+
+-- Za svaki vidljivi zadatak: nove poruke druge strane od zadnjeg otvaranja,
+-- adminu i zadatak koji još nije otvorio, klijentu i promjena statusa.
+create or replace function public.neprocitano() returns table (zadatak_id bigint, broj integer)
+language sql stable security invoker set search_path = public as $$
+  select z.id,
+    (select count(*) from public.poruke p
+       where p.zadatak_id = z.id and p.autor_id <> auth.uid() and p.created_at > coalesce(r.at, '-infinity'))::int
+    + case when r.at is null and z.klijent_id <> auth.uid() then 1 else 0 end
+    + case when z.klijent_id = auth.uid() and greatest(z.prihvaceno_at, z.u_izradi_at, z.zavrseno_at) > coalesce(r.at, z.created_at) then 1 else 0 end
+  from public.zadaci z
+  left join public.procitano r on r.zadatak_id = z.id and r.user_id = auth.uid()
+$$;
+revoke execute on function public.neprocitano() from public, anon;
+grant execute on function public.neprocitano() to authenticated;
+
+-- Označi zadatak kao pročitan (vrijeme s poslužitelja, ne iz preglednika)
+create or replace function public.procitaj(zid bigint) returns void
+language sql security invoker set search_path = public as $$
+  insert into public.procitano (user_id, zadatak_id) values (auth.uid(), zid)
+  on conflict (user_id, zadatak_id) do update set at = now()
+$$;
+revoke execute on function public.procitaj(bigint) from public, anon;
+grant execute on function public.procitaj(bigint) to authenticated;

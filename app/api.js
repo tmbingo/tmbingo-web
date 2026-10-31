@@ -63,13 +63,21 @@
       logout: function () { return sb.auth.signOut(); },
       updateProfile: async function (p) { check(await sb.from('profiles').update(p).eq('id', me.id)); Object.assign(me, p); },
       listTasks: async function () {
-        return check(await sb.from('zadaci').select('*, ' + KLIJENT).order('created_at', { ascending: false }));
+        var r = await Promise.all([sb.from('zadaci').select('*, ' + KLIJENT).order('created_at', { ascending: false }), sb.rpc('neprocitano')]);
+        var nove = {};
+        (r[1].data || []).forEach(function (n) { nove[n.zadatak_id] = n.broj; });
+        return check(r[0]).map(function (z) { z.novo = nove[z.id] || 0; return z; });
+      },
+      unread: async function () {
+        var r = await sb.rpc('neprocitano');
+        return (r.data || []).filter(function (n) { return n.broj > 0; });
       },
       getTask: async function (id) {
         var z = check(await sb.from('zadaci').select('*, ' + KLIJENT).eq('id', id).maybeSingle());
         if (!z) return null;
         z.poruke = check(await sb.from('poruke').select('*, autor:profiles(id,ime,email,is_admin)').eq('zadatak_id', id).order('created_at'));
         z.prilozi = check(await sb.from('prilozi').select('*').eq('zadatak_id', id).order('created_at'));
+        await sb.rpc('procitaj', { zid: z.id });
         return z;
       },
       createTask: async function (d) {
@@ -138,6 +146,17 @@
     var me = function () { return role === 'admin' ? admin : ana; };
     var prof = function (pid) { return profiles.find(function (p) { return p.id === pid; }); };
     var vis = function () { return zadaci.filter(function (z) { return me().is_admin || z.klijent_id === me().id; }); };
+    var seen = { a: {}, k1: {} };
+    seen.k1[12] = iso(now - 6 * D); seen.k1[9] = iso(now - 15 * D);
+    seen.a[14] = iso(now - 19 * H); seen.a[12] = iso(now - 7 * D); seen.a[9] = iso(now - 16 * D); seen.a[13] = iso(now - 4 * D);
+    var novo = function (z) {
+      var u = me().id, t = seen[u] && seen[u][z.id];
+      var n = poruke.filter(function (p) { return p.zadatak_id === z.id && p.autor_id !== u && (!t || p.created_at > t); }).length;
+      if (!t && z.klijent_id !== u) n++;
+      var st = [z.prihvaceno_at, z.u_izradi_at, z.zavrseno_at].filter(Boolean).sort().pop();
+      if (z.klijent_id === u && st && st > (t || z.created_at)) n++;
+      return n;
+    };
     var withK = function (z) { var k = prof(z.klijent_id); return Object.assign({}, z, { klijent: { id: k.id, email: k.email, ime: k.ime, tvrtka: k.tvrtka } }); };
     var wait = function (v) { return new Promise(function (r) { setTimeout(function () { r(v); }, 120); }); };
     function addFiles(z, pid, files, links) {
@@ -165,13 +184,15 @@
       login: function () { loggedIn = true; return wait(); },
       logout: function () { loggedIn = false; return wait(); },
       updateProfile: function (p) { Object.assign(me(), p); return wait(); },
-      listTasks: function () { return wait(vis().map(withK).sort(function (a, b) { return b.created_at < a.created_at ? -1 : 1; })); },
+      unread: function () { return wait(vis().map(function (z) { return { zadatak_id: z.id, broj: novo(z) }; }).filter(function (n) { return n.broj > 0; })); },
+      listTasks: function () { return wait(vis().map(function (z) { var r = withK(z); r.novo = novo(z); return r; }).sort(function (a, b) { return b.created_at < a.created_at ? -1 : 1; })); },
       getTask: function (tid) {
         var z = vis().find(function (x) { return x.id === +tid; });
         if (!z) return wait(null);
         var r = withK(z);
         r.poruke = poruke.filter(function (p) { return p.zadatak_id === z.id; }).map(function (p) { var a = prof(p.autor_id); return Object.assign({}, p, { autor: me().is_admin || a.id === me().id ? a : null }); });
         r.prilozi = prilozi.filter(function (p) { return p.zadatak_id === z.id; });
+        (seen[me().id] = seen[me().id] || {})[z.id] = iso(Date.now());
         return wait(r);
       },
       createTask: function (d) {

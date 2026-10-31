@@ -4,7 +4,7 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var app = $('#app'), bar = $('#bar');
-  var me = null, timer = null, filter = 'otvoreni';
+  var me = null, timer = null, filter = 'otvoreni', nove = null, noveTimer = null;
 
   var STATUS = { novo: 'Novo', prihvaceno: 'Prihvaćeno', u_izradi: 'U izradi', zavrseno: 'Završeno' };
   var PAKET = { start: 'Start', tmbingo: 'TMBingo paket', pro: 'Pro', web: 'Web za 14 dana' };
@@ -48,10 +48,41 @@
     if (me.is_admin) links.push(['#/narudzbe', 'Narudžbe', /^narudzbe$/], ['#/klijenti', 'Klijenti', /^klijenti$/]);
     else links.push(['#/paket', 'Paket', /^paket$/]);
     bar.innerHTML = '<div class="wrap in"><a class="logo" href="#/"><img src="/assets/logo-light.png" alt="TMBingo" width="63" height="20"></a>' +
-      '<nav class="lbl" aria-label="Izbornik">' + links.map(function (l) { return '<a href="' + l[0] + '"' + (l[2].test(route) ? ' class="on" aria-current="page"' : '') + '>' + l[1] + '</a>'; }).join('') + '</nav>' +
+      '<nav class="lbl" aria-label="Izbornik">' + links.map(function (l, i) { return '<a href="' + l[0] + '"' + (l[2].test(route) ? ' class="on" aria-current="page"' : '') + '>' + l[1] + (i === 0 ? '<span class="nb" id="nb" hidden></span>' : '') + '</a>'; }).join('') + '</nav>' +
       '<div class="me lbl"><span title="' + esc(me.email) + '">' + esc(me.email) + '</span><button type="button" id="logout">Odjava</button></div></div>';
-    $('#logout').onclick = async function () { await api.logout(); me = null; location.hash = '#/'; route_(); };
+    $('#logout').onclick = async function () { await api.logout(); me = null; pratiNove(); location.hash = '#/'; route_(); };
+    pokaziNove();
   }
+
+  /* ---------- nepročitano: brojač u traci i naslovu kartice, provjera svakih 30 s ---------- */
+  function pokaziNove() {
+    var n = nove ? nove.length : 0, el = $('#nb');
+    if (el) { el.hidden = !n; el.textContent = n; el.title = n + (n === 1 ? ' zadatak s novostima' : ' zadataka s novostima'); }
+    document.title = (n ? '(' + n + ') ' : '') + 'TMBingo CRM';
+  }
+  async function provjeriNove() {
+    if (!me || !api.unread) return;
+    var prije = nove, lista;
+    try { lista = await api.unread(); } catch (e) { return; }
+    if (!me) return;
+    nove = lista;
+    pokaziNove();
+    if (!prije) return;
+    var bilo = {};
+    prije.forEach(function (x) { bilo[x.zadatak_id] = x.broj; });
+    var h = location.hash.replace(/^#\/?/, ''), otvoren = +(h.match(/^zadatak\/(\d+)/) || [])[1];
+    var novi = lista.filter(function (x) { return x.broj > (bilo[x.zadatak_id] || 0) && x.zadatak_id !== otvoren; });
+    if (!novi.length) return;
+    toast(novi.length === 1 ? 'Novo u zadatku #' + novi[0].zadatak_id + '.' : 'Novo u ' + novi.length + ' zadatka.');
+    if (!document.hidden && h === '') viewList(true).catch(function () {});
+  }
+  function pratiNove() {
+    clearInterval(noveTimer); nove = null;
+    if (!me) { pokaziNove(); return; }
+    provjeriNove();
+    noveTimer = setInterval(function () { if (!document.hidden) provjeriNove(); }, 30000);
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) provjeriNove(); });
 
   function renderDemo() {
     var el = $('#demo');
@@ -99,17 +130,21 @@
       '<div class="stat"><span class="lbl dim">Prosjek po zadatku</span><b>' + trajanje(avg).replace(/(\d+) (h|min)/g, '$1<small>$2</small>') + '</b></div></div>';
   }
 
-  async function viewList() {
+  async function viewList(quiet) {
     app.className = 'wrap';
-    app.innerHTML = '<p class="spin lbl">Učitavam…</p>';
+    if (!quiet) app.innerHTML = '<p class="spin lbl">Učitavam…</p>';
     var list = await api.listTasks();
-    var counts = { otvoreni: 0, novo: 0, u_izradi: 0, zavrseno: 0, svi: list.length };
+    nove = list.filter(function (z) { return z.novo > 0; }).map(function (z) { return { zadatak_id: z.id, broj: z.novo }; });
+    pokaziNove();
+    var counts = { neprocitano: nove.length, otvoreni: 0, novo: 0, u_izradi: 0, zavrseno: 0, svi: list.length };
     list.forEach(function (z) { if (z.status !== 'zavrseno') counts.otvoreni++; if (counts[z.status] != null) counts[z.status]++; });
-    var tabs = [['otvoreni', 'Otvoreni'], ['svi', 'Svi'], ['zavrseno', 'Završeni']];
-    if (me.is_admin) tabs.splice(1, 0, ['novo', 'Novi'], ['u_izradi', 'U izradi']);
+    var tabs = [['otvoreni', 'Otvoreni'], ['neprocitano', 'Nepročitano'], ['svi', 'Svi'], ['zavrseno', 'Završeni']];
+    if (me.is_admin) tabs.splice(2, 0, ['novo', 'Novi'], ['u_izradi', 'U izradi']);
     var shown = list.filter(function (z) {
-      return filter === 'svi' || (filter === 'otvoreni' ? z.status !== 'zavrseno' : z.status === filter);
+      return filter === 'svi' || (filter === 'neprocitano' ? z.novo > 0 : filter === 'otvoreni' ? z.status !== 'zavrseno' : z.status === filter);
     });
+    // zadaci s novostima idu na vrh, ostalo ostaje po datumu
+    shown = shown.filter(function (z) { return z.novo > 0; }).concat(shown.filter(function (z) { return !z.novo; }));
     var canAdd = !me.is_admin && aktivan(me);
     var note = '';
     if (!me.is_admin) {
@@ -125,11 +160,11 @@
       '<div class="tabs lbl" role="tablist">' + tabs.map(function (t) { return '<button type="button" role="tab" data-f="' + t[0] + '" aria-selected="' + (filter === t[0]) + '"' + (filter === t[0] ? ' class="on"' : '') + '>' + t[1] + '<span>' + counts[t[0]] + '</span></button>'; }).join('') + '</div>' +
       (shown.length
         ? '<div class="list">' + shown.map(function (z) {
-            return '<a class="item" href="#/zadatak/' + z.id + '"><span class="id lbl dim">#' + z.id + '</span>' +
-              '<span class="t">' + esc(z.naslov) + (me.is_admin ? '<small>' + esc(ime(z.klijent)) + (z.klijent && z.klijent.tvrtka ? ' · ' + esc(z.klijent.tvrtka) : '') + '</small>' : '') + '</span>' +
+            return '<a class="item' + (z.novo ? ' unread' : '') + '" href="#/zadatak/' + z.id + '"><span class="id lbl dim">#' + z.id + '</span>' +
+              '<span class="t">' + (z.novo ? '<b class="nov lbl">' + (z.novo === 1 ? '1 novo' : z.novo + ' novo') + '</b>' : '') + esc(z.naslov) + (me.is_admin ? '<small>' + esc(ime(z.klijent)) + (z.klijent && z.klijent.tvrtka ? ' · ' + esc(z.klijent.tvrtka) : '') + '</small>' : '') + '</span>' +
               st(z.status) + '<span class="d lbl dim">' + datum(z.created_at) + '</span><span class="r lbl">' + (z.minuta ? trajanje(z.minuta) : '·') + '</span></a>';
           }).join('') + '</div>'
-        : '<p class="empty">' + (list.length ? 'Ovdje nema zadataka.' : canAdd ? 'Još nema zadataka. Dodaj prvi i javit ćemo se istog dana.' : 'Još nema zadataka.') + '</p>');
+        : '<p class="empty">' + (filter === 'neprocitano' ? 'Sve je pročitano.' : list.length ? 'Ovdje nema zadataka.' : canAdd ? 'Još nema zadataka. Dodaj prvi i javit ćemo se istog dana.' : 'Još nema zadataka.') + '</p>');
     $$('.tabs button').forEach(function (b) { b.onclick = function () { filter = b.dataset.f; viewList(); }; });
   }
 
@@ -233,6 +268,7 @@
       ATTACH + '<p class="err" id="e" hidden></p><div class="actions"><span class="hint">' + (me.is_admin ? 'Klijent dobije obavijest e-mailom.' : 'Javljamo se istog dana.') + '</span><button class="btn" type="submit">Pošalji</button></div></form></section></div>' +
       '<aside class="side"><div class="box"><p class="lbl">Tijek</p>' + steps + '</div>' + adminBox + '</aside></div>';
     if (draft) $('#compose textarea').value = draft;
+    if (!quiet) provjeriNove();
 
     $$('[data-file]').forEach(function (b) {
       b.onclick = async function () {
@@ -388,6 +424,7 @@
     }
     try { me = await api.session(); } catch (err) { console.error(err); me = null; }
     if (me && /access_token/.test(location.hash)) history.replaceState(null, '', location.pathname + location.search + '#/');
+    pratiNove();
     route_();
   }
 
@@ -396,7 +433,7 @@
   // Ako se u drugoj kartici istog preglednika prijavi drugi račun, ova kartica prelazi na njega (preglednik drži samo jednu prijavu)
   api.onAuth(function (ev, uid) {
     if (ev === 'SIGNED_IN' && (!me || (uid && uid !== me.id))) { if (me) toast('Prijavljen je drugi račun u ovom pregledniku.'); me = null; start(); }
-    else if (ev === 'SIGNED_OUT' && me) { me = null; route_(); }
+    else if (ev === 'SIGNED_OUT' && me) { me = null; pratiNove(); route_(); }
   });
   start();
 })();
