@@ -1,6 +1,6 @@
 // POST /api/obavijest { vrsta, zadatak_id, poruka_id? }
 // E-mail obavijesti: novi zadatak (adminu), nova poruka (drugoj strani), zadatak završen (klijentu).
-import { baza, demo, json, tijelo, prijavljeni, trajanje, ADMIN_EMAIL, SITE } from '../lib/zajednicko.mjs';
+import { baza, demo, json, tijelo, prijavljeni, trajanje, ADMIN_EMAIL, SITE, zapamtiOrigin } from '../lib/zajednicko.mjs';
 import { posalji, predlozak } from '../lib/posta.mjs';
 
 export const config = { path: '/api/obavijest' };
@@ -8,6 +8,7 @@ export const config = { path: '/api/obavijest' };
 const isjecak = (s, n = 600) => (s.length > n ? s.slice(0, n) + '…' : s);
 
 export default async (req) => {
+  zapamtiOrigin(req);
   if (req.method !== 'POST') return json(405, { greska: 'Metoda nije dopuštena.' });
   if (demo()) return json(200, { ok: true, demo: true });
   const ja = await prijavljeni(req);

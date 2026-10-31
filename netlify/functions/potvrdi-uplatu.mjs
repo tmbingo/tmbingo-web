@@ -1,12 +1,13 @@
 // POST /api/potvrdi-uplatu { id }  (samo admin)
 // Označi narudžbu plaćenom, otvori ili produlji pristup klijentu i pošalji mu link za prijavu.
-import { baza, demo, json, tijelo, prijavljeni, plusMjeseci, isoDatum, hrDatum, SITE } from '../lib/zajednicko.mjs';
+import { baza, demo, json, tijelo, prijavljeni, plusMjeseci, isoDatum, hrDatum, SITE, zapamtiOrigin } from '../lib/zajednicko.mjs';
 import { posalji, predlozak } from '../lib/posta.mjs';
 import { PAKETI, MJESECNI } from '../../app/paketi.mjs';
 
 export const config = { path: '/api/potvrdi-uplatu' };
 
 export default async (req) => {
+  zapamtiOrigin(req);
   if (req.method !== 'POST') return json(405, { greska: 'Metoda nije dopuštena.' });
   if (demo()) return json(503, { greska: 'CRM još nije spojen na bazu.' });
   const admin = await prijavljeni(req);

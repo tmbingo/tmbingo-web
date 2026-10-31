@@ -1,7 +1,7 @@
 // GET  /api/narudzba  → koliko je mjesta slobodno ovaj mjesec
 // POST /api/narudzba  → nova narudžba paketa (ili produljenje za prijavljenog klijenta) i podaci za uplatu
 import {
-  baza, demo, json, tijelo, prijavljeni, slobodnaMjesta, mjesecNaziv, MAX_KLIJENATA, ADMIN_EMAIL, SITE,
+  baza, demo, json, tijelo, prijavljeni, slobodnaMjesta, mjesecNaziv, MAX_KLIJENATA, ADMIN_EMAIL, SITE, zapamtiOrigin,
 } from '../lib/zajednicko.mjs';
 import { PAKETI, cijena } from '../../app/paketi.mjs';
 import { podaciZaUplatu, png } from '../lib/uplatnica.mjs';
@@ -13,6 +13,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const cist = (v, max) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, max);
 
 export default async (req) => {
+  zapamtiOrigin(req);
   if (req.method === 'GET') {
     return json(200, { slobodno: await slobodnaMjesta(), max: MAX_KLIJENATA(), mjesec: mjesecNaziv(), demo: demo() });
   }

@@ -52,7 +52,7 @@ Netlify → Site configuration → **Environment variables**:
 | `IBAN` | (nije obavezno) zadano je `HR7824070001100756977` (OTP banka) |
 | `REVOLUT_LINK` | (nije obavezno) Revolut Business link za plaćanje karticom |
 | `ADMIN_EMAIL` | (nije obavezno) kamo stižu obavijesti, zadano `tmbingo@gmail.com` |
-| `SITE_URL` | (nije obavezno) zadano `https://tmbingo.com` |
+| `SITE_URL` | (nije obavezno) adresa u linkovima e-mailova, zadano je adresa s koje je stigao zahtjev |
 | `PRIMATELJ_IME` | (nije obavezno) zadano `Studio23k, vl. T. Morić` (najviše 25 znakova za barkod) |
 
 Nakon spremanja: Deploys → Trigger deploy.

@@ -3,7 +3,13 @@ import { createClient } from '@supabase/supabase-js';
 
 export const env = (k, d = '') => (process.env[k] ?? d).trim();
 
-export const SITE = () => env('SITE_URL', 'https://tmbingo.com').replace(/\/$/, '');
+// Adresa stranice za linkove u e-mailovima: SITE_URL ako je postavljen, inače adresa s koje je stigao
+// zahtjev (glavna stranica ili pregled), da linkovi rade i prije prebacivanja domene.
+let zadnjiOrigin = '';
+export function zapamtiOrigin(req) {
+  try { zadnjiOrigin = new URL(req.url).origin; } catch {}
+}
+export const SITE = () => (env('SITE_URL') || zadnjiOrigin || 'https://tmbingo.com').replace(/\/$/, '');
 export const ADMIN_EMAIL = () => env('ADMIN_EMAIL', 'tmbingo@gmail.com');
 export const MAX_KLIJENATA = () => parseInt(env('MAX_KLIJENATA', '10'), 10) || 10;
 
