@@ -29,7 +29,7 @@ Pravila pristupa su u bazi: klijent vidi samo svoje zadatke, poruke i datoteke. 
 5. **Authentication → Emails → SMTP Settings**: uključi Custom SMTP (bez toga Supabase šalje samo nekoliko e-mailova na sat).
    - Host `smtp.gmail.com`, port `465`, korisnik `tmbingo@gmail.com`, lozinka je lozinka za aplikacije (korak 2), pošiljatelj `TMBingo`.
 6. **Authentication → Emails → Templates → Magic Link** (predložak je niže).
-7. Otvori svoj admin račun: **Authentication → Users → Add user → Create new user**, upiši `tmbingo@gmail.com`, uključi Auto Confirm. Zatim u SQL Editoru pokreni:
+7. ✓ Admin račun `tmbingo@gmail.com` je otvoren i postavljen za admina. Za drugi admin račun: **Authentication → Users → Add user → Create new user**, upiši `tmbingo@gmail.com`, uključi Auto Confirm. Zatim u SQL Editoru pokreni:
    ```sql
    update public.profiles set is_admin = true where email = 'tmbingo@gmail.com';
    ```
