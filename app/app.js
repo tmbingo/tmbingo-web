@@ -393,8 +393,9 @@
 
   window.addEventListener('hashchange', route_);
   // Supabase javlja SIGNED_IN i kad se kartica ponovno otvori, zato reagiramo samo na stvarnu promjenu
-  api.onAuth(function (ev) {
-    if (ev === 'SIGNED_IN' && !me) start();
+  // Ako se u drugoj kartici istog preglednika prijavi drugi račun, ova kartica prelazi na njega (preglednik drži samo jednu prijavu)
+  api.onAuth(function (ev, uid) {
+    if (ev === 'SIGNED_IN' && (!me || (uid && uid !== me.id))) { if (me) toast('Prijavljen je drugi račun u ovom pregledniku.'); me = null; start(); }
     else if (ev === 'SIGNED_OUT' && me) { me = null; route_(); }
   });
   start();

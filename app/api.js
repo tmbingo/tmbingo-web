@@ -45,7 +45,7 @@
 
     return {
       demo: false,
-      onAuth: function (cb) { sb.auth.onAuthStateChange(function (ev) { if (ev === 'SIGNED_IN' || ev === 'SIGNED_OUT') cb(ev); }); },
+      onAuth: function (cb) { sb.auth.onAuthStateChange(function (ev, s) { if (ev === 'SIGNED_IN' || ev === 'SIGNED_OUT') cb(ev, s && s.user ? s.user.id : null); }); },
       session: async function () {
         var s = (await sb.auth.getSession()).data.session;
         if (!s) return (me = null);
