@@ -89,7 +89,7 @@ Naslov: `Tvoj link za prijavu u TMBingo`
 - **Novi zadatak ili poruka od klijenta**: stiže ti e-mail s poveznicom na zadatak.
 - **Zadatak**: Prihvaćeno → U izradi → Završeno. Vrijeme upisuješ u satima i minutama ili gumbima +15 min, +30 min i +1 h. Kad označiš Završeno, klijent dobije e-mail.
 - **Nepročitano**: zadaci s novom porukom ili novim zadatkom imaju zelenu oznaku „1 novo“ i stoje na vrhu popisa. Broj zadataka s novostima vidiš uz **Zadaci** u traci i u naslovu kartice preglednika, a provjerava se svakih 30 sekundi. Kartica **Nepročitano** pokazuje samo njih. Klijent isto tako vidi tvoje odgovore i promjene statusa.
-- **Mjesta**: kad je baza spojena, broj slobodnih mjesta na naslovnoj i na `/paket/` računa se sam iz narudžbi novih klijenata (najviše 10 mjesečno, `MAX_KLIJENATA`).
+- **Mjesta**: na `/app/#/narudzbe` upisuješ koliko mjesta za nove klijente imaš mjesečno i koliko ih je sada slobodno. Svaka nova narudžba sama smanji broj (Pro zauzima dva), a na početku mjeseca broj se vraća na ukupno. Isti broj piše na naslovnoj i na `/paket/`, a kad je 0, nova narudžba se ne može poslati.
 
 ## Lokalno
 

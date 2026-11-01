@@ -99,6 +99,11 @@
       },
       setMinutes: async function (z, min) { return check(await sb.from('zadaci').update({ minuta: min }).eq('id', z.id).select('*').single()); },
       fileUrl: async function (putanja) { return check(await sb.storage.from('prilozi').createSignedUrl(putanja, 3600)).signedUrl; },
+      getSlots: async function () {
+        var r = check(await sb.from('postavke').select('*').eq('id', 1).maybeSingle()) || { mjesta_max: 10, zauzeto_rucno: 0, zauzeto_mjesec: null };
+        return r;
+      },
+      saveSlots: async function (p) { return check(await sb.from('postavke').update(Object.assign({ updated_at: new Date().toISOString() }, p)).eq('id', 1).select('*').single()); },
       listOrders: async function () { return check(await sb.from('narudzbe').select('*').order('created_at', { ascending: false }).limit(300)); },
       confirmOrder: async function (id) { return postApi('/api/potvrdi-uplatu', { id: id }, await token()); },
       cancelOrder: async function (id) { check(await sb.from('narudzbe').update({ status: 'otkazano' }).eq('id', id)); },
@@ -143,6 +148,7 @@
       { id: 1, poziv: '2026-1', email: ivan.email, ime: ivan.ime, tvrtka: ivan.tvrtka, status: 'placeno', novi: true, paket: 'start', period: 'godisnje', iznos_centi: 199000, created_at: iso(now - 33 * D), placeno_at: iso(now - 33 * D) },
     ];
     var blobs = {};
+    var postavke = { mjesta_max: 10, zauzeto_rucno: 0, zauzeto_mjesec: null };
     var me = function () { return role === 'admin' ? admin : ana; };
     var prof = function (pid) { return profiles.find(function (p) { return p.id === pid; }); };
     var vis = function () { return zadaci.filter(function (z) { return me().is_admin || z.klijent_id === me().id; }); };
@@ -204,6 +210,8 @@
       setStatus: function (z, s) { var t = zadaci.find(function (x) { return x.id === z.id; }); stamp(t, s); return wait(t); },
       setMinutes: function (z, m) { var t = zadaci.find(function (x) { return x.id === z.id; }); t.minuta = m; return wait(t); },
       fileUrl: function (p) { return wait(blobs[p] || 'data:text/plain,Ovo%20je%20demo%20datoteka.'); },
+      getSlots: function () { return wait(Object.assign({}, postavke)); },
+      saveSlots: function (p) { Object.assign(postavke, p); return wait(Object.assign({}, postavke)); },
       listOrders: function () { return wait(narudzbe.slice()); },
       confirmOrder: function (oid) {
         var n = narudzbe.find(function (x) { return x.id === oid; }); n.status = 'placeno'; n.placeno_at = iso(Date.now());

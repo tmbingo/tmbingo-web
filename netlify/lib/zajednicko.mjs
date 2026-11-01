@@ -64,15 +64,21 @@ export function trajanje(min) {
 }
 
 // Koliko je mjesta za nove klijente još slobodno ovaj mjesec.
-export async function slobodnaMjesta() {
-  if (demo()) return MAX_KLIJENATA();
+export async function mjesta() {
+  if (demo()) return { slobodno: MAX_KLIJENATA(), max: MAX_KLIJENATA() };
+  const db = baza();
+  const pocetak = pocetakMjeseca();
   // Pro paket zauzima dva mjesta, zato se zbrajaju mjesta, a ne narudžbe
-  const { data } = await baza()
-    .from('narudzbe')
-    .select('mjesta')
-    .eq('novi', true)
-    .neq('status', 'otkazano')
-    .gte('created_at', pocetakMjeseca().toISOString());
-  const zauzeto = (data || []).reduce((s, n) => s + (n.mjesta || 1), 0);
-  return Math.max(0, MAX_KLIJENATA() - zauzeto);
+  const [{ data }, { data: post }] = await Promise.all([
+    db.from('narudzbe').select('mjesta').eq('novi', true).neq('status', 'otkazano').gte('created_at', pocetak.toISOString()),
+    db.from('postavke').select('*').eq('id', 1).maybeSingle(),
+  ]);
+  const max = post ? post.mjesta_max : MAX_KLIJENATA();
+  // ručno zauzeta mjesta (klijenti izvan CRM-a) vrijede samo za mjesec u kojem su upisana
+  const rucno = post && post.zauzeto_mjesec === isoDatum(pocetak) ? post.zauzeto_rucno : 0;
+  const zauzeto = (data || []).reduce((s, n) => s + (n.mjesta || 1), 0) + rucno;
+  return { slobodno: Math.max(0, Math.min(max, max - zauzeto)), max };
+}
+export async function slobodnaMjesta() {
+  return (await mjesta()).slobodno;
 }
