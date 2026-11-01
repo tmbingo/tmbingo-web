@@ -338,16 +338,27 @@
     if (!me.is_admin) { location.hash = '#/'; return; }
     app.className = 'wrap';
     app.innerHTML = '<p class="spin lbl">Učitavam…</p>';
-    var list = await api.listOrders();
+    var r = await Promise.all([api.listOrders(), api.getSlots()]), list = r[0], post = r[1];
     var waiting = list.filter(function (n) { return n.status === 'ceka_uplatu'; });
     var month = new Date(); month = new Date(month.getFullYear(), month.getMonth(), 1).toISOString();
-    var novih = list.filter(function (n) { return n.novi && n.status !== 'otkazano' && n.created_at >= month; }).length;
+    var noviOvaj = list.filter(function (n) { return n.novi && n.status !== 'otkazano' && n.created_at >= month; });
+    var novih = noviOvaj.length;
+    // isto kao na serveru: mjesta iz narudžbi (Pro = 2) + ručno zauzeta za ovaj mjesec
+    var mjesecKljuc = (function (d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01'; })(new Date());
+    var autoZauzeto = noviOvaj.reduce(function (s, n) { return s + (n.mjesta || 1); }, 0);
+    var rucno = post.zauzeto_mjesec === mjesecKljuc ? post.zauzeto_rucno : 0;
+    var maxM = post.mjesta_max, slobodno = Math.max(0, Math.min(maxM, maxM - autoZauzeto - rucno));
     var placeno = list.filter(function (n) { return n.status === 'placeno' && n.placeno_at >= month; }).reduce(function (s, n) { return s + n.iznos_centi; }, 0);
     app.innerHTML = '<div class="head"><p class="lbl dim">Admin</p><h1>Narudžbe</h1></div>' +
       '<div class="stats"><div class="stat"><span class="lbl dim">Čeka uplatu</span><b>' + waiting.length + '</b></div>' +
-      '<div class="stat"><span class="lbl dim">Novih ovaj mjesec</span><b>' + novih + '<small>/ 10</small></b></div>' +
+      '<div class="stat"><span class="lbl dim">Slobodnih mjesta</span><b>' + slobodno + '<small>/ ' + maxM + '</small></b></div>' +
       '<div class="stat"><span class="lbl dim">Uplaćeno ovaj mjesec</span><b>' + (placeno / 100).toLocaleString('hr-HR') + '<small>€</small></b></div>' +
       '<div class="stat"><span class="lbl dim">Ukupno narudžbi</span><b>' + list.length + '</b></div></div>' +
+      '<form class="box slots" id="sf"><p class="lbl">Mjesta za nove klijente ovaj mjesec</p>' +
+      '<div class="time"><label><span class="lbl dim">Ukupno mjesečno</span><input type="number" name="max" min="0" max="100" inputmode="numeric" value="' + maxM + '"></label>' +
+      '<label><span class="lbl dim">Slobodno sada</span><input type="number" name="slobodno" min="0" max="100" inputmode="numeric" value="' + slobodno + '"></label>' +
+      '<button class="btn small" type="submit">Spremi</button></div>' +
+      '<p class="hint">Novih klijenata ovaj mjesec: ' + novih + (autoZauzeto !== novih ? ' (zauzimaju ' + autoZauzeto + ' mjesta, Pro broji dva)' : '') + '. Svaka nova narudžba sama smanji broj slobodnih mjesta. Ako uzmeš klijenta izvan stranice, ovdje smanji „Slobodno sada“. Na početku mjeseca broj se vraća na ukupno.</p></form>' +
       '<p class="hint" style="margin-bottom:16px">Kad uplata stigne na račun (provjeri poziv na broj), klikni „Potvrdi uplatu“. Klijent tada dobije e-mail s linkom za prijavu, a paket se produlji za mjesec dana.</p>' +
       '<div class="rows"><div class="row th lbl"><span>Poziv</span><span>Klijent</span><span>E-mail</span><span>Iznos</span><span>Status</span><span></span></div>' +
       (list.length ? list.map(function (n) {
@@ -357,6 +368,17 @@
           '<span class="lbl">' + (n.iznos_centi / 100).toLocaleString('hr-HR') + ' €<small>' + esc(nazivPaketa(n.paket)) + (n.period === 'godisnje' ? ', godišnje' : n.period === 'jednokratno' ? '' : ', mjesečno') + '</small></span>' + st(n.status, NARUDZBA) +
           '<span class="acts">' + (n.status === 'ceka_uplatu' ? '<button class="btn small green" data-ok="' + n.id + '">Potvrdi uplatu</button><button class="btn ghost small" data-no="' + n.id + '">Otkaži</button>' : n.placeno_at ? '<span class="lbl dim">' + datum(n.placeno_at) + '</span>' : '') + '</span></div>';
       }).join('') : '<p class="empty">Još nema narudžbi.</p>') + '</div>';
+    $('#sf').onsubmit = async function (ev) {
+      ev.preventDefault();
+      var m = Math.max(0, Math.min(100, parseInt(this.max.value, 10) || 0));
+      var sl = Math.max(0, Math.min(m, parseInt(this.slobodno.value, 10) || 0));
+      var b = $('button', this); busy(b, true, 'Spremam…');
+      try {
+        await api.saveSlots({ mjesta_max: m, zauzeto_rucno: Math.max(-100, Math.min(100, m - autoZauzeto - sl)), zauzeto_mjesec: mjesecKljuc });
+        toast('Spremljeno. Na stranici piše ' + sl + (sl === 1 ? ' slobodno mjesto.' : ' slobodnih mjesta.'));
+        viewOrders();
+      } catch (err) { toast(err.message); busy(b, false); }
+    };
     $$('[data-ok]').forEach(function (b) {
       b.onclick = async function () {
         if (!confirm('Potvrditi da je uplata stigla? Klijent će dobiti e-mail s linkom za prijavu.')) return;

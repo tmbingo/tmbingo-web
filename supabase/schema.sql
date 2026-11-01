@@ -245,3 +245,21 @@ language sql security invoker set search_path = public as $$
 $$;
 revoke execute on function public.procitaj(bigint) from public, anon;
 grant execute on function public.procitaj(bigint) to authenticated;
+
+-- ---------------------------------------------------------------------------
+-- Postavke: koliko mjesta za nove klijente ima mjesečno i koliko je ručno zauzeto
+-- (zauzeto_rucno vrijedi samo za mjesec u zauzeto_mjesec, pa se svaki mjesec sam poništi)
+-- ---------------------------------------------------------------------------
+create table public.postavke (
+  id              integer primary key default 1 check (id = 1),
+  mjesta_max      integer not null default 10 check (mjesta_max between 0 and 100),
+  zauzeto_rucno   integer not null default 0 check (zauzeto_rucno between -100 and 100),
+  zauzeto_mjesec  date,
+  updated_at      timestamptz not null default now()
+);
+insert into public.postavke (id) values (1) on conflict do nothing;
+alter table public.postavke enable row level security;
+revoke all on public.postavke from anon;
+create policy "postavke: admin čita" on public.postavke for select to authenticated using (public.is_admin());
+create policy "postavke: admin mijenja" on public.postavke for update to authenticated
+  using (public.is_admin()) with check (public.is_admin());

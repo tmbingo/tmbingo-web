@@ -128,6 +128,8 @@ textarea.input { min-height: 140px; resize: vertical; border: 1px solid var(--li
 .task { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 48px; align-items: start; }
 .side { position: sticky; top: 80px; display: grid; gap: 28px; }
 .box { border-top: 1px solid var(--ink); padding-top: 12px; display: grid; gap: 12px; }
+.slots { margin-bottom: 32px; max-width: 640px; }
+.slots .hint { margin: 0; }
 .steps { display: grid; gap: 0; }
 .steps li { display: grid; grid-template-columns: 18px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); color: var(--mid); }
 .steps li::before { content: ""; width: 10px; height: 10px; border: 1px solid var(--mid); border-radius: 50%; }
