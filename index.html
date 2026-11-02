@@ -123,7 +123,7 @@ html.no-pre .pre { display: none; }
 
 /* Full-bleed photos */
 .bleed { position: relative; height: min(80vw, 760px); overflow: hidden; background: #1a1a1a; }
-.bleed img { position: absolute; inset: -8% 0; width: 100%; height: 116%; object-fit: cover; will-change: transform; }
+.bleed img, .bleed video { position: absolute; inset: -8% 0; width: 100%; height: 116%; object-fit: cover; will-change: transform; }
 .bleed .lbl { position: absolute; left: var(--gx); top: 16px; z-index: 2; color: var(--white); background: #000; padding: 2px 6px; }
 
 /* Services list (scroll-linked) */
@@ -285,10 +285,10 @@ html.no-pre .pre { display: none; }
   <section class="intro grid" id="tim">
     <p class="lbl c1" data-scramble>AI + čovjek</p>
     <p class="lbl c3" data-scramble>Tonći · 20 godina<br>dizajna i programiranja</p>
-    <h2 class="large">AI asistent piše tekstove, odgovara na upite i dogovara posao. Tonći, dizajner i programer s 20 godina iskustva, osobno dizajnira i izrađuje svaki rad. Zato cijeli kreativni tim dobivaš za <span class="g">399 € mjesečno</span>.</h2>
+    <h2 class="large">Bingo, naš AI asistent, odgovara na upite i piše prve verzije tekstova. Tonći, dizajner i programer s 20 godina iskustva, svaki tekst pregleda i odobri, a dizajn i izradu radi osobno. Zato cijeli kreativni tim dobivaš za <span class="g">399 € mjesečno</span>.</h2>
   </section>
 
-  <div class="bleed" aria-hidden="true"><span class="lbl">Studio</span><img data-parallax src="assets/team-2.jpg" alt=""></div>
+  <div class="bleed" aria-hidden="true"><span class="lbl">Studio</span><video data-parallax data-lazyplay muted loop playsinline preload="none" poster="assets/team-2.jpg"><source src="assets/studio.mp4" type="video/mp4"></video></div>
 
   <section class="svc grid" id="usluge">
     <div class="head"><p class="lbl" data-scramble>Usluge</p><p class="lbl" data-scramble>Sve što brendu treba, u jednom paketu.</p></div>
@@ -380,7 +380,7 @@ html.no-pre .pre { display: none; }
   <section class="faq grid" id="pitanja">
     <p class="lbl" data-scramble>Česta pitanja</p>
     <div class="qs">
-      <details><summary><span class="lbl">01</span>Razgovaram li s čovjekom ili s AI-jem?</summary><p>Upite, ponude i dogovor vodi AI asistent i uvijek se tako predstavi. Dizajn i izradu radi Tonći osobno.</p></details>
+      <details><summary><span class="lbl">01</span>Razgovaram li s čovjekom ili s AI-jem?</summary><p>Upite, ponude i dogovor vodi Bingo, naš AI asistent. Uvijek se predstavi kao AI asistent, a mi ga od milja zovemo AE asistent, jer je AE u Dalmaciji odgovor na sve. Dizajn i izradu radi Tonći osobno.</p></details>
       <details><summary><span class="lbl">02</span>Zašto je tako povoljno?</summary><p>Administraciju, tekstove i komunikaciju radi AI, pa Tonći svaki dan dizajnira umjesto da piše mailove. Ušteda ide tebi.</p></details>
       <details><summary><span class="lbl">03</span>Zašto samo 10 klijenata mjesečno?</summary><p>Jer dizajn radi čovjek. Preko 10 ne bismo stigli raditi kvalitetno. Kad su mjesta popunjena, stavljamo te na listu za idući mjesec.</p></details>
       <details><summary><span class="lbl">04</span>Zašto komunikacija ide e-mailom?</summary><p>Zbog transparentnosti. Svaki dogovor, rok i izmjena ostaju zapisani.</p></details>
@@ -402,7 +402,7 @@ html.no-pre .pre { display: none; }
       </div>
     </div>
     <dl class="lbl c3">
-      <div><dt>Odgovor</dt><dd>AI asistent, isti dan</dd></div>
+      <div><dt>Odgovor</dt><dd>Bingo, AI asistent, isti dan</dd></div>
       <div><dt>Dizajn i izrada</dt><dd>Tonći</dd></div>
     </dl>
     <dl class="lbl c7">
@@ -534,6 +534,13 @@ var MJESEC = 'studeni 2026';
   var gspan = giant.querySelector('span');
   function fitGiant() { giant.style.fontSize = '100px'; var w = giant.clientWidth, sw = gspan.getBoundingClientRect().width; if (sw) giant.style.fontSize = Math.floor(100 * w / sw * 0.99) + 'px'; }
   fitGiant(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitGiant); addEventListener('resize', fitGiant);
+
+  /* studio video: plays only while on screen, never with reduced motion (the poster stays) */
+  var vids = document.querySelectorAll('video[data-lazyplay]');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var vio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var pr = e.target.play(); if (pr && pr.catch) pr.catch(function () {}); } else e.target.pause(); }); }, { rootMargin: '200px 0px' });
+    vids.forEach(function (v) { vio.observe(v); });
+  }
 
   addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
 
