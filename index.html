@@ -119,6 +119,8 @@ html.no-pre .pre { display: none; }
 .intro .large { grid-column: 1 / -1; }
 .large { font: 500 clamp(26px, 2.8vw, 40px)/1.02 var(--body); letter-spacing: -.01em; text-wrap: pretty; max-width: 60ch; }
 .large .g { color: var(--green); }
+.bingo-head { display: inline-block; width: 1.25em; height: 1.25em; margin: 0 .2em -.24em 0; vertical-align: baseline; transform-origin: 50% 90%; transition: transform .4s cubic-bezier(.3,1.6,.5,1); }
+.intro .large:hover .bingo-head { transform: rotate(-8deg); }
 @media (max-width: 800px) { .intro { row-gap: 96px; } }
 
 /* Full-bleed photos */
@@ -285,7 +287,7 @@ html.no-pre .pre { display: none; }
   <section class="intro grid" id="tim">
     <p class="lbl c1" data-scramble>AI + čovjek</p>
     <p class="lbl c3" data-scramble>Tonći · 20 godina<br>dizajna i programiranja</p>
-    <h2 class="large">Bingo, naš AI asistent, odgovara na upite i piše prve verzije tekstova. Tonći, dizajner i programer s 20 godina iskustva, svaki tekst pregleda i odobri, a dizajn i izradu radi osobno. Zato cijeli kreativni tim dobivaš za <span class="g">399 € mjesečno</span>.</h2>
+    <h2 class="large"><img class="bingo-head" src="assets/bingo-ai/bingo-ai-avatar.svg" alt="" width="48" height="48">Bingo, naš AI asistent, odgovara na upite i piše prve verzije tekstova. Tonći, dizajner i programer s 20 godina iskustva, svaki tekst pregleda i odobri, a dizajn i izradu radi osobno. Zato cijeli kreativni tim dobivaš za <span class="g">399 € mjesečno</span>.</h2>
   </section>
 
   <div class="bleed" aria-hidden="true"><span class="lbl">Studio</span><video data-parallax data-lazyplay muted loop playsinline preload="none" poster="assets/team-2.jpg"><source src="assets/studio.mp4" type="video/mp4"></video></div>
