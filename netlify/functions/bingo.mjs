@@ -64,6 +64,27 @@ Kako odgovaraš:
 - Kad posjetitelj želi ponudu, suradnju ili da ga netko kontaktira, pitaj ime i e-mail pa pozovi alat posalji_upit, s kratkim sažetkom što treba. Upit pošalji samo uz e-mail koji je posjetitelj sam napisao, i javi mu da je poslano.
 - Ne pomažeš s temama koje nisu vezane uz TMBingo, dizajn, web ili marketing; ljubazno vrati razgovor na to.`;
 
+// Ime, oblik obraćanja i rod koje je posjetitelj odabrao u pozdravu na stranici. Prvi blok (SUSTAV) ostaje
+// isti za sve, pa se može keširati; podaci o posjetitelju idu u drugi, kratki blok.
+const cisto = (v, n) => String(v ?? '').replace(/[^\p{L}\s'-]/gu, '').trim().slice(0, n);
+function sustav(osoba) {
+  const blokovi = [{ type: 'text', text: SUSTAV, cache_control: { type: 'ephemeral' } }];
+  const ime = cisto(osoba?.ime, 30);
+  if (!ime) return blokovi;
+  const vok = cisto(osoba?.vok, 32) || ime;
+  const vi = osoba?.oblik === 'vi';
+  const zensko = osoba?.rod === 'z';
+  blokovi.push({
+    type: 'text',
+    text: `Posjetitelj se na stranici predstavio kao ${ime} (vokativ: ${vok}). ` +
+      (vi ? 'Želi da mu/joj se obraćaš s "Vi" (veliko V), pristojno i bez "ti" oblika. ' : 'Obraćaj se s "ti". ') +
+      (zensko ? 'To je žena: kad se u rečenici vidi rod, piši u ženskom rodu' : 'To je muškarac: kad se u rečenici vidi rod, piši u muškom rodu') +
+      (vi ? ' (uz Vi vrijedi standardno pristojno obraćanje u množini, npr. "jeste li zadovoljni"). ' : '. ') +
+      'Ime koristi povremeno, prirodno, ne u svakoj poruci.',
+  });
+  return blokovi;
+}
+
 const ALATI = [
   {
     name: 'slobodna_mjesta',
@@ -138,7 +159,7 @@ export default async (req) => {
   const ip = req.headers.get('x-nf-client-connection-ip') || req.headers.get('x-forwarded-for') || 'nepoznato';
   if (previse(ip)) return json(429, { greska: 'Puno poruka u kratkom vremenu. Probaj opet za par minuta ili piši na info@tmbingo.com.' });
 
-  const { poruke: ulaz } = await tijelo(req);
+  const { poruke: ulaz, osoba } = await tijelo(req);
   if (!Array.isArray(ulaz) || !ulaz.length || ulaz.length > MAX_PORUKA)
     return json(400, { greska: 'Razgovor je predug. Osvježi stranicu ili piši na info@tmbingo.com.' });
 
@@ -163,8 +184,7 @@ export default async (req) => {
         output_config: { effort: env('BINGO_EFFORT', 'low') },
         betas: ['server-side-fallback-2026-07-01'],
         fallbacks: 'default',
-        cache_control: { type: 'ephemeral' },
-        system: SUSTAV,
+        system: sustav(osoba),
         tools: ALATI,
         messages: razgovor,
       });

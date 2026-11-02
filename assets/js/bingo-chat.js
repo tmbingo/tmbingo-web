@@ -4,7 +4,22 @@
   const AVATAR = '/assets/bingo-ai/bingo-ai-avatar.svg';
   const LIK = '/assets/bingo-ai/bingo-ai-mase.svg';
   const KLJUC = 'bingo-chat';
-  const POZDRAV = 'Bok! Ja sam Bingo, AI asistent TMBinga. Pitaj me o paketima, cijenama ili kako radimo, a ako želiš ponudu, proslijedit ću upit Tonćiju.';
+  // ime, oblik obraćanja (ti/vi) i rod iz pozdrava na stranici (bingo-osoba.js)
+  const osoba = () => {
+    if (window.BingoOsoba) return window.BingoOsoba.get();
+    try { return JSON.parse(localStorage.getItem('bingo-osoba') || 'null'); } catch { return null; }
+  };
+  const naVi = () => osoba()?.oblik === 'vi';
+  const pozdrav = () => {
+    const o = osoba();
+    if (o?.oblik === 'vi') return `Dobar dan, ${o.vok}! Ja sam Bingo, AI asistent TMBinga. Pitajte me o paketima, cijenama ili kako radimo, a ako želite ponudu, proslijedit ću upit Tonćiju.`;
+    return `Bok${o ? ', ' + o.vok : ''}! Ja sam Bingo, AI asistent TMBinga. Pitaj me o paketima, cijenama ili kako radimo, a ako želiš ponudu, proslijedit ću upit Tonćiju.`;
+  };
+  const pitajTekst = () => {
+    const o = osoba();
+    const t = naVi() ? 'trebate pomoć?' : 'trebaš pomoć?';
+    return o ? `${o.vok}, ${t}` : t.charAt(0).toUpperCase() + t.slice(1);
+  };
 
   const css = `
 .bc-lansir { position: fixed; z-index: 65; right: var(--gy, 16px); bottom: calc(max(12px, env(safe-area-inset-bottom, 0px)) + var(--bc-dolje, 0px)); display: flex; flex-direction: column; align-items: flex-end; gap: 6px; pointer-events: none; }
@@ -73,12 +88,12 @@
   document.head.append(el('style', {}, css));
 
   const gumb = el('button', { class: 'bc-gumb', type: 'button', 'aria-label': 'Razgovaraj s Bingom, AI asistentom', 'aria-expanded': 'false', 'aria-controls': 'bc-prozor' }, el('img', { src: LIK, alt: '', width: '74', height: '95' }));
-  const pitaj = el('button', { class: 'bc-pitaj', type: 'button' }, 'Trebaš pomoć?');
+  const pitaj = el('button', { class: 'bc-pitaj', type: 'button' }, pitajTekst());
   const makni = el('button', { class: 'bc-makni', type: 'button', 'aria-label': 'Sakrij poruku' }, '×');
   const oblak = el('div', { class: 'bc-oblak' }, pitaj, makni);
   const lansir = el('div', { class: 'bc-lansir' }, oblak, gumb);
   const lista = el('div', { class: 'bc-poruke', 'aria-live': 'polite' });
-  const polje = el('textarea', { rows: '1', placeholder: 'Napiši poruku…', 'aria-label': 'Poruka za Binga', maxlength: '2000' });
+  const polje = el('textarea', { rows: '1', placeholder: naVi() ? 'Napišite poruku…' : 'Napiši poruku…', 'aria-label': 'Poruka za Binga', maxlength: '2000' });
   const posalji = el('button', { type: 'submit' }, 'Pošalji');
   const zatvori = el('button', { class: 'bc-zatvori', type: 'button', 'aria-label': 'Zatvori chat' }, '×');
   const forma = el('form', { class: 'bc-unos' }, polje, posalji);
@@ -111,7 +126,7 @@
   };
   const iscrtaj = () => {
     lista.replaceChildren();
-    dodaj('bingo', POZDRAV);
+    dodaj('bingo', pozdrav());
     poruke.forEach((p) => dodaj(p.uloga, p.tekst));
   };
 
@@ -144,6 +159,11 @@
   makni.addEventListener('click', skloniOblak);
   pitaj.addEventListener('click', otvori);
   gumb.addEventListener('click', otvori);
+  window.addEventListener('bingo-osoba', () => {
+    pitaj.textContent = pitajTekst();
+    polje.placeholder = naVi() ? 'Napišite poruku…' : 'Napiši poruku…';
+    if (lista.childElementCount) iscrtaj();
+  });
   zatvori.addEventListener('click', sakrij);
   prozor.addEventListener('keydown', (e) => { if (e.key === 'Escape') sakrij(); });
   document.querySelectorAll('[data-bingo-chat]').forEach((b) => {
@@ -174,7 +194,7 @@
       const r = await fetch('/api/bingo', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ poruke: poruke.slice(-30) }),
+        body: JSON.stringify({ poruke: poruke.slice(-30), osoba: osoba() }),
       });
       const d = await r.json().catch(() => ({}));
       tipka.remove();
