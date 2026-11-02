@@ -2,14 +2,24 @@
 // Povijest razgovora drži se samo u ovoj kartici preglednika (sessionStorage), bez kolačića.
 (() => {
   const AVATAR = '/assets/bingo-ai/bingo-ai-avatar.svg';
+  const LIK = '/assets/bingo-ai/bingo-ai-mase.svg';
   const KLJUC = 'bingo-chat';
   const POZDRAV = 'Bok! Ja sam Bingo, AI asistent TMBinga. Pitaj me o paketima, cijenama ili kako radimo, a ako želiš ponudu, proslijedit ću upit Tonćiju.';
 
   const css = `
-.bc-gumb { position: fixed; z-index: 65; right: var(--gy, 16px); bottom: calc(max(16px, env(safe-area-inset-bottom, 0px)) + var(--bc-dolje, 0px)); width: 64px; height: 64px; border: 0; padding: 6px; background: #000; cursor: pointer; display: grid; place-items: center; transition: transform .3s cubic-bezier(.3,1.6,.5,1); }
-.bc-gumb:hover { transform: translateY(-3px) rotate(-6deg); }
-.bc-gumb img { width: 100%; height: 100%; }
-.bc-gumb[aria-expanded="true"] { display: none; }
+.bc-lansir { position: fixed; z-index: 65; right: var(--gy, 16px); bottom: calc(max(12px, env(safe-area-inset-bottom, 0px)) + var(--bc-dolje, 0px)); display: flex; flex-direction: column; align-items: flex-end; gap: 6px; pointer-events: none; }
+.bc-lansir.otvoren { display: none; }
+.bc-lansir > * { pointer-events: auto; }
+.bc-oblak { position: relative; display: flex; align-items: center; gap: 2px; background: #000; color: #fff; font: 500 14px/1.2 var(--body, system-ui, sans-serif); margin-right: 10px; opacity: 0; transform: translateY(8px) scale(.9); transform-origin: 85% 100%; transition: opacity .35s, transform .45s cubic-bezier(.3,1.6,.5,1); }
+.bc-oblak.vidljiv { opacity: 1; transform: none; }
+.bc-oblak::after { content: ""; position: absolute; right: 22px; bottom: -8px; border: 8px solid transparent; border-bottom: 0; border-top-color: #000; }
+.bc-oblak button { background: none; border: 0; color: inherit; font: inherit; cursor: pointer; }
+.bc-oblak .bc-pitaj { padding: 10px 4px 10px 14px; }
+.bc-oblak .bc-makni { padding: 10px 10px 10px 6px; color: #8a8a8a; font-size: 18px; line-height: 1; }
+.bc-oblak .bc-makni:hover { color: #fff; }
+.bc-gumb { width: 74px; height: 95px; border: 0; padding: 0; background: none; cursor: pointer; transition: transform .3s cubic-bezier(.3,1.6,.5,1); filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1.5px #fff) drop-shadow(0 6px 10px rgba(0,0,0,.25)); }
+.bc-gumb:hover { transform: translateY(-4px); }
+.bc-gumb img { width: 100%; height: 100%; display: block; }
 .bc-prozor { position: fixed; z-index: 75; right: var(--gy, 16px); bottom: max(16px, env(safe-area-inset-bottom, 0px)); width: min(380px, calc(100vw - 32px)); height: min(560px, calc(100dvh - 32px)); background: #fff; color: #0b0b0b; border: 1px solid #000; display: grid; grid-template-rows: auto 1fr auto auto; font: 400 15px/1.45 var(--body, system-ui, sans-serif); box-shadow: 0 18px 50px rgba(0,0,0,.18); }
 .bc-glava { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #000; color: #fff; }
 .bc-glava img { width: 34px; height: 34px; }
@@ -32,7 +42,7 @@
 .bc-unos button:disabled { background: #b9c2bd; cursor: default; }
 .bc-napomena { margin: 0; padding: 6px 12px 8px; font-size: 11px; color: #8a8a8a; }
 .bc-napomena a { color: inherit; }
-@media (prefers-reduced-motion: reduce) { .bc-gumb, .bc-tipka i { transition: none; animation: none; } }`;
+@media (prefers-reduced-motion: reduce) { .bc-gumb, .bc-oblak, .bc-tipka i { transition: none; animation: none; } }`;
 
   let poruke = [];
   try { poruke = JSON.parse(sessionStorage.getItem(KLJUC) || '[]'); } catch {}
@@ -62,7 +72,11 @@
 
   document.head.append(el('style', {}, css));
 
-  const gumb = el('button', { class: 'bc-gumb', type: 'button', 'aria-label': 'Razgovaraj s Bingom, AI asistentom', 'aria-expanded': 'false', 'aria-controls': 'bc-prozor' }, el('img', { src: AVATAR, alt: '' }));
+  const gumb = el('button', { class: 'bc-gumb', type: 'button', 'aria-label': 'Razgovaraj s Bingom, AI asistentom', 'aria-expanded': 'false', 'aria-controls': 'bc-prozor' }, el('img', { src: LIK, alt: '', width: '74', height: '95' }));
+  const pitaj = el('button', { class: 'bc-pitaj', type: 'button' }, 'Trebaš pomoć?');
+  const makni = el('button', { class: 'bc-makni', type: 'button', 'aria-label': 'Sakrij poruku' }, '×');
+  const oblak = el('div', { class: 'bc-oblak' }, pitaj, makni);
+  const lansir = el('div', { class: 'bc-lansir' }, oblak, gumb);
   const lista = el('div', { class: 'bc-poruke', 'aria-live': 'polite' });
   const polje = el('textarea', { rows: '1', placeholder: 'Napiši poruku…', 'aria-label': 'Poruka za Binga', maxlength: '2000' });
   const posalji = el('button', { type: 'submit' }, 'Pošalji');
@@ -72,7 +86,7 @@
     el('div', { class: 'bc-glava' }, el('img', { src: AVATAR, alt: '' }), el('div', {}, el('b', {}, 'Bingo'), el('small', {}, 'AI asistent · odgovara odmah')), zatvori),
     lista, forma,
     el('p', { class: 'bc-napomena' }, 'Bingo je AI i može pogriješiti. Tonći pregledava svaku ponudu. ', el('a', { href: '/privatnost.html' }, 'Privatnost')));
-  document.body.append(gumb, prozor);
+  document.body.append(lansir, prozor);
 
   // na uskim ekranima obavijest o kolačićima prekriva gumb, pa ga podignemo iznad nje dok je vidljiva
   const kolacic = document.getElementById('cookie');
@@ -80,9 +94,9 @@
     let dolje = 0;
     if (kolacic && !kolacic.hidden) {
       const k = kolacic.getBoundingClientRect();
-      if (k.right > window.innerWidth - 96) dolje = k.height + 12;
+      if (k.right > window.innerWidth - 110) dolje = k.height + 8;
     }
-    gumb.style.setProperty('--bc-dolje', dolje + 'px');
+    lansir.style.setProperty('--bc-dolje', dolje + 'px');
   };
   if (kolacic) {
     new MutationObserver(pomakni).observe(kolacic, { attributes: true, attributeFilter: ['hidden'] });
@@ -104,15 +118,31 @@
   const otvori = () => {
     prozor.hidden = false;
     gumb.setAttribute('aria-expanded', 'true');
+    lansir.classList.add('otvoren');
+    skloniOblak();
     if (!lista.childElementCount) iscrtaj();
     polje.focus();
   };
   const sakrij = () => {
     prozor.hidden = true;
     gumb.setAttribute('aria-expanded', 'false');
+    lansir.classList.remove('otvoren');
     gumb.focus();
   };
 
+  // oblačić "Trebaš pomoć?" pojavi se nakon 3 s, a nakon klika ili × ne vraća se do kraja posjeta
+  let oblakSklonjen = false;
+  try { oblakSklonjen = sessionStorage.getItem(KLJUC + '-oblak') === '1'; } catch {}
+  const skloniOblak = () => {
+    oblakSklonjen = true;
+    oblak.classList.remove('vidljiv');
+    oblak.hidden = true;
+    try { sessionStorage.setItem(KLJUC + '-oblak', '1'); } catch {}
+  };
+  if (oblakSklonjen) oblak.hidden = true;
+  else setTimeout(() => { if (!oblakSklonjen) oblak.classList.add('vidljiv'); }, 3000);
+  makni.addEventListener('click', skloniOblak);
+  pitaj.addEventListener('click', otvori);
   gumb.addEventListener('click', otvori);
   zatvori.addEventListener('click', sakrij);
   prozor.addEventListener('keydown', (e) => { if (e.key === 'Escape') sakrij(); });
