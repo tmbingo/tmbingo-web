@@ -123,7 +123,7 @@ html.no-pre .pre { display: none; }
 
 /* Full-bleed photos */
 .bleed { position: relative; height: min(80vw, 760px); overflow: hidden; background: #1a1a1a; }
-.bleed img { position: absolute; inset: -8% 0; width: 100%; height: 116%; object-fit: cover; will-change: transform; }
+.bleed img, .bleed video { position: absolute; inset: -8% 0; width: 100%; height: 116%; object-fit: cover; will-change: transform; }
 .bleed .lbl { position: absolute; left: var(--gx); top: 16px; z-index: 2; color: var(--white); background: #000; padding: 2px 6px; }
 
 /* Services list (scroll-linked) */
@@ -288,7 +288,7 @@ html.no-pre .pre { display: none; }
     <h2 class="large">Bingo, naš AI asistent, odgovara na upite i piše prve verzije tekstova. Tonći, dizajner i programer s 20 godina iskustva, svaki tekst pregleda i odobri, a dizajn i izradu radi osobno. Zato cijeli kreativni tim dobivaš za <span class="g">399 € mjesečno</span>.</h2>
   </section>
 
-  <div class="bleed" aria-hidden="true"><span class="lbl">Studio</span><img data-parallax src="assets/team-2.jpg" alt=""></div>
+  <div class="bleed" aria-hidden="true"><span class="lbl">Studio</span><video data-parallax data-lazyplay muted loop playsinline preload="none" poster="assets/team-2.jpg"><source src="https://studio23k.eu/wp-content/uploads/2025/08/studio23k-1.mp4" type="video/mp4"></video></div>
 
   <section class="svc grid" id="usluge">
     <div class="head"><p class="lbl" data-scramble>Usluge</p><p class="lbl" data-scramble>Sve što brendu treba, u jednom paketu.</p></div>
@@ -534,6 +534,13 @@ var MJESEC = 'studeni 2026';
   var gspan = giant.querySelector('span');
   function fitGiant() { giant.style.fontSize = '100px'; var w = giant.clientWidth, sw = gspan.getBoundingClientRect().width; if (sw) giant.style.fontSize = Math.floor(100 * w / sw * 0.99) + 'px'; }
   fitGiant(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitGiant); addEventListener('resize', fitGiant);
+
+  /* studio video: plays only while on screen, never with reduced motion (the poster stays) */
+  var vids = document.querySelectorAll('video[data-lazyplay]');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var vio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var pr = e.target.play(); if (pr && pr.catch) pr.catch(function () {}); } else e.target.pause(); }); }, { rootMargin: '200px 0px' });
+    vids.forEach(function (v) { vio.observe(v); });
+  }
 
   addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
 
