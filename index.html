@@ -119,6 +119,19 @@ html.no-pre .pre { display: none; }
 .intro .large { grid-column: 1 / -1; }
 .large { font: 500 clamp(26px, 2.8vw, 40px)/1.02 var(--body); letter-spacing: -.01em; text-wrap: pretty; max-width: 60ch; }
 .large .g { color: var(--green); }
+.bingo-head { display: inline-block; width: 1.25em; height: 1.25em; margin: 0 .2em -.24em 0; vertical-align: baseline; transform-origin: 50% 90%; transition: transform .4s cubic-bezier(.3,1.6,.5,1); }
+.intro .large:hover .bingo-head { transform: rotate(-8deg); }
+.upoznaj { grid-column: 1 / -1; margin-top: -112px; display: flex; align-items: flex-end; gap: 14px; max-width: 640px; }
+.up-lik { width: 74px; height: auto; flex: none; }
+.up-oblak { position: relative; margin: 0 0 12px; background: #e8f2f1; padding: 12px 16px; font-size: 18px; line-height: 1.35; }
+.up-oblak::before { content: ""; position: absolute; left: -10px; bottom: 14px; border: 10px solid transparent; border-left: 0; border-right-color: #e8f2f1; }
+.up-tijelo { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.up-forma { display: flex; gap: 8px; flex-wrap: wrap; }
+.up-forma input { font: inherit; font-size: 16px; padding: 9px 12px; border: 0; box-shadow: inset 0 0 0 1px var(--ink); min-width: 0; width: 200px; background: var(--white); color: var(--ink); }
+.up-forma input:focus { outline: 2px solid var(--green); outline-offset: 1px; }
+.up-izbor { display: flex; gap: 8px; }
+.up-promijeni { font: 400 12px/1 var(--tech); letter-spacing: .09em; text-transform: uppercase; background: none; border: 0; padding: 0; color: var(--mid); cursor: pointer; text-decoration: underline; }
+@media (max-width: 800px) { .upoznaj { margin-top: -56px; } .up-lik { width: 56px; } .up-oblak { font-size: 16px; } .up-forma input { width: 100%; } }
 @media (max-width: 800px) { .intro { row-gap: 96px; } }
 
 /* Full-bleed photos */
@@ -285,7 +298,11 @@ html.no-pre .pre { display: none; }
   <section class="intro grid" id="tim">
     <p class="lbl c1" data-scramble>AI + čovjek</p>
     <p class="lbl c3" data-scramble>Tonći · 20 godina<br>dizajna i programiranja</p>
-    <h2 class="large">Bingo, naš AI asistent, odgovara na upite i piše prve verzije tekstova. Tonći, dizajner i programer s 20 godina iskustva, svaki tekst pregleda i odobri, a dizajn i izradu radi osobno. Zato cijeli kreativni tim dobivaš za <span class="g">399 € mjesečno</span>.</h2>
+    <h2 class="large"><img class="bingo-head" src="assets/bingo-ai/bingo-ai-avatar.svg" alt="" width="48" height="48" data-bingo-chat title="Razgovaraj s Bingom">Bingo, naš AI asistent, odgovara na upite i piše prve verzije tekstova. Tonći, dizajner i programer s 20 godina iskustva, svaki tekst pregleda i odobri, a dizajn i izradu radi osobno. Zato cijeli kreativni tim <span data-ti="dobivaš" data-vi="dobivate">dobivaš</span> za <span class="g">399 € mjesečno</span>.</h2>
+    <div class="upoznaj" id="upoznaj" hidden aria-live="polite">
+      <img class="up-lik" src="assets/bingo-ai/bingo-ai-mase.svg" alt="" width="74" height="95">
+      <div><p class="up-oblak"></p><div class="up-tijelo"></div></div>
+    </div>
   </section>
 
   <div class="bleed" aria-hidden="true"><span class="lbl">Studio</span><video data-parallax data-lazyplay muted loop playsinline preload="none" poster="assets/team-2.jpg"><source src="assets/studio.mp4" type="video/mp4"></video></div>
@@ -318,21 +335,21 @@ html.no-pre .pre { display: none; }
     <section class="paket grid">
       <p class="lbl c1" data-scramble>TMBingo paketi</p>
       <p class="lbl c3 dim" data-scramble>Bez obveze trajanja.<br>Pauza ili otkaz bilo kada.</p>
-      <h2 class="large">Svaki rad prvo dobiješ u Figmi. Kad ga odobriš, uz pomoć AI-ja kreće kodiranje. Objave za društvene mreže radi dizajner, ne AI, da se istakneš iz mase novih AI sadržaja.</h2>
+      <h2 class="large" data-ti="[{vok}, ]svaki rad prvo dobiješ u Figmi. Kad ga odobriš, uz pomoć AI-ja kreće kodiranje. Objave za društvene mreže radi dizajner, ne AI, da se istakneš iz mase novih AI sadržaja." data-vi="[{vok}, ]svaki rad prvo dobijete u Figmi. Kad ga odobrite, uz pomoć AI-ja kreće kodiranje. Objave za društvene mreže radi dizajner, ne AI, da se istaknete iz mase novih AI sadržaja.">Svaki rad prvo dobiješ u Figmi. Kad ga odobriš, uz pomoć AI-ja kreće kodiranje. Objave za društvene mreže radi dizajner, ne AI, da se istakneš iz mase novih AI sadržaja.</h2>
       <div class="plans-l full">
         <div class="per lbl" role="radiogroup" aria-label="Način plaćanja"><button type="button" data-per="mjesecno" class="on" aria-checked="true" role="radio">Mjesečno</button><button type="button" data-per="godisnje" aria-checked="false" role="radio">Godišnje <span>2 mjeseca gratis</span></button></div>
         <div class="cards">
-          <a class="card" href="/paket/?p=start" data-p="start"><span class="lbl">Start</span><b class="amt" data-m="199 €" data-g="1.990 €">199 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><span class="sub">Društvene mreže i održavanje weba</span><ul><li>8 objava mjesečno</li><li>Održavanje postojećeg weba</li><li>Jedan zadatak u isto vrijeme</li></ul><span class="go lbl">Odaberi →</span></a>
-          <a class="card featured" href="/paket/?p=tmbingo" data-p="tmbingo"><span class="lbl">TMBingo paket <em>Najčešći izbor</em></span><b class="amt" data-m="399 €" data-g="3.990 €">399 €</b><small class="lbl dim" data-m="mjesečno · umjesto 1890 € plaće dizajnera" data-g="godišnje · umjesto 1890 € plaće dizajnera mjesečno">mjesečno · umjesto 1890 € plaće dizajnera</small><span class="sub">Web, dizajn i društvene mreže</span><ul><li>Web, hosting i održavanje</li><li>Logo, branding, tiskovine</li><li>Zadaci redom, jedan po jedan</li></ul><span class="go lbl">Odaberi →</span></a>
-          <a class="card" href="/paket/?p=pro" data-p="pro"><span class="lbl">Pro</span><b class="amt" data-m="749 €" data-g="7.490 €">749 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><span class="sub">Kad treba više i brže</span><ul><li>Sve iz TMBingo paketa</li><li>Dva zadatka u isto vrijeme</li><li>Prednost i mjesečni plan</li></ul><span class="go lbl">Odaberi →</span></a>
-          <a class="card" href="/paket/?p=web" data-p="web"><span class="lbl">Web za 14 dana</span><b class="amt">1.490 €</b><small class="lbl dim">jednokratno</small><span class="sub">Nova web stranica, bez pretplate</span><ul><li>Gotovo za 14 dana</li><li>Dizajn prvo u Figmi</li><li>Plaća se jednom</li></ul><span class="go lbl">Odaberi →</span></a>
+          <a class="card" href="/paket/?p=start" data-p="start"><span class="lbl">Start</span><b class="amt" data-m="199 €" data-g="1.990 €">199 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><span class="sub">Društvene mreže i održavanje weba</span><ul><li>8 objava mjesečno</li><li>Održavanje postojećeg weba</li><li>Jedan zadatak u isto vrijeme</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
+          <a class="card featured" href="/paket/?p=tmbingo" data-p="tmbingo"><span class="lbl">TMBingo paket <em>Najčešći izbor</em></span><b class="amt" data-m="399 €" data-g="3.990 €">399 €</b><small class="lbl dim" data-m="mjesečno · umjesto 1890 € plaće dizajnera" data-g="godišnje · umjesto 1890 € plaće dizajnera mjesečno">mjesečno · umjesto 1890 € plaće dizajnera</small><span class="sub">Web, dizajn i društvene mreže</span><ul><li>Web, hosting i održavanje</li><li>Logo, branding, tiskovine</li><li>Zadaci redom, jedan po jedan</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
+          <a class="card" href="/paket/?p=pro" data-p="pro"><span class="lbl">Pro</span><b class="amt" data-m="749 €" data-g="7.490 €">749 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><span class="sub">Kad treba više i brže</span><ul><li>Sve iz TMBingo paketa</li><li>Dva zadatka u isto vrijeme</li><li>Prednost i mjesečni plan</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
+          <a class="card" href="/paket/?p=web" data-p="web"><span class="lbl">Web za 14 dana</span><b class="amt">1.490 €</b><small class="lbl dim">jednokratno</small><span class="sub">Nova web stranica, bez pretplate</span><ul><li>Gotovo za 14 dana</li><li>Dizajn prvo u Figmi</li><li>Plaća se jednom</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
         </div>
       </div>
       <div class="slots">
         <p class="lbl">Najviše 10 novih klijenata mjesečno</p>
         <div class="slot-grid" id="slotGrid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <p class="lbl dim" id="slotText">Slobodna mjesta ovaj mjesec</p>
-        <p class="cta"><a class="btn light" href="/paket/">Odaberi paket</a><a class="btn ghost light" href="/app/">Prijava za klijente</a></p>
+        <p class="cta"><a class="btn light" href="/paket/" data-ti="Odaberi paket" data-vi="Odaberite paket">Odaberi paket</a><a class="btn ghost light" href="/app/">Prijava za klijente</a></p>
       </div>
     </section>
     <section class="list grid" aria-label="Kako radimo">
@@ -340,7 +357,7 @@ html.no-pre .pre { display: none; }
       <ol>
         <li><span class="lbl">01</span>Upit e-mailom i brief<em>AI</em></li>
         <li><span class="lbl">02</span>Figma prijedlog<em>Tonći</em></li>
-        <li><span class="lbl">03</span>Tvoje odobrenje i ispravci<em>Ti</em></li>
+        <li><span class="lbl">03</span><span data-ti="Tvoje" data-vi="Vaše">Tvoje</span> odobrenje i ispravci<em data-ti="Ti" data-vi="Vi">Ti</em></li>
         <li><span class="lbl">04</span>Kodiranje uz pomoć AI-ja<em>Tonći + AI</em></li>
         <li><span class="lbl">05</span>Objava, hosting i održavanje<em>Tonći</em></li>
       </ol>
@@ -381,8 +398,8 @@ html.no-pre .pre { display: none; }
     <p class="lbl" data-scramble>Česta pitanja</p>
     <div class="qs">
       <details><summary><span class="lbl">01</span>Razgovaram li s čovjekom ili s AI-jem?</summary><p>Upite, ponude i dogovor vodi Bingo, naš AI asistent. Uvijek se predstavi kao AI asistent, a mi ga od milja zovemo AE asistent, jer je AE u Dalmaciji odgovor na sve. Dizajn i izradu radi Tonći osobno.</p></details>
-      <details><summary><span class="lbl">02</span>Zašto je tako povoljno?</summary><p>Administraciju, tekstove i komunikaciju radi AI, pa Tonći svaki dan dizajnira umjesto da piše mailove. Ušteda ide tebi.</p></details>
-      <details><summary><span class="lbl">03</span>Zašto samo 10 klijenata mjesečno?</summary><p>Jer dizajn radi čovjek. Preko 10 ne bismo stigli raditi kvalitetno. Kad su mjesta popunjena, stavljamo te na listu za idući mjesec.</p></details>
+      <details><summary><span class="lbl">02</span>Zašto je tako povoljno?</summary><p>Administraciju, tekstove i komunikaciju radi AI, pa Tonći svaki dan dizajnira umjesto da piše mailove. Ušteda ide <span data-ti="tebi" data-vi="Vama">tebi</span>.</p></details>
+      <details><summary><span class="lbl">03</span>Zašto samo 10 klijenata mjesečno?</summary><p>Jer dizajn radi čovjek. Preko 10 ne bismo stigli raditi kvalitetno. Kad su mjesta popunjena, stavljamo <span data-ti="te" data-vi="Vas">te</span> na listu za idući mjesec.</p></details>
       <details><summary><span class="lbl">04</span>Zašto komunikacija ide e-mailom?</summary><p>Zbog transparentnosti. Svaki dogovor, rok i izmjena ostaju zapisani.</p></details>
       <details><summary><span class="lbl">05</span>Mogu li pauzirati ili otkazati?</summary><p>Da, u bilo kojem trenutku i bez penala. Nema dugoročnog ugovora ni minimalnog trajanja, otkaz vrijedi od idućeg mjeseca. Detalji su u <a href="uvjeti.html">uvjetima poslovanja</a>.</p></details>
     </div>
@@ -397,8 +414,8 @@ html.no-pre .pre { display: none; }
       <p class="lbl dim">Kontakt</p>
       <p class="mail" id="mail">info@tmbingo.com</p>
       <div class="acts">
-        <button class="btn" type="button" id="copyMail">Kopiraj adresu</button>
-        <a class="btn ghost" href="https://calendar.app.google/usQc7qxTB229WQip9" target="_blank" rel="noopener">Video poziv 30 min</a>
+        <button class="btn" type="button" id="copyMail" data-ti="Kopiraj adresu" data-vi="Kopirajte adresu">Kopiraj adresu</button>
+        <a class="btn ghost" href="https://calendar.app.google/jx4eBT3Tn9bsoiSt9" target="_blank" rel="noopener">Video poziv 30 min</a>
       </div>
     </div>
     <dl class="lbl c3">
@@ -420,6 +437,8 @@ html.no-pre .pre { display: none; }
 </div>
 
 <script src="assets/js/lenis.min.js"></script>
+<script src="assets/js/bingo-osoba.js?v=2" defer></script>
+<script src="assets/js/bingo-chat.js?v=3" defer></script>
 <script>
 /* BROJ SLOBODNIH MJESTA: Tonći ovdje upisuje koliko je mjesta još slobodno ovaj mjesec (0 do 10). */
 var SLOBODNA_MJESTA = 10;
@@ -556,7 +575,7 @@ var MJESEC = 'studeni 2026';
 
   document.getElementById('copyMail').addEventListener('click', function () {
     var btn = this, txt = document.getElementById('mail');
-    var done = function () { btn.textContent = 'Kopirano'; setTimeout(function () { btn.textContent = 'Kopiraj adresu'; }, 1600); };
+    var done = function () { btn.textContent = 'Kopirano'; setTimeout(function () { btn.textContent = document.documentElement.dataset.oblik === 'vi' ? 'Kopirajte adresu' : 'Kopiraj adresu'; }, 1600); };
     var fallback = function () { var r = document.createRange(); r.selectNodeContents(txt); var s = getSelection(); s.removeAllRanges(); s.addRange(r); };
     try { navigator.clipboard.writeText(txt.textContent).then(done, fallback); } catch (err) { fallback(); }
   });
