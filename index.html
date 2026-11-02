@@ -130,13 +130,8 @@ html.no-pre .pre { display: none; }
 .up-forma input { font: inherit; font-size: 16px; padding: 9px 12px; border: 0; box-shadow: inset 0 0 0 1px var(--ink); min-width: 0; width: 200px; background: var(--white); color: var(--ink); }
 .up-forma input:focus { outline: 2px solid var(--green); outline-offset: 1px; }
 .up-izbor { display: flex; gap: 8px; }
-.up-rod { display: flex; gap: 6px; align-items: center; font-size: 14px; }
-.up-rod .lbl { margin-right: 4px; }
-.up-rod button { font: inherit; background: none; border: 0; padding: 4px 8px; cursor: pointer; color: var(--mid); box-shadow: inset 0 0 0 1px var(--grey); }
-.up-rod button[aria-checked="true"] { color: var(--white); background: var(--ink); box-shadow: none; }
-.up-rod.trazi { outline: 2px solid var(--green); outline-offset: 4px; }
 .up-promijeni { font: 400 12px/1 var(--tech); letter-spacing: .09em; text-transform: uppercase; background: none; border: 0; padding: 0; color: var(--mid); cursor: pointer; text-decoration: underline; }
-@media (max-width: 800px) { .upoznaj { margin-top: -56px; } .up-lik { width: 56px; } .up-oblak { font-size: 16px; } }
+@media (max-width: 800px) { .upoznaj { margin-top: -56px; } .up-lik { width: 56px; } .up-oblak { font-size: 16px; } .up-forma input { width: 100%; } }
 @media (max-width: 800px) { .intro { row-gap: 96px; } }
 
 /* Full-bleed photos */
@@ -442,7 +437,7 @@ html.no-pre .pre { display: none; }
 </div>
 
 <script src="assets/js/lenis.min.js"></script>
-<script src="assets/js/bingo-osoba.js?v=1" defer></script>
+<script src="assets/js/bingo-osoba.js?v=2" defer></script>
 <script src="assets/js/bingo-chat.js?v=3" defer></script>
 <script>
 /* BROJ SLOBODNIH MJESTA: Tonći ovdje upisuje koliko je mjesta još slobodno ovaj mjesec (0 do 10). */

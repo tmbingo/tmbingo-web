@@ -74,56 +74,48 @@
   const oblak = kutija.querySelector('.up-oblak');
   const tijelo = kutija.querySelector('.up-tijelo');
 
+  function zavrsi(ime, oblik, rod) {
+    osoba = { ime, vok: vokativ(ime, rod), rod, oblik };
+    spremi(osoba);
+    primijeni(osoba);
+    korakGotovo();
+  }
+
+  // Jedan korak: ime + "Na ti" ili "Na Vi". Rod se pogađa iz imena; samo za imena koja mogu biti
+  // i muška i ženska (Saša, Matija…) Bingo jednim klikom pita još i to.
   function korakIme() {
     oblak.innerHTML = 'Pozdrav, ja sam Bingo! Kako se zoveš?';
-    tijelo.innerHTML = `<form class="up-forma"><input name="ime" autocomplete="given-name" maxlength="30" placeholder="Tvoje ime" aria-label="Tvoje ime" required><button class="btn" type="submit">Upoznajmo se</button></form>`;
+    tijelo.innerHTML = `<form class="up-forma">
+        <input name="ime" autocomplete="given-name" maxlength="30" placeholder="Upiši ime" aria-label="Tvoje ime" required>
+        <button class="btn" type="submit" value="ti">Na ti</button>
+        <button class="btn ghost" type="submit" value="vi">Na Vi</button>
+      </form>`;
     const f = tijelo.querySelector('form');
     f.addEventListener('submit', (e) => {
       e.preventDefault();
       const ime = veliko(f.ime.value.trim().replace(/[^\p{L}\s'-]/gu, '').replace(/\s+/g, ' ').split(' ')[0] || '');
       if (!ime) return f.ime.focus();
-      korakOblik(ime, procijeniRod(ime));
+      const oblik = e.submitter?.value === 'vi' ? 'vi' : 'ti';
+      const rod = procijeniRod(ime);
+      rod ? zavrsi(ime, oblik, rod) : korakRod(ime, oblik);
     });
   }
 
-  function korakOblik(ime, rod) {
-    const vok = vokativ(ime, rod || 'm');
-    oblak.innerHTML = `Drago mi je, ${esc(vok)}! Kako ti je draže da ti se obraćam?`;
-    tijelo.innerHTML = `
-      <div class="up-izbor" role="group" aria-label="Oblik obraćanja">
-        <button class="btn" type="button" data-oblik="ti">Na ti</button>
-        <button class="btn ghost" type="button" data-oblik="vi">Na Vi</button>
-      </div>
-      <div class="up-rod" role="radiogroup" aria-label="Rod">
-        <span class="lbl dim">Pišem ti kao</span>
-        <button type="button" role="radio" data-rod="m" aria-checked="${rod === 'm'}">muškarcu</button>
-        <button type="button" role="radio" data-rod="z" aria-checked="${rod === 'z'}">ženi</button>
+  function korakRod(ime, oblik) {
+    const vi = oblik === 'vi';
+    oblak.innerHTML = vi ? `Drago mi je, ${esc(ime)}! Da Vam pišem kao gospodinu ili gospođi?` : `Drago mi je, ${esc(ime)}! Da ti pišem kao muškarcu ili ženi?`;
+    tijelo.innerHTML = `<div class="up-izbor">
+        <button class="btn" type="button" data-rod="m">${vi ? 'Gospodinu' : 'Muškarcu'}</button>
+        <button class="btn" type="button" data-rod="z">${vi ? 'Gospođi' : 'Ženi'}</button>
       </div>`;
-    let odabraniRod = rod;
-    const rodovi = tijelo.querySelectorAll('[data-rod]');
-    rodovi.forEach((b) => b.addEventListener('click', () => {
-      odabraniRod = b.dataset.rod;
-      rodovi.forEach((x) => x.setAttribute('aria-checked', String(x === b)));
-      const v = vokativ(ime, odabraniRod);
-      oblak.innerHTML = `Drago mi je, ${esc(v)}! Kako ti je draže da ti se obraćam?`;
-    }));
-    tijelo.querySelectorAll('[data-oblik]').forEach((b) => b.addEventListener('click', () => {
-      if (!odabraniRod) {
-        tijelo.querySelector('.up-rod').classList.add('trazi');
-        return;
-      }
-      osoba = { ime, vok: vokativ(ime, odabraniRod), rod: odabraniRod, oblik: b.dataset.oblik };
-      spremi(osoba);
-      primijeni(osoba);
-      korakGotovo();
-    }));
+    tijelo.querySelectorAll('[data-rod]').forEach((b) => b.addEventListener('click', () => zavrsi(ime, oblik, b.dataset.rod)));
   }
 
   function korakGotovo() {
     const { vok, rod, oblik } = osoba;
     oblak.innerHTML = oblik === 'vi'
-      ? `Dobro došli, ${esc(vok)}! Ostatak stranice sada Vam se obraća na Vi.`
-      : `${rod === 'z' ? 'Dobrodošla' : 'Dobrodošao'}, ${esc(vok)}! Ostatak stranice sad je pisan za tebe.`;
+      ? `Dobro došli, ${esc(vok)}! Stranica Vam se sada obraća na Vi.`
+      : `${rod === 'z' ? 'Dobrodošla' : 'Dobrodošao'}, ${esc(vok)}! Stranica je sad pisana za tebe.`;
     tijelo.innerHTML = `<button class="up-promijeni" type="button">${oblik === 'vi' ? 'Promijenite' : 'Promijeni'}</button>`;
     tijelo.querySelector('button').addEventListener('click', () => {
       osoba = null;
