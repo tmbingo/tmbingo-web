@@ -1,0 +1,7 @@
+# tmbingo.com
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /api/
+
+Sitemap: https://tmbingo.com/sitemap.xml
