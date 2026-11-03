@@ -34,6 +34,14 @@ python3 -m http.server 8000
 
 pa otvori http://localhost:8000.
 
+## SEO i AI pretrage
+
+- `izrada-web-stranica-zadar/`, `drustvene-mreze-zadar/`, `graficki-dizajn-zadar/` – podstranice usluga (stil u `assets/stranica.css`)
+- `blog/` – blog; novi članak = nova mapa `blog/naziv-clanka/index.html` po uzoru na postojeće, plus poveznica u `blog/index.html`, `sitemap.xml` i `llms.txt`
+- `sitemap.xml`, `robots.txt` – za Google i Bing
+- `llms.txt` – sažetak za AI alate (ChatGPT, Perplexity, Claude)
+- Strukturirani podaci (JSON-LD) su u `<head>` svake stranice. **Kad mijenjaš cijene paketa, promijeni ih i tamo, u podstranicama i u `llms.txt`.**
+
 ## Pravne stranice
 
 - `uvjeti.html` – uvjeti poslovanja, pravo na raskid i obrazac
