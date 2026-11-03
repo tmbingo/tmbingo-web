@@ -342,6 +342,18 @@ html.no-pre .pre { display: none; }
 .svc ol { grid-column: 1 / span 6; list-style: none; margin: 0; padding: 0; }
 .svc li { font: 500 clamp(40px, 5.4vw, 80px)/1 var(--body); letter-spacing: -.01em; color: var(--grey); transition: color .35s ease; }
 .svc li.on { color: var(--ink); }
+.blog { padding-block: 120px 40px; }
+.blog .head { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; margin-bottom: 48px; }
+.blog .head > :first-child { grid-column: 1 / span 6; }
+.blog .head > :last-child { grid-column: 7 / span 4; }
+.blog .posts { grid-column: 7 / -1; border-top: 1px solid var(--line); }
+.blog .posts a { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding-block: 16px; border-bottom: 1px solid var(--line); font: 500 20px/1.25 var(--body); transition: color .2s ease; }
+.blog .posts a:hover { color: var(--green); }
+.blog .posts span { font: 400 12px/1.6 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--mid); white-space: nowrap; }
+.blog .more { grid-column: 7 / -1; margin-top: 16px; }
+a.u { border-bottom: 1px solid currentColor; }
+a.u:hover { color: var(--green); }
+@media (max-width: 800px) { .blog .head > :first-child { grid-column: 1 / span 3; } .blog .head > :last-child { grid-column: 4 / span 3; } .blog .posts, .blog .more { grid-column: 1 / -1; } .blog .posts a { grid-template-columns: 1fr; gap: 4px; } }
 .svc li a { transition: color .2s ease; }
 .svc li a:hover { color: var(--green); }
 .svc .thumbs { grid-column: 7 / span 2; position: sticky; top: 40vh; align-self: start; aspect-ratio: 1; max-width: 100%; }
@@ -465,7 +477,7 @@ html.no-pre .pre { display: none; }
 <div class="menu" id="menu" aria-hidden="true">
   <div class="grid"><span class="lbl c1">TMBingo</span><span class="lbl c3">Izbornik</span><button class="lbl close c11" type="button" id="closeMenu">Zatvori</button></div>
   <nav class="grid" aria-label="Izbornik"><div class="links full">
-    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="#kontakt">Kontakt</a><a href="/app/">Prijava</a>
+    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="/blog/">Blog</a><a href="#kontakt">Kontakt</a><a href="/app/">Prijava</a>
   </div></nav>
   <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez obveze trajanja · od 199 € / mj</span></div>
 </div>
@@ -481,7 +493,7 @@ html.no-pre .pre { display: none; }
   <div class="top grid">
     <a class="lbl c1" href="#vrh">TMBingo</a>
     <span class="lbl c3">Kreativni tim</span>
-    <nav class="lbl c7" aria-label="Glavna navigacija"><ul><li><a href="#usluge">Usluge</a></li><li><a href="#paket">Paket</a></li><li><a href="#radovi">Radovi</a></li><li><a href="#pitanja">Pitanja</a></li><li><a href="#kontakt">Kontakt</a></li></ul></nav>
+    <nav class="lbl c7" aria-label="Glavna navigacija"><ul><li><a href="#usluge">Usluge</a></li><li><a href="#paket">Paket</a></li><li><a href="#radovi">Radovi</a></li><li><a href="#pitanja">Pitanja</a></li><li><a href="/blog/">Blog</a></li><li><a href="#kontakt">Kontakt</a></li></ul></nav>
     <button class="burger c11 open-menu" type="button" aria-label="Otvori izbornik"><i></i><i></i></button>
   </div>
   <div class="grid stage">
@@ -505,18 +517,18 @@ html.no-pre .pre { display: none; }
   <div class="bleed" aria-hidden="true"><span class="lbl">Studio</span><video data-parallax data-lazyplay muted loop playsinline preload="none" poster="assets/team-2.jpg"><source src="assets/studio.mp4" type="video/mp4"></video></div>
 
   <section class="svc grid" id="usluge">
-    <div class="head"><p class="lbl" data-scramble>Usluge</p><p class="lbl" data-scramble>Sve što brendu treba, u jednom paketu.</p></div>
+    <div class="head"><p class="lbl" data-scramble>Usluge</p><p class="lbl" data-scramble>Sve što brendu treba, u jednom paketu.<br><a class="u" href="/usluge/">Sve usluge →</a></p></div>
     <ol id="svcList">
       <li data-img="0"><a href="/izrada-web-stranica-zadar/">Web stranice</a></li>
       <li data-img="1"><a href="/graficki-dizajn-zadar/">Logo</a></li>
-      <li data-img="2">Branding</li>
+      <li data-img="2"><a href="/branding-zadar/">Branding</a></li>
       <li data-img="3"><a href="/drustvene-mreze-zadar/">Društvene mreže</a></li>
-      <li data-img="4">Tiskani materijali</li>
-      <li data-img="5">Web banneri</li>
-      <li data-img="1">Newsletter</li>
-      <li data-img="0">SEO</li>
-      <li data-img="2">Hosting</li>
-      <li data-img="5">Održavanje</li>
+      <li data-img="4"><a href="/tiskani-materijali-zadar/">Tiskani materijali</a></li>
+      <li data-img="5"><a href="/web-banneri/">Web banneri</a></li>
+      <li data-img="1"><a href="/newsletter/">Newsletter</a></li>
+      <li data-img="0"><a href="/seo-optimizacija-zadar/">SEO</a></li>
+      <li data-img="2"><a href="/web-hosting/">Hosting</a></li>
+      <li data-img="5"><a href="/odrzavanje-web-stranica/">Održavanje</a></li>
     </ol>
     <div class="thumbs" id="thumbs" aria-hidden="true">
       <img class="on" src="assets/rad-2.jpg" alt="">
@@ -589,6 +601,15 @@ html.no-pre .pre { display: none; }
       <li>Mile<span>Identitet</span></li>
       <li>TST Group<span>Identitet</span></li>
     </ul>
+  </section>
+
+  <section class="blog grid" id="blog" aria-label="Blog">
+    <div class="head"><p class="lbl" data-scramble>Blog</p><p class="lbl" data-scramble>Savjeti za male firme, obrte i turizam.</p></div>
+    <ul class="posts">
+      <li><a href="/blog/koliko-kosta-web-stranica/">Koliko košta izrada web stranice i što ulazi u cijenu<span>Web · 3. 11. 2026.</span></a></li>
+      <li><a href="/blog/drustvene-mreze-za-male-firme/">Društvene mreže za malu firmu: koliko objavljivati i što<span>Društvene mreže · 3. 11. 2026.</span></a></li>
+    </ul>
+    <p class="lbl more"><a class="u" href="/blog/">Svi članci →</a></p>
   </section>
 
   <section class="faq grid" id="pitanja">

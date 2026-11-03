@@ -36,7 +36,7 @@ pa otvori http://localhost:8000.
 
 ## SEO i AI pretrage
 
-- `izrada-web-stranica-zadar/`, `drustvene-mreze-zadar/`, `graficki-dizajn-zadar/` – podstranice usluga (stil u `assets/stranica.css`)
+- `usluge/` i podstranice za svaku uslugu (web, web trgovina, društvene mreže, dizajn, branding, tiskovine, banneri, newsletter, SEO, hosting, održavanje); stil u `assets/stranica.css`
 - `blog/` – blog; novi članak = nova mapa `blog/naziv-clanka/index.html` po uzoru na postojeće, plus poveznica u `blog/index.html`, `sitemap.xml` i `llms.txt`
 - `sitemap.xml`, `robots.txt` – za Google i Bing
 - `llms.txt` – sažetak za AI alate (ChatGPT, Perplexity, Claude)
