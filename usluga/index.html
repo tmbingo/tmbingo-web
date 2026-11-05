@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Odaberi uslugu · TMBingo</title>
+<meta name="description" content="Usluge van TMBingo paketa po fiksnoj cijeni: logo, vizualni identitet, tiskovine, objave, banneri, web trgovina, CRM po mjeri i rad po satu. Pošalji upit i javljamo se s ponudom.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://tmbingo.com/usluga/">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/app/app.css">
+<style>
+.order { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: start; }
+.sum { display: grid; gap: 24px; position: sticky; top: 80px; }
+.price { font: 700 clamp(56px, 7vw, 96px)/.9 var(--mark); letter-spacing: -.05em; }
+.price small { display: block; font: 400 13px/1.4 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--mid); margin-top: 10px; }
+.rok { border-top: 1px solid var(--line); padding-top: 12px; }
+.rok .dim { color: var(--mid); margin-right: 8px; }
+.plan .rokk { color: var(--mid); font-size: 12px; }
+.next { counter-reset: n; display: grid; gap: 0; margin-top: 32px; max-width: 760px; }
+.next li { counter-increment: n; display: grid; grid-template-columns: 48px 1fr; border-top: 1px solid var(--line); padding: 14px 0; }
+.next li::before { content: "0" counter(n); font: 400 13px/1.6 var(--tech); color: var(--mid); }
+@media (max-width: 900px) { .order { grid-template-columns: 1fr; gap: 40px; } .sum { position: static; } }
+@media (max-width: 560px) { .plan .kratko { display: none; } .plan.on .kratko { display: block; } }
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap in"><a class="logo" href="/"><img src="/assets/logo-light.png" alt="TMBingo" width="63" height="20"></a><nav class="lbl" aria-label="Izbornik"><a href="/">Naslovna</a><a href="/#cijene">Cijene</a></nav><div class="me lbl"><a href="/app/" style="text-decoration:none">Prijava</a></div></div></header>
+
+<main class="wrap" id="vrh">
+  <div class="head"><p class="lbl dim">Usluge van paketa</p><h1 id="naslov">Odaberi uslugu</h1></div>
+
+  <div id="order">
+  <div class="picker"><div class="plans" id="plans" role="radiogroup" aria-label="Usluga"></div></div>
+
+  <div class="order">
+    <aside class="sum">
+      <p class="lbl dim">Odabrano</p>
+      <p class="lbl" id="selNaziv">Logo</p>
+      <p class="price" id="selCijena">290 €<small>jednokratno</small></p>
+      <p class="rok lbl"><span class="dim">Rok isporuke</span><span id="selRok">7 dana</span></p>
+      <p class="hint">Plaća se jednom, bez pretplate. Nismo u sustavu PDV-a, cijena je konačna. Točan opseg, cijenu i rok potvrđujemo u ponudi e-mailom, prije bilo kakve uplate.</p>
+    </aside>
+
+    <form class="form" id="f" novalidate>
+      <label class="field"><span class="lbl">Tvoji zahtjevi</span><textarea class="input" name="opis" id="opis" required maxlength="4000" rows="7"></textarea></label>
+      <label class="field"><span class="lbl">Željeni rok <span class="dim">(nije obavezno)</span></span><input class="input" name="rok" maxlength="120" placeholder="npr. do 20. 11. ili nije hitno"></label>
+      <div class="two">
+        <label class="field"><span class="lbl">Ime i prezime</span><input class="input" name="ime" autocomplete="name" required maxlength="100"></label>
+        <label class="field"><span class="lbl">E-mail</span><input class="input" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="200"></label>
+      </div>
+      <div class="two">
+        <label class="field"><span class="lbl">Tvrtka ili obrt <span class="dim">(nije obavezno)</span></span><input class="input" name="tvrtka" autocomplete="organization" maxlength="120"></label>
+        <label class="field"><span class="lbl">Telefon <span class="dim">(nije obavezno)</span></span><input class="input" name="telefon" type="tel" autocomplete="tel" maxlength="40"></label>
+      </div>
+      <input type="text" name="web" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+      <label class="check"><input type="checkbox" name="privatnost" required><span>Slažem se da podatke iz upita koristite za odgovor i ponudu, prema <a href="/privatnost.html" target="_blank">pravilima privatnosti</a>.</span></label>
+      <p class="err" id="e" hidden></p>
+      <div><button class="btn" type="submit">Pošalji upit</button></div>
+      <p class="hint">Upit nije narudžba i ništa se ne plaća. Javljamo se s ponudom najkasnije idući radni dan.</p>
+    </form>
+  </div>
+  </div>
+
+  <section id="done" hidden>
+    <p class="lbl ok" style="margin-bottom:16px">Upit je poslan</p>
+    <p class="lbl" id="doneNaziv" style="margin-bottom:12px"></p>
+    <ol class="next">
+      <li><span>Pregledamo tvoje zahtjeve. Potvrdu upita smo ti poslali i na e-mail.</span></li>
+      <li><span>Najkasnije idući radni dan šaljemo ponudu s točnim opsegom, cijenom i rokom.</span></li>
+      <li><span>Kad ponudu prihvatiš, prvi prijedlog dobiješ u Figmi.</span></li>
+    </ol>
+    <p style="margin-top:32px"><a class="btn ghost" href="/">Natrag na naslovnu</a></p>
+  </section>
+</main>
+
+<script type="module">
+import { USLUGE } from '/app/usluge.mjs';
+var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+var f = document.getElementById('f'), e = document.getElementById('e'), plans = document.getElementById('plans');
+var usluga = new URLSearchParams(location.search).get('u');
+if (!USLUGE[usluga]) usluga = 'logo';
+
+plans.innerHTML = Object.keys(USLUGE).map(function (k) {
+  var u = USLUGE[k];
+  return '<label class="plan"><input type="radio" name="usluga" value="' + k + '">' +
+    '<span class="lbl">' + esc(u.naziv) + '</span><b class="iznos">' + esc(u.cijena) + '<small>' + esc(u.jedinica) + '</small></b>' +
+    '<span class="kratko">' + esc(u.kratko) + '</span><span class="lbl rokk">Rok ' + esc(u.rok) + '</span></label>';
+}).join('');
+
+function crtaj() {
+  var u = USLUGE[usluga];
+  plans.querySelectorAll('input').forEach(function (i) { i.checked = i.value === usluga; i.closest('.plan').classList.toggle('on', i.checked); });
+  document.getElementById('selNaziv').textContent = u.naziv;
+  document.getElementById('selCijena').innerHTML = esc(u.cijena) + '<small>' + esc(u.jedinica) + '</small>';
+  document.getElementById('selRok').textContent = u.rok;
+  document.getElementById('opis').placeholder = u.pitanje;
+  history.replaceState(null, '', '?u=' + usluga);
+}
+plans.addEventListener('change', function (ev) { usluga = ev.target.value; crtaj(); });
+crtaj();
+
+f.onsubmit = async function (ev) {
+  ev.preventDefault();
+  e.hidden = true;
+  var d = Object.fromEntries(new FormData(f).entries());
+  var msg = d.opis.trim().length < 10 ? 'Opiši ukratko što trebaš.'
+    : d.ime.trim().length < 2 ? 'Upiši ime i prezime.'
+    : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email.trim()) ? 'Upiši ispravnu e-mail adresu.'
+    : !f.privatnost.checked ? 'Za slanje upita treba prihvatiti pravila privatnosti.' : '';
+  if (msg) { e.textContent = msg; e.hidden = false; return; }
+  d.privatnost = true;
+  d.usluga = usluga;
+  var b = f.querySelector('button[type=submit]'); b.disabled = true; b.textContent = 'Šaljem…';
+  try {
+    var r = await fetch('/api/upit', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d) });
+    var j = await r.json().catch(function () { return {}; });
+    if (!r.ok) throw new Error(j.greska || 'Upit nije poslan. Pokušaj ponovno ili piši na info@tmbingo.com.');
+    document.getElementById('doneNaziv').textContent = j.naziv || USLUGE[usluga].naziv;
+    document.getElementById('order').hidden = true;
+    document.getElementById('done').hidden = false;
+    document.getElementById('naslov').textContent = 'Hvala, upit je stigao';
+    window.scrollTo(0, 0);
+  } catch (err) {
+    e.textContent = err.message; e.hidden = false; b.disabled = false; b.textContent = 'Pošalji upit';
+  }
+};
+</script>
+</body>
+</html>
