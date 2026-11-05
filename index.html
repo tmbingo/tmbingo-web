@@ -391,6 +391,17 @@ a.u:hover { color: var(--green); }
 .slot-grid i.free { background: var(--green); border-color: var(--green); }
 @media (max-width: 800px) { .price, .slots { grid-column: 1 / -1; } }
 .paket .slots { grid-column: 1 / -1; }
+.extra { padding-block: 0 120px; row-gap: 80px; }
+.extra > .lbl.c1 { padding-top: 18px; border-top: 1px solid var(--line-d); }
+.extra > .lbl.c3 { padding-top: 18px; }
+.extra .large { grid-column: 1 / -1; }
+.extra .card .amt { font-size: clamp(40px, 4vw, 64px); }
+.extra .card .sub { color: var(--grey); font-size: 16px; line-height: 1.45; }
+.extra .rok { border-top: 1px solid var(--line-d); padding-top: 10px; }
+.extra .rok .dim { color: var(--mid); margin-right: 6px; }
+.extra .cards { row-gap: 56px; }
+.extra .note { max-width: 70ch; display: grid; gap: 8px; font-size: 14px; line-height: 1.5; }
+.extra .note .dim { color: var(--mid); }
 
 .list { padding-block: 0 120px; }
 .list > .lbl { grid-column: 1 / span 6; padding-top: 18px; border-top: 1px solid var(--line-d); }
@@ -477,7 +488,7 @@ a.u:hover { color: var(--green); }
 <div class="menu" id="menu" aria-hidden="true">
   <div class="grid"><span class="lbl c1">TMBingo</span><span class="lbl c3">Izbornik</span><button class="lbl close c11" type="button" id="closeMenu">Zatvori</button></div>
   <nav class="grid" aria-label="Izbornik"><div class="links full">
-    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="/blog/">Blog</a><a href="#kontakt">Kontakt</a><a href="/app/">Prijava</a>
+    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#cijene">Cijene</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="/blog/">Blog</a><a href="#kontakt">Kontakt</a><a href="/app/">Prijava</a>
   </div></nav>
   <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez obveze trajanja · od 199 € / mj</span></div>
 </div>
@@ -582,6 +593,26 @@ a.u:hover { color: var(--green); }
         <li><span class="lbl">06</span>Nismo u sustavu PDV-a, cijena je konačna</li>
       </ol>
     </section>
+    <section class="extra grid" id="cijene" aria-label="Cijene van paketa">
+      <p class="lbl c1" data-scramble>Cijene van paketa</p>
+      <p class="lbl c3 dim" data-scramble>Jedan posao, jedna cijena.<br>Bez pretplate.</p>
+      <h2 class="large" data-ti="Ne treba ti paket? Pojedinačne poslove radimo po fiksnoj cijeni, a i ovdje svaki rad prvo vidiš u Figmi." data-vi="Ne treba Vam paket? Pojedinačne poslove radimo po fiksnoj cijeni, a i ovdje svaki rad prvo vidite u Figmi.">Ne treba ti paket? Pojedinačne poslove radimo po fiksnoj cijeni, a i ovdje svaki rad prvo vidiš u Figmi.</h2>
+      <div class="cards full">
+          <a class="card xc" href="/usluga/?u=logo"><span class="lbl">Logo</span><b class="amt">290 €</b><small class="lbl dim">jednokratno</small><span class="sub">Znak i logotip u dvije-tri varijante, s revizijama dok ne sjedne.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 7 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=identitet"><span class="lbl">Vizualni identitet</span><b class="amt">690 €</b><small class="lbl dim">jednokratno</small><span class="sub">Logo, boje, fontovi, pravila korištenja i predlošci za mreže.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 14 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=tiskovina"><span class="lbl">Tiskovina</span><b class="amt">od 90 €</b><small class="lbl dim">po dizajnu</small><span class="sub">Vizitka, letak, jelovnik ili plakat, pripremljeno za tisak.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 3 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=objave"><span class="lbl">Objave za mreže</span><b class="amt">149 €</b><small class="lbl dim">set od 8 objava</small><span class="sub">Dizajnirane objave za Facebook i Instagram, bez pretplate.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 5 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=banneri"><span class="lbl">Web banneri</span><b class="amt">99 €</b><small class="lbl dim">set dimenzija</small><span class="sub">Oglas za Facebook, Instagram i Google u svim potrebnim veličinama.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 3 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=trgovina"><span class="lbl">Web trgovina</span><b class="amt">od 2.490 €</b><small class="lbl dim">jednokratno</small><span class="sub">Katalog, košarica, kartično plaćanje i dostava. Dizajn prvo u Figmi.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 30 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=crm"><span class="lbl">CRM po mjeri</span><b class="amt">od 1.200 €</b><small class="lbl dim">jednokratno</small><span class="sub">Sustav za upite, zadatke i klijente. Ostaje tvoj, bez pretplate po korisniku.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> po dogovoru</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=sat"><span class="lbl">Rad po satu</span><b class="amt">40 €</b><small class="lbl dim">po satu</small><span class="sub">Izmjene na postojećem webu, hitni popravci i sve što nije gore.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> po dogovoru</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+      </div>
+      <div class="note full">
+        <p>Cijene su u eurima i konačne. PDV nije obračunat temeljem čl. 90. st. 2. Zakona o porezu na dodanu vrijednost, obrt Studio23k nije u sustavu PDV-a.</p>
+        <p class="dim">Rok teče od odobrenog briefa i uplate. Točan opseg i rok <span data-ti="dobiješ" data-vi="dobivate">dobiješ</span> u ponudi e-mailom. U TMBingo paketu sve ovo, osim CRM-a, ulazi u mjesečnu cijenu.</p>
+        <p class="cta"><a class="btn light" href="/usluga/" data-ti="Pošalji upit" data-vi="Pošaljite upit">Pošalji upit</a></p>
+      </div>
+    </section>
   </div>
 
   <div class="bleed" aria-hidden="true"><span class="lbl">Rad</span><img data-parallax src="assets/team-1.jpg" alt=""></div>
@@ -680,7 +711,7 @@ var MJESEC = 'studeni 2026';
       var g = b.dataset.per === 'godisnje';
       document.querySelectorAll('.per button').forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); });
       document.querySelectorAll('.cards [data-m]').forEach(function (el) { el.textContent = el.getAttribute(g ? 'data-g' : 'data-m'); });
-      document.querySelectorAll('.cards .card').forEach(function (c) {
+      document.querySelectorAll('.cards .card[data-p]').forEach(function (c) {
         if (c.dataset.p !== 'web') c.href = '/paket/?p=' + c.dataset.p + (g ? '&period=godisnje' : '');
       });
     });

@@ -1,0 +1,12 @@
+// Usluge van paketa i cijene. Ovu datoteku koriste stranica /usluga/ i server (/api/upit).
+// Naslovna (index.html, sekcija #cijene) ima iste podatke upisane ručno, pa ih kod promjene ispravi i tamo.
+export const USLUGE = {
+  logo: { naziv: 'Logo', cijena: '290 €', jedinica: 'jednokratno', rok: '7 dana', kratko: 'Znak i logotip u dvije-tri varijante, s revizijama dok ne sjedne.', pitanje: 'Čime se baviš i kakav dojam logo treba ostaviti? Ako imaš primjere koji ti se sviđaju, zalijepi linkove.' },
+  identitet: { naziv: 'Vizualni identitet', cijena: '690 €', jedinica: 'jednokratno', rok: '14 dana', kratko: 'Logo, boje, fontovi, pravila korištenja i predlošci za mreže.', pitanje: 'Opiši posao, kome se obraćaš i gdje će se identitet koristiti (web, tisak, mreže, vozila…).' },
+  tiskovina: { naziv: 'Tiskovina', cijena: 'od 90 €', jedinica: 'po dizajnu', rok: '3 dana', kratko: 'Vizitka, letak, jelovnik ili plakat, pripremljeno za tisak.', pitanje: 'Što treba (vizitka, letak, jelovnik…), u kojoj veličini i koliko stranica? Imaš li tekst i fotografije?' },
+  objave: { naziv: 'Objave za mreže', cijena: '149 €', jedinica: 'set od 8 objava', rok: '5 dana', kratko: 'Dizajnirane objave za Facebook i Instagram, bez pretplate.', pitanje: 'O čemu trebaju biti objave i na kojem profilu? Zalijepi link na Instagram ili Facebook.' },
+  banneri: { naziv: 'Web banneri', cijena: '99 €', jedinica: 'set dimenzija', rok: '3 dana', kratko: 'Oglas za Facebook, Instagram i Google u svim potrebnim veličinama.', pitanje: 'Što oglašavaš, gdje će se oglas vrtjeti i koje dimenzije trebaš (ako znaš)?' },
+  trgovina: { naziv: 'Web trgovina', cijena: 'od 2.490 €', jedinica: 'jednokratno', rok: '30 dana', kratko: 'Katalog, košarica, kartično plaćanje i dostava. Dizajn prvo u Figmi.', pitanje: 'Što prodaješ, otprilike koliko proizvoda i kako želiš naplaćivati i dostavljati?' },
+  crm: { naziv: 'CRM po mjeri', cijena: 'od 1.200 €', jedinica: 'jednokratno', rok: 'po dogovoru', kratko: 'Sustav za upite, zadatke i klijente. Ostaje tvoj, bez pretplate po korisniku.', pitanje: 'Kako sada vodiš upite, klijente i zadatke, i što te u tome najviše muči? Koliko vas radi u sustavu?' },
+  sat: { naziv: 'Rad po satu', cijena: '40 €', jedinica: 'po satu', rok: 'po dogovoru', kratko: 'Izmjene na postojećem webu, hitni popravci i sve što nije gore.', pitanje: 'Opiši što treba napraviti i zalijepi link na web ili stranicu o kojoj je riječ.' },
+};

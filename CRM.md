@@ -65,6 +65,8 @@ Nakon spremanja: Deploys → Trigger deploy.
 
 Paketi su u `app/paketi.mjs` (naziv, cijena mjesečno, godišnje ili jednokratno, opis i koliko od 10 mjesečnih mjesta zauzima). Iz te datoteke čitaju stranica za narudžbu, CRM i server, koji računa iznos na uplatnici. Naslovna (`index.html`, sekcija `#paket`) i tablica u `uvjeti.html` imaju iste cijene upisane ručno, pa ih kod promjene ispravi i tamo.
 
+Usluge van paketa (logo, identitet, tiskovine, web trgovina, CRM po mjeri, rad po satu…) su u `app/usluge.mjs`. Klijent ih bira na `/usluga/` i šalje upit sa zahtjevima, koji preko `/api/upit` stiže e-mailom na `ADMIN_EMAIL` (odgovor ide izravno klijentu). Ništa se ne naplaćuje ni ne sprema u bazu. Sekcija `#cijene` na naslovnoj ima iste cijene upisane ručno.
+
 Godišnja uplata produljuje pristup za 12 mjeseci, mjesečna i jednokratna za mjesec dana. Pro zauzima 2 mjesta.
 
 ## Predložak e-maila za prijavu (Supabase → Magic Link)
