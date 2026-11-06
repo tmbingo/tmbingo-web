@@ -1,6 +1,6 @@
 // POST /api/upit → upit za uslugu van paketa (/usluga/). Ne sprema se u bazu, nego stiže e-mailom na ADMIN_EMAIL,
 // a klijent dobiva potvrdu da je upit zaprimljen.
-import { json, tijelo, ADMIN_EMAIL, zapamtiOrigin } from '../lib/zajednicko.mjs';
+import { json, tijelo, ADMIN_EMAIL, zapamtiOrigin, ipAdresa, uGranicama, nijeBot, pozdrav } from '../lib/zajednicko.mjs';
 import { USLUGE } from '../../app/usluge.mjs';
 import { posalji, predlozak } from '../lib/posta.mjs';
 
@@ -31,6 +31,19 @@ export default async (req) => {
   if (d.opis.length < 10) return json(400, { greska: 'Opiši ukratko što trebaš.' });
   if (b.privatnost !== true) return json(400, { greska: 'Za slanje upita treba prihvatiti pravila privatnosti.' });
 
+  // zaštita od botova i od slanja mailova na tuđe adrese
+  if (!(await nijeBot(b.captcha, req))) {
+    return json(400, { greska: 'Provjera da nisi robot nije uspjela. Osvježi stranicu i pokušaj ponovno.' });
+  }
+  const ip = ipAdresa(req);
+  const ok = await uGranicama([
+    [`upit:ip:${ip}`, 3, 3600],
+    [`upit:ip-dan:${ip}`, 6, 86400],
+    [`upit:email:${d.email}`, 2, 86400],
+    ['upit:sve', 20, 3600],
+  ]);
+  if (!ok) return json(429, { greska: 'Previše upita u kratkom vremenu. Pokušaj kasnije ili piši na info@tmbingo.com.' });
+
   const u = USLUGE[kljuc];
   const naziv = `${u.naziv} (${u.cijena}, ${u.jedinica})`;
 
@@ -56,9 +69,10 @@ export default async (req) => {
     const zaKlijenta = predlozak({
       naslov: 'Upit je zaprimljen',
       odlomci: [
-        `Bok ${d.ime.split(' ')[0]}, hvala na upitu za: ${naziv}.`,
+        `${pozdrav(d.ime)}, hvala na upitu za: ${naziv}.`,
         'Pregledat ćemo zahtjeve i javiti se s ponudom i rokom, najkasnije idući radni dan.',
-        'Ono što si nam poslao ili poslala:\n' + d.opis,
+        // upisani tekst namjerno se ne vraća u potvrdi, da forma ne služi za slanje tuđeg sadržaja s naše adrese
+        'Ako nisi ti poslao ili poslala ovaj upit, samo zanemari ovaj e-mail.',
       ],
     });
     await posalji({ to: d.email, subject: `TMBingo: upit za ${u.naziv.toLowerCase()} je zaprimljen`, ...zaKlijenta });

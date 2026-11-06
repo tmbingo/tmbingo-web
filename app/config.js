@@ -4,4 +4,6 @@
 window.TMB_CONFIG = {
   supabaseUrl: 'https://edspnavvakpmcrwyjzes.supabase.co',
   supabaseAnonKey: 'sb_publishable_q92I1EkqhvROgAeb7WokoA_PT0zg52M',
+  // Cloudflare Turnstile "Site Key" (javan); tajni ključ ide na Netlify kao TURNSTILE_SECRET. Prazno = isključeno.
+  turnstileSiteKey: '0x4AAAAAAF2DHpcGtRuJ2wVE',
 };

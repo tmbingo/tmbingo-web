@@ -2,6 +2,7 @@
 // POST /api/narudzba  → nova narudžba paketa (ili produljenje za prijavljenog klijenta) i podaci za uplatu
 import {
   baza, demo, json, tijelo, prijavljeni, slobodnaMjesta, mjesta, mjesecNaziv, MAX_KLIJENATA, ADMIN_EMAIL, SITE, zapamtiOrigin,
+  ipAdresa, uGranicama, nijeBot, pozdrav, imeIPrezime, ispravanOib, ROK_UPLATE_DANA,
 } from '../lib/zajednicko.mjs';
 import { PAKETI, cijena } from '../../app/paketi.mjs';
 import { podaciZaUplatu, png } from '../lib/uplatnica.mjs';
@@ -34,11 +35,11 @@ export default async (req) => {
   });
 
   if (!profil) {
-    if (podaci.ime.length < 2) return json(400, { greska: 'Upiši ime i prezime.' });
+    if (!imeIPrezime(podaci.ime)) return json(400, { greska: 'Upiši ime i prezime.' });
     if (!EMAIL.test(podaci.email)) return json(400, { greska: 'Upiši ispravnu e-mail adresu.' });
     if (b.uvjeti !== true) return json(400, { greska: 'Za narudžbu treba prihvatiti uvjete poslovanja.' });
   }
-  if (podaci.oib && podaci.oib.length !== 11) return json(400, { greska: 'OIB ima 11 znamenki.' });
+  if (podaci.oib && !ispravanOib(podaci.oib)) return json(400, { greska: 'OIB nije ispravan, provjeri znamenke.' });
 
   const paket = PAKETI[b.paket] ? b.paket : 'tmbingo';
   const p = PAKETI[paket];
@@ -55,6 +56,28 @@ export default async (req) => {
   }
 
   const db = baza();
+
+  // zaštita od botova za narudžbe bez prijave: provjera Turnstile, ograničenje po IP-u, e-mailu i ukupno
+  if (!profil) {
+    if (!(await nijeBot(b.captcha, req))) {
+      return json(400, { greska: 'Provjera da nisi robot nije uspjela. Osvježi stranicu i pokušaj ponovno.' });
+    }
+    const ip = ipAdresa(req);
+    const ok = await uGranicama([
+      [`narudzba:ip:${ip}`, 3, 3600],
+      [`narudzba:ip-dan:${ip}`, 5, 86400],
+      [`narudzba:email:${podaci.email}`, 3, 86400],
+      ['narudzba:sve', 10, 3600],
+    ]);
+    if (!ok) return json(429, { greska: 'Previše narudžbi u kratkom vremenu. Pokušaj kasnije ili piši na info@tmbingo.com.' });
+    // ista adresa već ima narudžbu koja čeka uplatu: ne otvaraj novu i ne šalji još jedan mail
+    const { data: ceka } = await db.from('narudzbe').select('poziv').eq('email', podaci.email).eq('status', 'ceka_uplatu')
+      .gte('created_at', new Date(Date.now() - 864e5).toISOString()).limit(1).maybeSingle();
+    if (ceka) {
+      return json(409, { greska: `Na ovu adresu već postoji narudžba ${ceka.poziv} koja čeka uplatu. Podaci za uplatu su ti na e-mailu, a za promjenu piši na info@tmbingo.com.` });
+    }
+  }
+
   // novi klijent = još nema nijednu plaćenu narudžbu
   const { count: placenih } = await db.from('narudzbe').select('id', { count: 'exact', head: true })
     .eq('email', podaci.email).eq('status', 'placeno');
@@ -87,10 +110,11 @@ export default async (req) => {
     const mail = predlozak({
       naslov: 'Hvala na narudžbi',
       odlomci: [
-        `Bok ${podaci.ime.split(' ')[0]}, zaprimili smo narudžbu: ${naziv}.`,
+        `${pozdrav(podaci.ime)}, zaprimili smo narudžbu: ${naziv}.`,
         'Uplatu možeš skenirati barkodom ili QR kodom u aplikaciji banke, ili je upisati ručno:',
         { html: tablica, text: `Iznos: ${u.iznos}\nIBAN: ${u.iban}\nPoziv na broj: ${u.model} ${u.poziv}\nOpis: ${u.opis}` },
         u.revolut ? { html: `Možeš platiti i karticom preko Revoluta: <a href="${esc(u.revolut)}">${esc(u.revolut)}</a>`, text: `Plaćanje karticom: ${u.revolut}` } : '',
+        novi ? `Mjesto ti čuvamo ${ROK_UPLATE_DANA} dana. Ako uplata do tada ne stigne, mjesto se oslobađa za druge, a narudžbu uvijek možeš ponoviti.` : '',
         'Čim uplata stigne, na ovaj e-mail šaljemo link za prijavu u TMBingo CRM, gdje dodaješ zadatke i pratiš njihovu izradu.',
       ].filter(Boolean),
       dodatak: kodovi,

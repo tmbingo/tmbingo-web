@@ -341,7 +341,8 @@
     var r = await Promise.all([api.listOrders(), api.getSlots()]), list = r[0], post = r[1];
     var waiting = list.filter(function (n) { return n.status === 'ceka_uplatu'; });
     var month = new Date(); month = new Date(month.getFullYear(), month.getMonth(), 1).toISOString();
-    var noviOvaj = list.filter(function (n) { return n.novi && n.status !== 'otkazano' && n.created_at >= month; });
+    var rokUplate = new Date(Date.now() - 3 * 864e5).toISOString(); // kao ROK_UPLATE_DANA na serveru
+    var noviOvaj = list.filter(function (n) { return n.novi && n.status !== 'otkazano' && n.created_at >= month && (n.status === 'placeno' || n.created_at >= rokUplate); });
     var novih = noviOvaj.length;
     // isto kao na serveru: mjesta iz narudžbi (Pro = 2) + ručno zauzeta za ovaj mjesec
     var mjesecKljuc = (function (d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01'; })(new Date());
@@ -358,7 +359,7 @@
       '<div class="time"><label><span class="lbl dim">Ukupno mjesečno</span><input type="number" name="max" min="0" max="100" inputmode="numeric" value="' + maxM + '"></label>' +
       '<label><span class="lbl dim">Slobodno sada</span><input type="number" name="slobodno" min="0" max="100" inputmode="numeric" value="' + slobodno + '"></label>' +
       '<button class="btn small" type="submit">Spremi</button></div>' +
-      '<p class="hint">Novih klijenata ovaj mjesec: ' + novih + (autoZauzeto !== novih ? ' (zauzimaju ' + autoZauzeto + ' mjesta, Pro broji dva)' : '') + '. Svaka nova narudžba sama smanji broj slobodnih mjesta. Ako uzmeš klijenta izvan stranice, ovdje smanji „Slobodno sada“. Na početku mjeseca broj se vraća na ukupno.</p></form>' +
+      '<p class="hint">Novih klijenata ovaj mjesec: ' + novih + (autoZauzeto !== novih ? ' (zauzimaju ' + autoZauzeto + ' mjesta, Pro broji dva)' : '') + '. Svaka nova narudžba sama smanji broj slobodnih mjesta, a neplaćena ga drži 3 dana. Ako uzmeš klijenta izvan stranice, ovdje smanji „Slobodno sada“. Na početku mjeseca broj se vraća na ukupno.</p></form>' +
       '<p class="hint" style="margin-bottom:16px">Kad uplata stigne na račun (provjeri poziv na broj), klikni „Potvrdi uplatu“. Klijent tada dobije e-mail s linkom za prijavu, a paket se produlji za mjesec dana.</p>' +
       '<div class="rows"><div class="row th lbl"><span>Poziv</span><span>Klijent</span><span>E-mail</span><span>Iznos</span><span>Status</span><span></span></div>' +
       (list.length ? list.map(function (n) {
