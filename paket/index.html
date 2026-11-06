@@ -60,6 +60,7 @@
       <input type="text" name="web" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
       <label class="check"><input type="checkbox" name="uvjeti" required><span>Prihvaćam <a href="/uvjeti.html" target="_blank">uvjete poslovanja</a> i <a href="/privatnost.html" target="_blank">pravila privatnosti</a>.</span></label>
       <label class="check"><input type="checkbox" name="odmah"><span>Želim da s radom počnete odmah nakon uplate. Znam da kao potrošač tada za već obavljeni dio plaćam razmjerni iznos ako raskinem ugovor u roku od 14 dana.</span></label>
+      <div class="captcha" id="captcha"></div>
       <p class="err" id="e" hidden></p>
       <div><button class="btn" type="submit">Naruči i prikaži uplatu</button></div>
       <p class="hint">Plaćaš uplatom na račun (barkod ili QR kod). Čim uplata stigne, na e-mail dobiješ link za prijavu.</p>
@@ -78,9 +79,12 @@
   </section>
 </main>
 
+<script src="/app/config.js"></script>
+<script src="/app/captcha.js"></script>
 <script src="/app/uplata.js"></script>
 <script type="module">
 import { odabir, euri } from '/app/odabir.mjs';
+var captcha = window.TMB_CAPTCHA(document.getElementById('captcha'));
 var f = document.getElementById('f'), e = document.getElementById('e');
 var q = new URLSearchParams(location.search);
 var izbor = odabir(document.getElementById('picker'), {
@@ -108,7 +112,7 @@ f.onsubmit = async function (ev) {
   ev.preventDefault();
   e.hidden = true;
   var d = Object.fromEntries(new FormData(f).entries());
-  var msg = d.ime.trim().length < 2 ? 'Upiši ime i prezime.'
+  var msg = !/\S\s+\S/.test(d.ime.trim()) ? 'Upiši ime i prezime.'
     : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email.trim()) ? 'Upiši ispravnu e-mail adresu.'
     : d.oib && !/^\d{11}$/.test(d.oib.trim()) ? 'OIB ima 11 znamenki.'
     : !f.uvjeti.checked ? 'Za narudžbu treba prihvatiti uvjete poslovanja.' : '';
@@ -119,6 +123,7 @@ f.onsubmit = async function (ev) {
   delete d.odmah;
   var b = f.querySelector('button[type=submit]'); b.disabled = true; b.textContent = 'Šaljem…';
   try {
+    d.captcha = await captcha.token();
     var r = await fetch('/api/narudzba', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d) });
     var j = await r.json().catch(function () { return {}; });
     if (!r.ok) throw new Error(j.greska || 'Narudžba nije poslana. Pokušaj ponovno ili piši na info@tmbingo.com.');
@@ -128,7 +133,7 @@ f.onsubmit = async function (ev) {
     document.getElementById('naslov').textContent = 'Hvala, još samo uplata';
     window.scrollTo(0, 0);
   } catch (err) {
-    e.textContent = err.message; e.hidden = false; b.disabled = false; b.textContent = 'Naruči i prikaži uplatu';
+    captcha.reset(); e.textContent = err.message; e.hidden = false; b.disabled = false; b.textContent = 'Naruči i prikaži uplatu';
   }
 };
 </script>

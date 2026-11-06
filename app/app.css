@@ -245,3 +245,4 @@ textarea.input { min-height: 140px; resize: vertical; border: 1px solid var(--li
 .plan li::before { content: "+"; font-family: var(--tech); color: var(--green); }
 @media (max-width: 1000px) { .plans { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .plans { grid-template-columns: 1fr; } .plan ul { display: none; } .plan.on ul { display: grid; } }
+.captcha:empty{display:none}

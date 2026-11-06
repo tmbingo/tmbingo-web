@@ -2,7 +2,7 @@
 // Bingo, AI asistent na stranici: odgovara na pitanja o paketima i radu, a kad posjetitelj ostavi
 // e-mail, šalje upit Tonćiju. Povijest razgovora čuva preglednik (samo tekst), server ništa ne sprema.
 import Anthropic from '@anthropic-ai/sdk';
-import { env, json, tijelo, mjesta, ADMIN_EMAIL, zapamtiOrigin } from '../lib/zajednicko.mjs';
+import { env, json, tijelo, mjesta, ADMIN_EMAIL, zapamtiOrigin, ipAdresa, uGranicama } from '../lib/zajednicko.mjs';
 import { posalji, predlozak } from '../lib/posta.mjs';
 import { PAKETI, MJESECNI, euri } from '../../app/paketi.mjs';
 
@@ -12,15 +12,9 @@ const MAX_PORUKA = 30;      // poruka u jednom razgovoru
 const MAX_ZNAKOVA = 2000;   // po poruci
 const MAX_KORAKA = 4;       // krugova alata po odgovoru
 
-// Grubo ograničenje po IP adresi (vrijedi dok je funkcija "topla"): 20 poruka u 10 minuta.
-const posjeti = new Map();
-function previse(ip) {
-  const sad = Date.now();
-  const niz = (posjeti.get(ip) || []).filter((t) => sad - t < 10 * 60 * 1000);
-  niz.push(sad);
-  posjeti.set(ip, niz);
-  return niz.length > 20;
-}
+// Ograničenja se pamte u bazi (vrijede za sve instance funkcije): po IP-u i ukupno dnevno,
+// da netko ne može trošiti Anthropic kredite bez kraja. Ukupni dnevni broj mijenja se s BINGO_DNEVNO.
+const DNEVNO = () => parseInt(env('BINGO_DNEVNO', '500'), 10) || 500;
 
 const opisPaketa = () =>
   Object.entries(PAKETI)
@@ -111,7 +105,7 @@ const ALATI = [
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-async function izvrsi(alat, ulaz, poruke) {
+async function izvrsi(alat, ulaz, poruke, ip) {
   if (alat === 'slobodna_mjesta') {
     const m = await mjesta();
     return `Slobodno ${m.slobodno} od ${m.max} mjesta ovaj mjesec.`;
@@ -122,6 +116,8 @@ async function izvrsi(alat, ulaz, poruke) {
     // e-mail mora stvarno biti u porukama posjetitelja, da model ne izmisli adresu
     if (!poruke.some((p) => p.role === 'user' && typeof p.content === 'string' && p.content.toLowerCase().includes(email.toLowerCase())))
       return { greska: 'Posjetitelj nije napisao tu e-mail adresu. Pitaj ga za e-mail.' };
+    if (!(await uGranicama([[`bingo-upit:ip:${ip}`, 2, 86400], ['bingo-upit:sve', 20, 86400]])))
+      return { greska: 'Upit je već poslan. Ako treba još nešto, neka posjetitelj piše na info@tmbingo.com.' };
     const paket = PAKETI[ulaz.paket]?.naziv || 'nije odlučeno';
     const razgovor = poruke
       .filter((p) => typeof p.content === 'string')
@@ -156,8 +152,11 @@ export default async (req) => {
   zapamtiOrigin(req);
   if (req.method !== 'POST') return json(405, { greska: 'Metoda nije dopuštena.' });
 
-  const ip = req.headers.get('x-nf-client-connection-ip') || req.headers.get('x-forwarded-for') || 'nepoznato';
-  if (previse(ip)) return json(429, { greska: 'Puno poruka u kratkom vremenu. Probaj opet za par minuta ili piši na info@tmbingo.com.' });
+  const ip = ipAdresa(req);
+  if (!(await uGranicama([[`bingo:ip:${ip}`, 20, 600], [`bingo:ip-dan:${ip}`, 80, 86400]])))
+    return json(429, { greska: 'Puno poruka u kratkom vremenu. Probaj opet za par minuta ili piši na info@tmbingo.com.' });
+  if (!(await uGranicama([['bingo:sve', DNEVNO(), 86400]])))
+    return json(429, { greska: 'Bingo je danas imao puno razgovora i odmara do sutra. Piši nam na info@tmbingo.com, javljamo se isti dan.' });
 
   const { poruke: ulaz, osoba } = await tijelo(req);
   if (!Array.isArray(ulaz) || !ulaz.length || ulaz.length > MAX_PORUKA)
@@ -200,7 +199,7 @@ export default async (req) => {
       const rezultati = [];
       for (const b of odgovor.content) {
         if (b.type !== 'tool_use') continue;
-        const r = await izvrsi(b.name, b.input || {}, poruke);
+        const r = await izvrsi(b.name, b.input || {}, poruke, ip);
         rezultati.push(
           typeof r === 'string'
             ? { type: 'tool_result', tool_use_id: b.id, content: r }
