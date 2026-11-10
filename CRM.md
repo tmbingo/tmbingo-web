@@ -2,6 +2,8 @@
 
 Klijent naruči paket na `/paket/` i dobije uplatnicu s HUB3 barkodom i QR kodom. Kad potvrdiš uplatu, dobije e-mail s linkom za prijavu. U CRM-u na `/app/` dodaje zadatke, šalje datoteke do 10 MB (ili WeTransfer link) i dopisuje se s tobom. Ti u adminu prihvaćaš zadatke, upisuješ vrijeme i označavaš ih kao završene, a klijent tada dobije e-mail.
 
+**Interni zadaci:** u adminu gumb „+ Interni zadatak“ dodaje zadatak za klijenta koji nema račun u CRM-u (upišeš samo naziv klijenta i rok). Takve zadatke vidiš samo ti i nitko ne dobiva e-mail.
+
 Demo s izmišljenim podacima otvaraš na `/app/?demo`. Gore u zelenoj traci možeš prebaciti prikaz između klijenta i admina.
 
 ## Kako radi

@@ -34,7 +34,7 @@
     async function upload(klijentId, zadatakId, porukaId, files, links) {
       for (var f of files || []) {
         if (f.size > MAX) throw new Error('Datoteka ' + f.name + ' je veća od 10 MB.');
-        var path = klijentId + '/' + zadatakId + '/' + Date.now() + '-' + safeName(f.name);
+        var path = (klijentId || 'interno') + '/' + zadatakId + '/' + Date.now() + '-' + safeName(f.name);
         check(await sb.storage.from('prilozi').upload(path, f, { contentType: f.type || undefined, upsert: false }));
         check(await sb.from('prilozi').insert({ zadatak_id: zadatakId, poruka_id: porukaId, vrsta: 'datoteka', naziv: f.name.slice(0, 300), putanja: path, velicina: f.size }));
       }
@@ -81,23 +81,26 @@
         return z;
       },
       createTask: async function (d) {
-        var z = check(await sb.from('zadaci').insert({ naslov: d.naslov, opis: d.opis }).select('*').single());
-        await upload(me.id, z.id, null, d.files, d.links);
-        notify({ vrsta: 'zadatak', zadatak_id: z.id });
+        var interni = me.is_admin;
+        var red = interni ? { naslov: d.naslov, opis: d.opis, klijent_id: null, klijent_naziv: d.klijent_naziv, rok: d.rok || null } : { naslov: d.naslov, opis: d.opis };
+        var z = check(await sb.from('zadaci').insert(red).select('*').single());
+        await upload(z.klijent_id, z.id, null, d.files, d.links);
+        if (!interni) notify({ vrsta: 'zadatak', zadatak_id: z.id });
         return z;
       },
       addMessage: async function (z, d) {
         var p = check(await sb.from('poruke').insert({ zadatak_id: z.id, tekst: d.tekst }).select('*').single());
         await upload(z.klijent_id, z.id, p.id, d.files, d.links);
-        notify({ vrsta: 'poruka', zadatak_id: z.id, poruka_id: p.id });
+        if (z.klijent_id) notify({ vrsta: 'poruka', zadatak_id: z.id, poruka_id: p.id });
         return p;
       },
       setStatus: async function (z, status) {
         var r = check(await sb.from('zadaci').update({ status: status }).eq('id', z.id).select('*').single());
-        if (status === 'zavrseno') notify({ vrsta: 'zavrseno', zadatak_id: z.id });
+        if (status === 'zavrseno' && z.klijent_id) notify({ vrsta: 'zavrseno', zadatak_id: z.id });
         return r;
       },
       setMinutes: async function (z, min) { return check(await sb.from('zadaci').update({ minuta: min }).eq('id', z.id).select('*').single()); },
+      setRok: async function (z, rok) { return check(await sb.from('zadaci').update({ rok: rok || null }).eq('id', z.id).select('*').single()); },
       fileUrl: async function (putanja) { return check(await sb.storage.from('prilozi').createSignedUrl(putanja, 3600)).signedUrl; },
       getSlots: async function () {
         var r = check(await sb.from('postavke').select('*').eq('id', 1).maybeSingle()) || { mjesta_max: 10, zauzeto_rucno: 0, zauzeto_mjesec: null };
@@ -130,6 +133,7 @@
       { id: 12, klijent_id: 'k1', naslov: 'Nova naslovna fotografija na webu', opis: 'Zamijeniti hero sliku na webu novom fotkom terase.', status: 'zavrseno', minuta: 40, created_at: iso(now - 9 * D), prihvaceno_at: iso(now - 9 * D + H), u_izradi_at: iso(now - 8 * D), zavrseno_at: iso(now - 7 * D) },
       { id: 9, klijent_id: 'k1', naslov: 'Jelovnik za tisak A4', opis: 'Dvostrani jelovnik, isti stil kao web.', status: 'zavrseno', minuta: 150, created_at: iso(now - 20 * D), prihvaceno_at: iso(now - 20 * D + H), u_izradi_at: iso(now - 19 * D), zavrseno_at: iso(now - 16 * D) },
       { id: 15, klijent_id: 'k1', naslov: 'Plakat za Halloween party', opis: 'Plakat B2 i verzija za story. Datum 31. 10., DJ Marin.', status: 'novo', minuta: 0, created_at: iso(now - 3 * H) },
+      { id: 16, klijent_id: null, klijent_naziv: 'Pinčo (adventska kućica)', rok: inDays(1), naslov: 'Božićni logo za džempere', opis: 'Interni zadatak bez klijentskog računa.', status: 'u_izradi', minuta: 30, created_at: iso(now - D), prihvaceno_at: iso(now - D), u_izradi_at: iso(now - D) },
       { id: 13, klijent_id: 'k2', naslov: 'Cjenik za sezonu 2027', opis: 'Ažurirati cjenik na webu.', status: 'prihvaceno', minuta: 0, created_at: iso(now - 5 * D), prihvaceno_at: iso(now - 4 * D) },
     ];
     var poruke = [
@@ -154,7 +158,7 @@
     var vis = function () { return zadaci.filter(function (z) { return me().is_admin || z.klijent_id === me().id; }); };
     var seen = { a: {}, k1: {} };
     seen.k1[12] = iso(now - 6 * D); seen.k1[9] = iso(now - 15 * D);
-    seen.a[14] = iso(now - 19 * H); seen.a[12] = iso(now - 7 * D); seen.a[9] = iso(now - 16 * D); seen.a[13] = iso(now - 4 * D);
+    seen.a[14] = iso(now - 19 * H); seen.a[12] = iso(now - 7 * D); seen.a[9] = iso(now - 16 * D); seen.a[13] = iso(now - 4 * D); seen.a[16] = iso(now - D);
     var novo = function (z) {
       var u = me().id, t = seen[u] && seen[u][z.id];
       var n = poruke.filter(function (p) { return p.zadatak_id === z.id && p.autor_id !== u && (!t || p.created_at > t); }).length;
@@ -163,7 +167,7 @@
       if (z.klijent_id === u && st && st > (t || z.created_at)) n++;
       return n;
     };
-    var withK = function (z) { var k = prof(z.klijent_id); return Object.assign({}, z, { klijent: { id: k.id, email: k.email, ime: k.ime, tvrtka: k.tvrtka } }); };
+    var withK = function (z) { var k = prof(z.klijent_id); return Object.assign({}, z, { klijent: k ? { id: k.id, email: k.email, ime: k.ime, tvrtka: k.tvrtka } : null }); };
     var wait = function (v) { return new Promise(function (r) { setTimeout(function () { r(v); }, 120); }); };
     function addFiles(z, pid, files, links) {
       (files || []).forEach(function (f) {
@@ -202,6 +206,10 @@
         return wait(r);
       },
       createTask: function (d) {
+        if (me().is_admin) {
+          var zi = { id: ++id, klijent_id: null, klijent_naziv: d.klijent_naziv, rok: d.rok || null, naslov: d.naslov, opis: d.opis, status: 'novo', minuta: 0, created_at: iso(Date.now()) };
+          zadaci.push(zi); (seen.a = seen.a || {})[zi.id] = iso(Date.now()); addFiles(zi, null, d.files, d.links); return wait(zi);
+        }
         if (!(me().aktivan_do >= new Date().toISOString().slice(0, 10))) return Promise.reject(new Error('Paket nije aktivan.'));
         var z = { id: ++id, klijent_id: me().id, naslov: d.naslov, opis: d.opis, status: 'novo', minuta: 0, created_at: iso(Date.now()) };
         zadaci.push(z); addFiles(z, null, d.files, d.links); return wait(z);
@@ -209,6 +217,7 @@
       addMessage: function (z, d) { var p = { id: ++id, zadatak_id: z.id, autor_id: me().id, tekst: d.tekst, created_at: iso(Date.now()) }; poruke.push(p); addFiles(z, p.id, d.files, d.links); return wait(p); },
       setStatus: function (z, s) { var t = zadaci.find(function (x) { return x.id === z.id; }); stamp(t, s); return wait(t); },
       setMinutes: function (z, m) { var t = zadaci.find(function (x) { return x.id === z.id; }); t.minuta = m; return wait(t); },
+      setRok: function (z, r) { var t = zadaci.find(function (x) { return x.id === z.id; }); t.rok = r || null; return wait(t); },
       fileUrl: function (p) { return wait(blobs[p] || 'data:text/plain,Ovo%20je%20demo%20datoteka.'); },
       getSlots: function () { return wait(Object.assign({}, postavke)); },
       saveSlots: function (p) { Object.assign(postavke, p); return wait(Object.assign({}, postavke)); },
