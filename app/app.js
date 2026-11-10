@@ -40,6 +40,13 @@
     else { btn.textContent = btn.dataset.t || btn.textContent; btn.disabled = false; }
   }
   function ime(p) { return (p && (p.ime || p.email)) || ''; }
+  // za koga je zadatak: klijent s računom ili samo naziv kod internih zadataka
+  function kome(z) { return z.klijent ? ime(z.klijent) + (z.klijent.tvrtka ? ' · ' + z.klijent.tvrtka : '') : (z.klijent_naziv || '') + ' · interno'; }
+  function rokTxt(z) {
+    if (!z.rok || z.status === 'zavrseno') return '';
+    var danas = new Date().toISOString().slice(0, 10);
+    return ' · rok ' + dan(z.rok) + (z.rok < danas ? ' (kasni)' : z.rok === danas ? ' (danas)' : '');
+  }
 
   /* ---------- traka ---------- */
   function renderBar(route) {
@@ -145,7 +152,7 @@
     });
     // zadaci s novostima idu na vrh, ostalo ostaje po datumu
     shown = shown.filter(function (z) { return z.novo > 0; }).concat(shown.filter(function (z) { return !z.novo; }));
-    var canAdd = !me.is_admin && aktivan(me);
+    var canAdd = me.is_admin || aktivan(me);
     var note = '';
     if (!me.is_admin) {
       note = aktivan(me)
@@ -155,16 +162,16 @@
     app.innerHTML =
       '<div class="head"><p class="lbl dim">' + (me.is_admin ? 'Admin' : esc(me.tvrtka || 'TMBingo CRM')) + '</p>' +
       '<div class="hrow"><h1>' + (me.is_admin ? 'Svi zadaci' : 'Bok, ' + esc((me.ime || '').split(' ')[0] || 'dobro došao')) + '</h1>' +
-      (canAdd ? '<a class="btn" href="#/novi">+ Novi zadatak</a>' : '') + '</div></div>' +
+      (canAdd ? '<a class="btn" href="#/novi">' + (me.is_admin ? '+ Interni zadatak' : '+ Novi zadatak') + '</a>' : '') + '</div></div>' +
       note + stats(list) +
       '<div class="tabs lbl" role="tablist">' + tabs.map(function (t) { return '<button type="button" role="tab" data-f="' + t[0] + '" aria-selected="' + (filter === t[0]) + '"' + (filter === t[0] ? ' class="on"' : '') + '>' + t[1] + '<span>' + counts[t[0]] + '</span></button>'; }).join('') + '</div>' +
       (shown.length
         ? '<div class="list">' + shown.map(function (z) {
             return '<a class="item' + (z.novo ? ' unread' : '') + '" href="#/zadatak/' + z.id + '"><span class="id lbl dim">#' + z.id + '</span>' +
-              '<span class="t">' + (z.novo ? '<b class="nov lbl">' + (z.novo === 1 ? '1 novo' : z.novo + ' novo') + '</b>' : '') + esc(z.naslov) + (me.is_admin ? '<small>' + esc(ime(z.klijent)) + (z.klijent && z.klijent.tvrtka ? ' · ' + esc(z.klijent.tvrtka) : '') + '</small>' : '') + '</span>' +
+              '<span class="t">' + (z.novo ? '<b class="nov lbl">' + (z.novo === 1 ? '1 novo' : z.novo + ' novo') + '</b>' : '') + esc(z.naslov) + (me.is_admin ? '<small>' + esc(kome(z) + rokTxt(z)) + '</small>' : '') + '</span>' +
               st(z.status) + '<span class="d lbl dim">' + datum(z.created_at) + '</span><span class="r lbl">' + (z.minuta ? trajanje(z.minuta) : '·') + '</span></a>';
           }).join('') + '</div>'
-        : '<p class="empty">' + (filter === 'neprocitano' ? 'Sve je pročitano.' : list.length ? 'Ovdje nema zadataka.' : canAdd ? 'Još nema zadataka. Dodaj prvi i javit ćemo se istog dana.' : 'Još nema zadataka.') + '</p>');
+        : '<p class="empty">' + (filter === 'neprocitano' ? 'Sve je pročitano.' : list.length ? 'Ovdje nema zadataka.' : canAdd && !me.is_admin ? 'Još nema zadataka. Dodaj prvi i javit ćemo se istog dana.' : 'Još nema zadataka.') + '</p>');
     $$('.tabs button').forEach(function (b) { b.onclick = function () { filter = b.dataset.f; viewList(); }; });
   }
 
@@ -200,25 +207,36 @@
     '<label class="field"><span class="lbl">Veće datoteke: link (WeTransfer, Google Drive…)</span><input class="input" name="links" type="url" inputmode="url" placeholder="https://we.tl/…"></label>';
 
   /* ---------- novi zadatak ---------- */
-  function viewNew() {
+  async function viewNew() {
     app.className = 'wrap';
-    if (me.is_admin || !aktivan(me)) { location.hash = '#/'; return; }
-    app.innerHTML = '<div class="head"><a class="back lbl" href="#/">← Zadaci</a><h1>Novi zadatak</h1></div>' +
+    if (!me.is_admin && !aktivan(me)) { location.hash = '#/'; return; }
+    var nazivi = [];
+    if (me.is_admin) {
+      (await api.listTasks()).forEach(function (z) { if (z.klijent_naziv && nazivi.indexOf(z.klijent_naziv) < 0) nazivi.push(z.klijent_naziv); });
+    }
+    app.innerHTML = '<div class="head"><a class="back lbl" href="#/">← Zadaci</a><h1>' + (me.is_admin ? 'Interni zadatak' : 'Novi zadatak') + '</h1>' +
+      (me.is_admin ? '<p class="hint">Za klijenta bez računa u CRM-u. Vidiš ga samo ti i nitko ne dobiva e-mail.</p>' : '') + '</div>' +
       '<form class="form" id="f" novalidate>' +
+      (me.is_admin
+        ? '<label class="field"><span class="lbl">Klijent</span><input class="input" name="klijent" maxlength="200" required list="nazivi" placeholder="npr. Pinčo (adventska kućica)"></label>' +
+          '<datalist id="nazivi">' + nazivi.map(function (n) { return '<option value="' + esc(n) + '">'; }).join('') + '</datalist>' +
+          '<label class="field"><span class="lbl">Rok (nije obavezno)</span><input class="input" name="rok" type="date"></label>'
+        : '') +
       '<label class="field"><span class="lbl">Što trebaš</span><input class="input" name="naslov" maxlength="200" required placeholder="npr. Plakat za Halloween party"></label>' +
       '<label class="field"><span class="lbl">Opis</span><textarea class="input" name="opis" maxlength="10000" placeholder="Rok, dimenzije, tekst, gdje će se koristiti… Što više detalja, to brže."></textarea></label>' +
-      ATTACH + '<p class="err" id="e" hidden></p><div><button class="btn" type="submit">Pošalji zadatak</button></div></form>';
+      ATTACH + '<p class="err" id="e" hidden></p><div><button class="btn" type="submit">' + (me.is_admin ? 'Dodaj zadatak' : 'Pošalji zadatak') + '</button></div></form>';
     var f = $('#f'), at = attachUI(f);
     f.onsubmit = async function (ev) {
       ev.preventDefault();
       var e = $('#e'), b = $('button[type=submit]', f), naslov = f.naslov.value.trim();
       e.hidden = true;
-      var msg = !naslov ? 'Upiši što trebaš.' : at.check();
+      var klijent = f.klijent ? f.klijent.value.trim() : '';
+      var msg = !naslov ? 'Upiši što trebaš.' : me.is_admin && !klijent ? 'Upiši za kojeg je klijenta.' : at.check();
       if (msg) { e.textContent = msg; e.hidden = false; return; }
       busy(b, true, 'Šaljem…');
       try {
-        var z = await api.createTask({ naslov: naslov, opis: f.opis.value.trim(), files: at.files(), links: at.links() });
-        toast('Zadatak je poslan.');
+        var z = await api.createTask({ naslov: naslov, opis: f.opis.value.trim(), files: at.files(), links: at.links(), klijent_naziv: klijent, rok: f.rok ? f.rok.value : '' });
+        toast(me.is_admin ? 'Zadatak je dodan.' : 'Zadatak je poslan.');
         location.hash = '#/zadatak/' + z.id;
       } catch (err) { e.textContent = err.message; e.hidden = false; busy(b, false); }
     };
@@ -245,12 +263,16 @@
     var steps = '<ol class="steps">' + order.map(function (s, i) {
       return '<li class="' + (i === idx ? 'done now' : i < idx && times[s] ? 'done' : '') + '"><span>' + STATUS[s] + '</span><small>' + (i <= idx && times[s] ? datum(times[s]) : '') + '</small></li>';
     }).join('') + '</ol>';
+    var interni = !z.klijent_id;
     var adminBox = me.is_admin
-      ? '<div class="box"><p class="lbl">Status</p><div class="seg lbl">' + order.map(function (s) { return '<button type="button" data-s="' + s + '" class="' + s + (s === z.status ? ' on' : '') + '">' + STATUS[s] + '</button>'; }).join('') + '</div><p class="hint">Kad označiš Završeno, klijent dobije e-mail.</p></div>' +
+      ? '<div class="box"><p class="lbl">Status</p><div class="seg lbl">' + order.map(function (s) { return '<button type="button" data-s="' + s + '" class="' + s + (s === z.status ? ' on' : '') + '">' + STATUS[s] + '</button>'; }).join('') + '</div><p class="hint">' + (interni ? 'Interni zadatak: nitko ne dobiva e-mail.' : 'Kad označiš Završeno, klijent dobije e-mail.') + '</p></div>' +
+        '<div class="box"><p class="lbl">Rok</p><form class="time" id="rf"><label><span class="lbl dim">Datum</span><input type="date" name="rok" value="' + esc(z.rok || '') + '"></label><button class="btn small" type="submit">Spremi</button></form>' + (rokTxt(z) ? '<p class="hint">' + esc(rokTxt(z).slice(3)) + '</p>' : '') + '</div>' +
         '<div class="box"><p class="lbl">Vrijeme izrade</p><p class="big">' + trajanje(z.minuta) + '</p>' +
         '<form class="time" id="tf"><label><span class="lbl dim">Sati</span><input type="number" name="h" min="0" max="999" inputmode="numeric" value="' + Math.floor(z.minuta / 60) + '"></label><label><span class="lbl dim">Minute</span><input type="number" name="m" min="0" max="59" inputmode="numeric" value="' + (z.minuta % 60) + '"></label><button class="btn small" type="submit">Spremi</button></form>' +
         '<div class="quick lbl"><button type="button" class="btn ghost small" data-add="15">+15 min</button><button type="button" class="btn ghost small" data-add="30">+30 min</button><button type="button" class="btn ghost small" data-add="60">+1 h</button></div></div>' +
-        '<div class="box"><p class="lbl">Klijent</p><p>' + esc(ime(z.klijent)) + (z.klijent && z.klijent.tvrtka ? '<br><span class="dim">' + esc(z.klijent.tvrtka) + '</span>' : '') + '<br><a href="mailto:' + esc(z.klijent && z.klijent.email) + '">' + esc(z.klijent && z.klijent.email) + '</a></p></div>'
+        (interni
+          ? '<div class="box"><p class="lbl">Klijent</p><p>' + esc(z.klijent_naziv) + '<br><span class="dim">Bez računa u CRM-u</span></p></div>'
+          : '<div class="box"><p class="lbl">Klijent</p><p>' + esc(ime(z.klijent)) + (z.klijent && z.klijent.tvrtka ? '<br><span class="dim">' + esc(z.klijent.tvrtka) + '</span>' : '') + '<br><a href="mailto:' + esc(z.klijent && z.klijent.email) + '">' + esc(z.klijent && z.klijent.email) + '</a></p></div>')
       : '<div class="box"><p class="lbl">Vrijeme izrade</p><p class="big">' + (z.minuta ? trajanje(z.minuta) : '·') + '</p></div>';
     var base = z.prilozi.filter(function (a) { return !a.poruka_id; });
     var thread = z.poruke.map(function (p) {
@@ -261,11 +283,11 @@
         (p.tekst ? '<p>' + linkify(p.tekst) + '</p>' : '') + attList(z.prilozi.filter(function (a) { return a.poruka_id === p.id; })) + '</article>';
     }).join('');
     app.innerHTML = '<div class="head"><a class="back lbl" href="#/">← Zadaci</a><div class="hrow"><h1>' + esc(z.naslov) + '</h1>' + st(z.status) + '</div>' +
-      '<p class="lbl dim">#' + z.id + ' · ' + datum(z.created_at, true) + (me.is_admin ? ' · ' + esc(ime(z.klijent)) : '') + '</p></div>' +
+      '<p class="lbl dim">#' + z.id + ' · ' + datum(z.created_at, true) + (me.is_admin ? ' · ' + esc(kome(z)) : '') + '</p></div>' +
       '<div class="task"><div>' + (z.opis ? '<p class="opis">' + linkify(z.opis) + '</p>' : '') + attList(base) +
       '<section class="thread"><p class="lbl">Poruke i komentari</p>' + (thread || '<p class="empty" style="padding:24px 0">Još nema poruka.</p>') +
-      '<form class="compose" id="compose" novalidate><label class="field"><span class="lbl">Nova poruka</span><textarea class="input" name="tekst" maxlength="10000" placeholder="' + (me.is_admin ? 'Napiši klijentu…' : 'Pitanje, komentar ili izmjena…') + '"></textarea></label>' +
-      ATTACH + '<p class="err" id="e" hidden></p><div class="actions"><span class="hint">' + (me.is_admin ? 'Klijent dobije obavijest e-mailom.' : 'Javljamo se istog dana.') + '</span><button class="btn" type="submit">Pošalji</button></div></form></section></div>' +
+      '<form class="compose" id="compose" novalidate><label class="field"><span class="lbl">Nova poruka</span><textarea class="input" name="tekst" maxlength="10000" placeholder="' + (me.is_admin ? (interni ? 'Bilješka za sebe…' : 'Napiši klijentu…') : 'Pitanje, komentar ili izmjena…') + '"></textarea></label>' +
+      ATTACH + '<p class="err" id="e" hidden></p><div class="actions"><span class="hint">' + (me.is_admin ? (interni ? 'Bilješke vidiš samo ti.' : 'Klijent dobije obavijest e-mailom.') : 'Javljamo se istog dana.') + '</span><button class="btn" type="submit">Pošalji</button></div></form></section></div>' +
       '<aside class="side"><div class="box"><p class="lbl">Tijek</p>' + steps + '</div>' + adminBox + '</aside></div>';
     if (draft) $('#compose textarea').value = draft;
     if (!quiet) provjeriNove();
@@ -294,9 +316,9 @@
           var s = b.dataset.s;
           if (s === z.status) return;
           if (s === 'zavrseno' && !z.minuta && !confirm('Vrijeme izrade je 0 min. Svejedno označiti kao završeno?')) return;
-          if (s === 'zavrseno' && !confirm('Označiti kao završeno? Klijent će dobiti e-mail.')) return;
+          if (s === 'zavrseno' && !interni && !confirm('Označiti kao završeno? Klijent će dobiti e-mail.')) return;
           b.disabled = true;
-          try { await api.setStatus(z, s); toast('Status: ' + STATUS[s] + (s === 'zavrseno' ? '. Klijent je obaviješten.' : '.')); await viewTask(id, true); }
+          try { await api.setStatus(z, s); toast('Status: ' + STATUS[s] + (s === 'zavrseno' && !interni ? '. Klijent je obaviješten.' : '.')); await viewTask(id, true); }
           catch (err) { toast(err.message); b.disabled = false; }
         };
       });
@@ -305,6 +327,11 @@
       };
       $('#tf').onsubmit = function (ev) { ev.preventDefault(); save((parseInt(this.h.value, 10) || 0) * 60 + Math.min(59, parseInt(this.m.value, 10) || 0)); };
       $$('[data-add]').forEach(function (b) { b.onclick = function () { save(z.minuta + +b.dataset.add); }; });
+      $('#rf').onsubmit = async function (ev) {
+        ev.preventDefault();
+        var rok = this.rok.value;
+        try { await api.setRok(z, rok); toast(rok ? 'Rok je spremljen.' : 'Rok je maknut.'); await viewTask(id, true); } catch (err) { toast(err.message); }
+      };
     }
     clearInterval(timer);
     timer = setInterval(function () {
@@ -412,7 +439,22 @@
         return '<div class="row cl"><span>' + esc(c.ime || c.email) + '<small>' + esc([c.tvrtka, c.paket && nazivPaketa(c.paket)].filter(Boolean).join(' · ')) + '</small></span><span><a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a></span>' +
           (aktivan(c) ? '<span class="st placeno">Do ' + dan(c.aktivan_do) + '</span>' : '<span class="st otkazano">' + (c.aktivan_do ? 'Istekao ' + dan(c.aktivan_do) : 'Nije aktivan') + '</span>') +
           '<span class="lbl">' + done + ' / ' + mine.length + '<small>završeno</small></span><span class="r lbl">' + trajanje(min) + '</span></div>';
-      }).join('') : '<p class="empty">Još nema klijenata.</p>') + '</div>';
+      }).join('') : '') + interniRedovi(tasks) + (clients.length || tasks.some(function (z) { return !z.klijent_id; }) ? '' : '<p class="empty">Još nema klijenata.</p>') + '</div>';
+  }
+
+  // klijenti bez računa: grupirani po nazivu iz internih zadataka
+  function interniRedovi(tasks) {
+    var grupe = {};
+    tasks.filter(function (z) { return !z.klijent_id && z.klijent_naziv; }).forEach(function (z) { (grupe[z.klijent_naziv] = grupe[z.klijent_naziv] || []).push(z); });
+    return Object.keys(grupe).sort().map(function (n) {
+      var mine = grupe[n];
+      var done = mine.filter(function (z) { return z.status === 'zavrseno'; }).length;
+      var min = mine.reduce(function (s, z) { return s + (z.minuta || 0); }, 0);
+      var rokovi = mine.filter(function (z) { return z.rok && z.status !== 'zavrseno'; }).map(function (z) { return z.rok; }).sort();
+      return '<div class="row cl"><span>' + esc(n) + '<small>Bez računa u CRM-u</small></span><span class="dim">·</span>' +
+        '<span class="st prihvaceno">' + (rokovi.length ? 'Rok ' + dan(rokovi[0]) : 'Interno') + '</span>' +
+        '<span class="lbl">' + done + ' / ' + mine.length + '<small>završeno</small></span><span class="r lbl">' + trajanje(min) + '</span></div>';
+    }).join('');
   }
 
   /* ---------- usmjeravanje ---------- */
@@ -425,7 +467,7 @@
     if (!me) return viewLogin();
     try {
       if (parts[0] === 'zadatak' && parts[1]) await viewTask(+parts[1]);
-      else if (parts[0] === 'novi') viewNew();
+      else if (parts[0] === 'novi') await viewNew();
       else if (parts[0] === 'narudzbe') await viewOrders();
       else if (parts[0] === 'klijenti') await viewClients();
       else if (parts[0] === 'paket') await viewPaket();

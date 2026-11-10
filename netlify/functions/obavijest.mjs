@@ -18,6 +18,8 @@ export default async (req) => {
   const db = baza();
   const { data: z } = await db.from('zadaci').select('*, klijent:profiles!zadaci_klijent_id_fkey(email, ime, tvrtka)').eq('id', zadatak_id).single();
   if (!z || (!ja.is_admin && z.klijent_id !== ja.id)) return json(404, { greska: 'Zadatak ne postoji.' });
+  // interni zadatak (bez klijentskog računa): nema kome poslati e-mail
+  if (!z.klijent_id) return json(200, { ok: true, poslano: false, interni: true });
 
   const link = `${SITE()}/app/#/zadatak/${z.id}`;
   const klijent = z.klijent?.ime || z.klijent?.email;

@@ -296,3 +296,27 @@ grant execute on function public.ogranici(text, integer, integer) to service_rol
 -- Prijavljeni korisnici ne trebaju prava za pražnjenje tablica ni okidače (RLS ih ionako ne pokriva)
 revoke truncate, references, trigger on public.profiles, public.narudzbe, public.zadaci, public.poruke,
   public.prilozi, public.procitano, public.postavke from authenticated;
+
+-- ---------------------------------------------------------------------------
+-- Interni zadaci: admin ih dodaje sam, bez klijentskog računa (samo naziv klijenta i rok).
+-- Takve zadatke vidi samo admin i nitko ne dobiva e-mail.
+-- ---------------------------------------------------------------------------
+alter table public.zadaci alter column klijent_id drop not null;
+alter table public.zadaci add column if not exists klijent_naziv text check (char_length(klijent_naziv) <= 200);
+alter table public.zadaci add column if not exists rok date;
+alter table public.zadaci add constraint zadaci_klijent_ili_naziv
+  check (klijent_id is not null or nullif(trim(klijent_naziv), '') is not null);
+
+create policy "zadaci: admin dodaje interne" on public.zadaci for insert to authenticated
+  with check (public.is_admin() and klijent_id is null);
+
+-- datoteke internih zadataka idu u mapu interno/<zadatak_id>/
+drop policy "prilozi: dodaj u svoj zadatak" on public.prilozi;
+create policy "prilozi: dodaj u svoj zadatak" on public.prilozi for insert to authenticated
+  with check (
+    autor_id = auth.uid()
+    and exists (
+      select 1 from public.zadaci z where z.id = zadatak_id
+        and (vrsta = 'link' or putanja like coalesce(z.klijent_id::text, 'interno') || '/' || z.id::text || '/%')
+    )
+  );
