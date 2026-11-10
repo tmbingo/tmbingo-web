@@ -439,7 +439,22 @@
         return '<div class="row cl"><span>' + esc(c.ime || c.email) + '<small>' + esc([c.tvrtka, c.paket && nazivPaketa(c.paket)].filter(Boolean).join(' · ')) + '</small></span><span><a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a></span>' +
           (aktivan(c) ? '<span class="st placeno">Do ' + dan(c.aktivan_do) + '</span>' : '<span class="st otkazano">' + (c.aktivan_do ? 'Istekao ' + dan(c.aktivan_do) : 'Nije aktivan') + '</span>') +
           '<span class="lbl">' + done + ' / ' + mine.length + '<small>završeno</small></span><span class="r lbl">' + trajanje(min) + '</span></div>';
-      }).join('') : '<p class="empty">Još nema klijenata.</p>') + '</div>';
+      }).join('') : '') + interniRedovi(tasks) + (clients.length || tasks.some(function (z) { return !z.klijent_id; }) ? '' : '<p class="empty">Još nema klijenata.</p>') + '</div>';
+  }
+
+  // klijenti bez računa: grupirani po nazivu iz internih zadataka
+  function interniRedovi(tasks) {
+    var grupe = {};
+    tasks.filter(function (z) { return !z.klijent_id && z.klijent_naziv; }).forEach(function (z) { (grupe[z.klijent_naziv] = grupe[z.klijent_naziv] || []).push(z); });
+    return Object.keys(grupe).sort().map(function (n) {
+      var mine = grupe[n];
+      var done = mine.filter(function (z) { return z.status === 'zavrseno'; }).length;
+      var min = mine.reduce(function (s, z) { return s + (z.minuta || 0); }, 0);
+      var rokovi = mine.filter(function (z) { return z.rok && z.status !== 'zavrseno'; }).map(function (z) { return z.rok; }).sort();
+      return '<div class="row cl"><span>' + esc(n) + '<small>Bez računa u CRM-u</small></span><span class="dim">·</span>' +
+        '<span class="st prihvaceno">' + (rokovi.length ? 'Rok ' + dan(rokovi[0]) : 'Interno') + '</span>' +
+        '<span class="lbl">' + done + ' / ' + mine.length + '<small>završeno</small></span><span class="r lbl">' + trajanje(min) + '</span></div>';
+    }).join('');
   }
 
   /* ---------- usmjeravanje ---------- */
