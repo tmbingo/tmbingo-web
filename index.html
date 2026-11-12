@@ -434,6 +434,9 @@ a.u:hover { color: var(--green); }
 .w2 { background: #d9a2a3; } .w1 { background: #fff; } .w1 img { object-fit: contain; }
 .projects { grid-column: 7 / -1; margin-top: 64px; border-top: 1px solid var(--line); }
 .projects li { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding-block: 16px; border-bottom: 1px solid var(--line); font: 500 20px/1.2 var(--body); }
+.projects li a { text-decoration: none; }
+.projects li a::after { content: " ↗"; color: var(--mid); font-size: .8em; }
+.projects li a:hover { color: var(--green); }
 .projects li span { font: 400 12px/1.6 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--mid); }
 .clients { grid-column: 1 / span 5; margin-top: 64px; display: grid; gap: 18px; }
 .clients p { font-size: 15px; color: #444; max-width: 46ch; }
@@ -636,7 +639,7 @@ a.u:hover { color: var(--green); }
     </div>
     <ul class="projects">
       <li>Antuntun<span>Identitet · Web</span></li>
-      <li>Zadar City Guide<span>Identitet · Web</span></li>
+      <li><a href="https://zdguide.com" target="_blank" rel="noopener">Zadar Region Guide</a><span>Identitet · Web</span></li>
       <li>Mile<span>Identitet</span></li>
       <li>TST Group<span>Identitet</span></li>
     </ul>
