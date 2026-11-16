@@ -24,3 +24,11 @@
   for = "/app/*.mjs"
   [headers.values]
     Content-Type = "text/javascript; charset=utf-8"
+
+# CSV cjenik s baznim cijenama (propis od 17. 11. 2026.): ispravan tip i bez dugog keširanja
+[[headers]]
+  for = "/cjenik/*.csv"
+  [headers.values]
+    Content-Type = "text/csv; charset=utf-8"
+    Cache-Control = "public, max-age=300"
+    Access-Control-Allow-Origin = "*"

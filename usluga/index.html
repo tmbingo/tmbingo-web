@@ -27,7 +27,7 @@
 </style>
 </head>
 <body>
-<header class="bar"><div class="wrap in"><a class="logo" href="/"><img src="/assets/logo-light.png" alt="TMBingo" width="63" height="20"></a><nav class="lbl" aria-label="Izbornik"><a href="/">Naslovna</a><a href="/#cijene">Cijene</a></nav><div class="me lbl"><a href="/app/" style="text-decoration:none">Prijava</a></div></div></header>
+<header class="bar"><div class="wrap in"><a class="logo" href="/"><img src="/assets/logo-light.png" alt="TMBingo" width="63" height="20"></a><nav class="lbl" aria-label="Izbornik"><a href="/">Naslovna</a><a href="/cjenik/">Cjenik</a></nav><div class="me lbl"><a href="/app/" style="text-decoration:none">Prijava</a></div></div></header>
 
 <main class="wrap" id="vrh">
   <div class="head"><p class="lbl dim">Usluge van paketa</p><h1 id="naslov">Odaberi uslugu</h1></div>
@@ -40,8 +40,9 @@
       <p class="lbl dim">Odabrano</p>
       <p class="lbl" id="selNaziv">Logo</p>
       <p class="price" id="selCijena">290 €<small>jednokratno</small></p>
+      <p class="lbl dim" id="selBazna">Bazna cijena 290 € (5. 11. 2026.)</p>
       <p class="rok lbl"><span class="dim">Rok isporuke</span><span id="selRok">7 dana</span></p>
-      <p class="hint">Plaća se jednom, bez pretplate. Nismo u sustavu PDV-a, cijena je konačna. Točan opseg, cijenu i rok potvrđujemo u ponudi e-mailom, prije bilo kakve uplate.</p>
+      <p class="hint">Plaća se jednom, bez pretplate. Nismo u sustavu PDV-a, cijena je konačna. Točan opseg, cijenu i rok potvrđujemo u ponudi e-mailom u roku 24 sata (radnim danom), prije bilo kakve uplate. <a href="/cjenik/">Sve cijene i bazne cijene</a></p>
     </aside>
 
     <form class="form" id="f" novalidate>
@@ -60,7 +61,7 @@
       <div class="captcha" id="captcha"></div>
       <p class="err" id="e" hidden></p>
       <div><button class="btn" type="submit">Pošalji upit</button></div>
-      <p class="hint">Upit nije narudžba i ništa se ne plaća. Javljamo se s ponudom najkasnije idući radni dan.</p>
+      <p class="hint">Upit nije narudžba i ništa se ne plaća. Ponudu s cijenom i rokom šaljemo u roku 24 sata, radnim danom.</p>
     </form>
   </div>
   </div>
@@ -70,7 +71,7 @@
     <p class="lbl" id="doneNaziv" style="margin-bottom:12px"></p>
     <ol class="next">
       <li><span>Pregledamo tvoje zahtjeve. Potvrdu upita smo ti poslali i na e-mail.</span></li>
-      <li><span>Najkasnije idući radni dan šaljemo ponudu s točnim opsegom, cijenom i rokom.</span></li>
+      <li><span>U roku 24 sata (radnim danom) šaljemo ponudu s točnim opsegom, cijenom i rokom.</span></li>
       <li><span>Kad ponudu prihvatiš, prvi prijedlog dobiješ u Figmi.</span></li>
     </ol>
     <p style="margin-top:32px"><a class="btn ghost" href="/">Natrag na naslovnu</a></p>
@@ -86,8 +87,9 @@ var captcha = window.TMB_CAPTCHA(document.getElementById('captcha'));
 var f = document.getElementById('f'), e = document.getElementById('e'), plans = document.getElementById('plans');
 var usluga = new URLSearchParams(location.search).get('u');
 if (!USLUGE[usluga]) usluga = 'logo';
+var prije = new URLSearchParams(location.search).get('opis'); // tekst iz kalkulatora na /cjenik/
 
-plans.innerHTML = Object.keys(USLUGE).map(function (k) {
+plans.innerHTML = Object.keys(USLUGE).filter(function (k) { return !USLUGE[k].skriveno; }).map(function (k) {
   var u = USLUGE[k];
   return '<label class="plan"><input type="radio" name="usluga" value="' + k + '">' +
     '<span class="lbl">' + esc(u.naziv) + '</span><b class="iznos">' + esc(u.cijena) + '<small>' + esc(u.jedinica) + '</small></b>' +
@@ -100,11 +102,13 @@ function crtaj() {
   document.getElementById('selNaziv').textContent = u.naziv;
   document.getElementById('selCijena').innerHTML = esc(u.cijena) + '<small>' + esc(u.jedinica) + '</small>';
   document.getElementById('selRok').textContent = u.rok;
+  var bz = document.getElementById('selBazna'); bz.textContent = u.bazna ? 'Bazna cijena ' + u.bazna : ''; bz.hidden = !u.bazna;
   document.getElementById('opis').placeholder = u.pitanje;
   history.replaceState(null, '', '?u=' + usluga);
 }
 plans.addEventListener('change', function (ev) { usluga = ev.target.value; crtaj(); });
 crtaj();
+if (prije) document.getElementById('opis').value = prije.slice(0, 4000);
 
 f.onsubmit = async function (ev) {
   ev.preventDefault();

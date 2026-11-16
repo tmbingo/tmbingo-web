@@ -16,7 +16,7 @@ Ključne činjenice:
 - Start, 199 € mjesečno: društvene mreže (8 objava mjesečno) i održavanje postojećeg weba.
 - TMBingo paket, 399 € mjesečno: web stranice, hosting i održavanje; logo, branding i tiskani materijali; društvene mreže, web banneri i newsletter. Zadaci redom, jedan po jedan.
 - Pro, 749 € mjesečno: sve iz TMBingo paketa, dva zadatka istovremeno, prednost u redu, mjesečni video poziv za plan.
-- Web za 14 dana, 1.490 € jednokratno: nova web stranica gotova za 14 dana, bez pretplate.
+- Web za 14 dana, 1.490 € jednokratno: nova web stranica gotova za 14 dana (uobičajeni rok na tržištu 5 do 9 tjedana), bez pretplate.
 
 ## Cijene van paketa (jednokratno, bez pretplate)
 
@@ -28,7 +28,14 @@ Ključne činjenice:
 - Web trgovina: od 2.490 €, oko 30 dana
 - CRM po mjeri: od 1.200 €
 - Rad po satu: 40 €
-- Upit: https://tmbingo.com/usluga/
+- CSV cjenik i sidrena (bazna) cijena za web klijenta: 94 € za jednu lokaciju i do 50 stavki, 49 € po dodatnoj lokaciji, 2 radna dana
+- Besplatni pregled weba: 5 stvari koje treba popraviti, u 24 sata
+- Upit: https://tmbingo.com/usluga/ (ponuda s cijenom i rokom u 24 sata, radnim danom)
+
+## Cjenik i bazne cijene
+
+- [Cjenik s baznim cijenama i kalkulatorom](https://tmbingo.com/cjenik/). Sve bazne cijene jednake su današnjim (cijena na dan prve ponude, 29. 10. do 17. 11. 2026.).
+- CSV cjenik: https://tmbingo.com/cjenik/cjenik.csv
 
 ## Usluge
 
@@ -48,6 +55,8 @@ Ključne činjenice:
 
 ## Blog
 
+- [Bazna (sidrena) cijena i CSV cjenik na webu: što obrt mora napraviti](https://tmbingo.com/blog/sidrena-cijena-csv-cjenik/)
+- [Web za 14 dana: kako izgleda svaki dan izrade](https://tmbingo.com/blog/web-za-14-dana/)
 - [Koliko košta izrada web stranice i što ulazi u cijenu](https://tmbingo.com/blog/koliko-kosta-web-stranica/)
 - [Društvene mreže za malu firmu: koliko objavljivati i što](https://tmbingo.com/blog/drustvene-mreze-za-male-firme/)
 - [Web stranica za apartmane: kako do direktnih rezervacija](https://tmbingo.com/blog/web-stranica-za-apartmane/)
