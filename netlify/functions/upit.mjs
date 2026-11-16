@@ -70,7 +70,7 @@ export default async (req) => {
       naslov: 'Upit je zaprimljen',
       odlomci: [
         `${pozdrav(d.ime)}, hvala na upitu za: ${naziv}.`,
-        'Pregledat ćemo zahtjeve i javiti se s ponudom i rokom, najkasnije idući radni dan.',
+        'Pregledat ćemo zahtjeve i javiti se s ponudom, cijenom i rokom u roku 24 sata, radnim danom.',
         // upisani tekst namjerno se ne vraća u potvrdi, da forma ne služi za slanje tuđeg sadržaja s naše adrese
         'Ako nisi ti poslao ili poslala ovaj upit, samo zanemari ovaj e-mail.',
       ],

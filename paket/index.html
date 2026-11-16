@@ -39,6 +39,7 @@
       <p class="lbl dim">Odabrano</p>
       <p class="lbl" id="selNaziv">TMBingo paket</p>
       <p class="price" id="selCijena">399 €<small>mjesečno</small></p>
+      <p class="lbl dim" id="selBazna">Bazna cijena 399 € (29. 10. 2026.)</p>
       <p class="hint" id="selNapomena">Bez obveze trajanja. Pauza ili otkaz bilo kada.</p>
       <div><p class="lbl" id="slotTxt">Najviše 10 novih klijenata mjesečno</p><div class="slots" id="slots" aria-hidden="true"></div></div>
     </aside>
@@ -84,6 +85,8 @@
 <script src="/app/uplata.js"></script>
 <script type="module">
 import { odabir, euri } from '/app/odabir.mjs';
+import { STAVKE, eur, datumHr } from '/app/cjenik.mjs';
+var SIFRA = { start: 'TMB-START', tmbingo: 'TMB-PAKET', pro: 'TMB-PRO', web: 'TMB-WEB14' };
 var captcha = window.TMB_CAPTCHA(document.getElementById('captcha'));
 var f = document.getElementById('f'), e = document.getElementById('e');
 var q = new URLSearchParams(location.search);
@@ -94,6 +97,9 @@ var izbor = odabir(document.getElementById('picker'), {
     document.getElementById('selNaziv').textContent = o.naziv;
     var per = o.period === 'godisnje' ? 'godišnje, plaća se unaprijed' : o.period === 'jednokratno' ? 'jednokratno' : 'mjesečno';
     document.getElementById('selCijena').innerHTML = euri(o.centi) + '<small>' + per + '</small>';
+    var sf = SIFRA[o.paket] + (o.paket === 'web' ? '' : o.period === 'godisnje' ? '-G' : '-M');
+    var bz = STAVKE.find(function (s) { return s.sifra === sf; });
+    document.getElementById('selBazna').textContent = bz ? 'Bazna cijena ' + eur(bz.bazna) + ' (' + datumHr(bz.datum) + ')' : '';
     document.getElementById('selNapomena').textContent = o.period === 'jednokratno'
       ? 'Plaća se jednom, bez pretplate. Održavanje poslije možeš nastaviti kroz Start paket.'
       : o.period === 'godisnje' ? 'Plaćaš 10 mjeseci, dobivaš 12.' : 'Bez obveze trajanja. Pauza ili otkaz bilo kada.';

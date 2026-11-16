@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cjenik s baznim cijenama i kalkulator · TMBingo</title>
+<meta name="description" content="Javni cjenik TMBinga s baznim (sidrenim) cijenama i CSV datotekom: web za 14 dana 1.490 €, paketi od 199 € mjesečno, logo 290 €, CSV cjenik za tvoj web 94 €. Kalkulator okvirne cijene.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://tmbingo.com/cjenik/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="hr_HR">
+<meta property="og:site_name" content="TMBingo">
+<meta property="og:url" content="https://tmbingo.com/cjenik/">
+<meta property="og:title" content="Cjenik s baznim cijenama · TMBingo">
+<meta property="og:description" content="Sve cijene na jednom mjestu, s baznim cijenama i CSV cjenikom. Bez skrivenih troškova.">
+<meta property="og:image" content="https://tmbingo.com/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="alternate" type="text/csv" href="/cjenik/cjenik.csv" title="Cjenik (CSV)">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/assets/stranica.css">
+<script type="application/ld+json">
+[
+ {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+   { "@type": "ListItem", "position": 1, "name": "TMBingo", "item": "https://tmbingo.com/" },
+   { "@type": "ListItem", "position": 2, "name": "Cjenik", "item": "https://tmbingo.com/cjenik/" }
+  ]
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Cjenik usluga TMBingo (Studio23k) s baznim cijenama",
+  "description": "Cjenik usluga s maloprodajnim i baznim cijenama, u CSV obliku.",
+  "url": "https://tmbingo.com/cjenik/",
+  "creator": { "@id": "https://tmbingo.com/#posao" },
+  "distribution": [{ "@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://tmbingo.com/cjenik/cjenik.csv" }]
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+   { "@type": "Question", "name": "Što je bazna cijena?", "acceptedAnswer": { "@type": "Answer", "text": "Bazna cijena, u javnosti poznata kao sidrena cijena, je cijena koja je za istu uslugu vrijedila 10. rujna 2026. Ako je usluga u ponudi od kasnije, bazna je cijena s dana prve ponude i uz nju se navodi taj datum. Od 17. studenoga 2026. ističe se uz svaku cijenu." } },
+   { "@type": "Question", "name": "Jesu li u cijene uračunati porezi?", "acceptedAnswer": { "@type": "Answer", "text": "Da. Obrt Studio23k nije u sustavu PDV-a, pa su sve cijene konačne." } },
+   { "@type": "Question", "name": "Koliko traje izrada web stranice?", "acceptedAnswer": { "@type": "Answer", "text": "Web za 14 dana gotov je za 14 dana od odobrenog briefa i uplate. Uobičajeni rok na tržištu je 5 do 9 tjedana." } }
+  ]
+ }
+]
+</script>
+<style>
+.cj td.n { white-space: nowrap; }
+.cj .dim { font-size: 13px; }
+.cj tbody tr:target { background: #f2faf6; }
+.calc { display: grid; gap: 20px; margin: 0 0 12px; }
+.calc fieldset { border: 0; border-top: 1px solid var(--line); margin: 0; padding: 14px 0 0; display: grid; gap: 8px; }
+.calc legend { font: 400 12px/1.4 var(--tech); text-transform: uppercase; letter-spacing: .09em; color: var(--mid); padding: 0; margin-bottom: 6px; }
+.calc label { display: flex; gap: 10px; align-items: baseline; cursor: pointer; }
+.calc label span.dim { margin-left: auto; font-size: 14px; white-space: nowrap; }
+.calc input[type=number] { width: 72px; font: inherit; padding: 4px 6px; border: 1px solid var(--line); }
+.rez { background: var(--black); color: var(--white); padding: 24px; display: grid; gap: 10px; }
+.rez .iznos { font: 700 clamp(40px, 5vw, 64px)/.95 var(--mark); letter-spacing: -.04em; margin: 0; }
+.rez p { margin: 0; }
+.rez .dim { color: #b5b5b5; }
+.rez .btn { background: var(--white); color: var(--black); justify-self: start; }
+.rez .btn:hover { background: var(--green); color: var(--white); }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--line); margin: 0 0 12px; }
+.vs div { padding: 14px 12px 14px 0; }
+.vs b { display: block; font: 700 clamp(32px, 4vw, 48px)/1 var(--mark); letter-spacing: -.04em; }
+.vs .dim b { color: var(--mid); }
+.side .bz { margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top lbl">
+    <a href="/">TMBingo</a>
+    <nav aria-label="Glavna navigacija"><a href="/usluge/">Usluge</a><a href="/izrada-web-stranica-zadar/">Web</a><a href="/cjenik/" aria-current="page">Cjenik</a><a href="/blog/">Blog</a><a href="/#paket">Paketi</a></nav>
+  </header>
+  <p class="crumbs lbl dim"><a href="/">TMBingo</a> / <span>Cjenik</span></p>
+  <h1>Cjenik s baznim cijenama</h1>
+  <aside class="side">
+    <p class="lbl dim">Cijene vrijede od 17. 11. 2026.</p>
+    <p class="price">1.490 €</p>
+    <p class="lbl dim bz">Bazna cijena 1.490 € (31. 10. 2026.)</p>
+    <p class="lbl dim">Nova web stranica za 14 dana.<br>Uobičajeni rok na tržištu je 5 do 9 tjedana.</p>
+    <p class="lbl">Bez skrivenih troškova.<br><span class="dim">Nismo u sustavu PDV-a, cijene su konačne.</span></p>
+    <p class="cta"><a class="btn" href="#kalkulator">Izračunaj cijenu</a><a class="btn ghost" href="/cjenik/cjenik.csv">CSV cjenik</a></p>
+  </aside>
+  <main class="doc">
+    <p class="lead">Sve naše cijene na jednom mjestu, s rokovima i baznim cijenama. Isti cjenik je i u CSV datoteci, kako propis traži od 17. studenoga 2026. Točan opseg i rok uvijek dobiješ u ponudi e-mailom, u roku 24 sata radnim danom, prije bilo kakve uplate.</p>
+
+    <div class="vs" aria-label="Usporedba rokova">
+      <div><span class="lbl">TMBingo</span><b>14 dana</b><span class="dim">od briefa do objave</span></div>
+      <div class="dim"><span class="lbl">Uobičajeno na tržištu</span><b>5–9 tjedana</b><span>za sličan opseg</span></div>
+    </div>
+
+<!-- CJENIK:POCETAK -->
+<h2>TMBingo paketi (bez obveze trajanja)</h2>
+<table class="cj">
+  <thead><tr><th>Usluga</th><th>Cijena</th><th>Bazna cijena</th></tr></thead>
+  <tbody>
+    <tr id="tmb-start-m"><td><b>Start paket</b><br><span class="dim">8 objava mjesečno i održavanje postojećeg weba</span></td><td class="n">199 €<br><span class="dim">mjesečno</span></td><td class="n">199 €<br><span class="dim">na dan 31. 10. 2026.</span></td></tr>
+    <tr id="tmb-start-g"><td><b>Start paket, godišnje plaćanje</b><br><span class="dim">12 mjeseci, 2 mjeseca gratis</span></td><td class="n">1.990 €<br><span class="dim">godišnje</span></td><td class="n">1.990 €<br><span class="dim">na dan 31. 10. 2026.</span></td></tr>
+    <tr id="tmb-paket-m"><td><b>TMBingo paket</b><br><span class="dim">Web, hosting, održavanje, dizajn i društvene mreže</span></td><td class="n">399 €<br><span class="dim">mjesečno</span></td><td class="n">399 €<br><span class="dim">na dan 29. 10. 2026.</span></td></tr>
+    <tr id="tmb-paket-g"><td><b>TMBingo paket, godišnje plaćanje</b><br><span class="dim">12 mjeseci, 2 mjeseca gratis</span></td><td class="n">3.990 €<br><span class="dim">godišnje</span></td><td class="n">3.990 €<br><span class="dim">na dan 31. 10. 2026.</span></td></tr>
+    <tr id="tmb-pro-m"><td><b>Pro paket</b><br><span class="dim">Sve iz TMBingo paketa, dva zadatka istovremeno, prednost</span></td><td class="n">749 €<br><span class="dim">mjesečno</span></td><td class="n">749 €<br><span class="dim">na dan 31. 10. 2026.</span></td></tr>
+    <tr id="tmb-pro-g"><td><b>Pro paket, godišnje plaćanje</b><br><span class="dim">12 mjeseci, 2 mjeseca gratis</span></td><td class="n">7.490 €<br><span class="dim">godišnje</span></td><td class="n">7.490 €<br><span class="dim">na dan 31. 10. 2026.</span></td></tr>
+  </tbody>
+</table>
+
+<h2>Jednokratne usluge</h2>
+<table class="cj">
+  <thead><tr><th>Usluga</th><th>Cijena</th><th>Bazna cijena</th></tr></thead>
+  <tbody>
+    <tr id="tmb-web14"><td><b>Web za 14 dana</b><br><span class="dim">Nova web stranica, dizajn prvo u Figmi, gotovo za 14 dana</span></td><td class="n">1.490 €<br><span class="dim">jednokratno</span></td><td class="n">1.490 €<br><span class="dim">na dan 31. 10. 2026.</span></td></tr>
+    <tr id="tmb-logo"><td><b>Logo</b><br><span class="dim">Znak i logotip u dvije-tri varijante, rok 7 dana</span></td><td class="n">290 €<br><span class="dim">jednokratno</span></td><td class="n">290 €<br><span class="dim">na dan 5. 11. 2026.</span></td></tr>
+    <tr id="tmb-identitet"><td><b>Vizualni identitet</b><br><span class="dim">Logo, boje, fontovi, pravila korištenja, predlošci za mreže, rok 14 dana</span></td><td class="n">690 €<br><span class="dim">jednokratno</span></td><td class="n">690 €<br><span class="dim">na dan 5. 11. 2026.</span></td></tr>
+    <tr id="tmb-tisak"><td><b>Tiskovina</b><br><span class="dim">Vizitka, letak, jelovnik ili plakat, pripremljeno za tisak, rok 3 dana</span></td><td class="n">od 90 €<br><span class="dim">po dizajnu</span></td><td class="n">od 90 €<br><span class="dim">na dan 5. 11. 2026.</span></td></tr>
+    <tr id="tmb-objave"><td><b>Objave za mreže</b><br><span class="dim">Set od 8 dizajniranih objava, rok 5 dana</span></td><td class="n">149 €<br><span class="dim">po setu</span></td><td class="n">149 €<br><span class="dim">na dan 5. 11. 2026.</span></td></tr>
+    <tr id="tmb-banneri"><td><b>Web banneri</b><br><span class="dim">Oglas u svim potrebnim dimenzijama, rok 3 dana</span></td><td class="n">99 €<br><span class="dim">po setu</span></td><td class="n">99 €<br><span class="dim">na dan 5. 11. 2026.</span></td></tr>
+    <tr id="tmb-trgovina"><td><b>Web trgovina</b><br><span class="dim">Katalog, košarica, kartično plaćanje i dostava, rok oko 30 dana</span></td><td class="n">od 2.490 €<br><span class="dim">jednokratno</span></td><td class="n">od 2.490 €<br><span class="dim">na dan 5. 11. 2026.</span></td></tr>
+    <tr id="tmb-crm"><td><b>CRM po mjeri</b><br><span class="dim">Sustav za upite, zadatke i klijente</span></td><td class="n">od 1.200 €<br><span class="dim">jednokratno</span></td><td class="n">od 1.200 €<br><span class="dim">na dan 5. 11. 2026.</span></td></tr>
+    <tr id="tmb-sat"><td><b>Rad po satu</b><br><span class="dim">Izmjene na postojećem webu i hitni popravci</span></td><td class="n">40 €<br><span class="dim">po satu</span></td><td class="n">40 €<br><span class="dim">na dan 5. 11. 2026.</span></td></tr>
+  </tbody>
+</table>
+
+<h2>Cjenik i bazna cijena za tvoj web</h2>
+<table class="cj">
+  <thead><tr><th>Usluga</th><th>Cijena</th><th>Bazna cijena</th></tr></thead>
+  <tbody>
+    <tr id="tmb-cjenik"><td><b>CSV cjenik i sidrena cijena</b><br><span class="dim">CSV cjenik na webu i bazna cijena uz cijene, do 50 stavki, jedna lokacija, rok 2 radna dana</span></td><td class="n">94 €<br><span class="dim">jednokratno</span></td><td class="n">94 €<br><span class="dim">na dan 17. 11. 2026.</span></td></tr>
+    <tr id="tmb-cjenik-lok"><td><b>CSV cjenik, dodatna lokacija</b><br><span class="dim">Svaka dodatna poslovnica ili prodajno mjesto s drugim cijenama</span></td><td class="n">49 €<br><span class="dim">po lokaciji</span></td><td class="n">49 €<br><span class="dim">na dan 17. 11. 2026.</span></td></tr>
+  </tbody>
+</table>
+<p class="lbl dim">Cjenik vrijedi od 17. 11. 2026. · Studio23k, vl. Tonći Morić · OIB 13393375189 · Jakova Gotovca 18, 23000 Zadar</p>
+<p class="cta"><a class="btn" href="/cjenik/13393375189_ZA_SVA_PRODAJNA_MJESTA_USLUGE_001_20261117_0800.csv" download>Preuzmi cjenik (CSV)</a><a class="btn ghost" href="/cjenik/cjenik.csv">Stalna adresa cjenika</a></p>
+<!-- CJENIK:KRAJ -->
+
+    <h2>Što nije u cijeni</h2>
+    <ul>
+      <li><b>Tisak.</b> Dizajn pripremamo spreman za tisak, a tisak se plaća tiskari po tvom izboru.</li>
+      <li><b>Domena.</b> Registrira se na tvoje ime i plaća registru, pa je uvijek tvoja.</li>
+      <li><b>Plaćeni oglasi.</b> Budžet za Google ili Metu plaća se izravno njima.</li>
+    </ul>
+    <p>Sve ostalo što je navedeno uz uslugu je u cijeni. Nema naknade za postavljanje, za „projektni menadžment“ ni za izlazak iz paketa.</p>
+
+    <h2 id="kalkulator">Kalkulator okvirne cijene</h2>
+    <p>Odaberi što trebaš. Izračun je okviran i temelji se na cjeniku iznad. Točnu cijenu potvrđujemo u ponudi.</p>
+    <form class="calc" id="calc">
+      <fieldset>
+        <legend>1. Što trebaš?</legend>
+        <label><input type="radio" name="web" value="web" checked> Novu web stranicu <span class="dim">1.490 €</span></label>
+        <label><input type="radio" name="web" value="trgovina"> Web trgovinu <span class="dim">od 2.490 €</span></label>
+        <label><input type="radio" name="web" value="izmjene"> Imam web, trebaju mi izmjene <span class="dim">40 € / sat</span></label>
+        <label><input type="radio" name="web" value="nista"> Ne treba mi web <span class="dim">0 €</span></label>
+      </fieldset>
+      <fieldset>
+        <legend>2. Treba li ti logo?</legend>
+        <label><input type="radio" name="logo" value="ne" checked> Ne, imam ga <span class="dim">0 €</span></label>
+        <label><input type="radio" name="logo" value="logo"> Logo <span class="dim">290 €</span></label>
+        <label><input type="radio" name="logo" value="identitet"> Cijeli vizualni identitet <span class="dim">690 €</span></label>
+      </fieldset>
+      <fieldset>
+        <legend>3. Ističeš li cijene na webu?</legend>
+        <label><input type="radio" name="csv" value="ne" checked> Ne, ili je CSV cjenik već sređen <span class="dim">0 €</span></label>
+        <label><input type="radio" name="csv" value="da"> Treba mi CSV cjenik i bazna cijena <span class="dim">94 €</span></label>
+        <label>Broj lokacija s različitim cijenama <input type="number" name="lok" min="1" max="50" value="1" inputmode="numeric"> <span class="dim">+49 € po dodatnoj</span></label>
+      </fieldset>
+      <fieldset>
+        <legend>4. Poslije objave</legend>
+        <label><input type="radio" name="poslije" value="ne" checked> Sam održavam <span class="dim">0 €</span></label>
+        <label><input type="radio" name="poslije" value="start"> Održavanje i 8 objava mjesečno (Start) <span class="dim">199 € / mj</span></label>
+      </fieldset>
+      <div class="rez" aria-live="polite">
+        <p class="lbl dim">Okvirno</p>
+        <p class="iznos" id="rIznos">1.490 €</p>
+        <p id="rMj" class="lbl"></p>
+        <p id="rRok" class="lbl dim"></p>
+        <p id="rPaket" class="dim"></p>
+        <a class="btn" id="rUpit" href="/usluga/?u=izracun">Pošalji upit s ovim izračunom</a>
+      </div>
+    </form>
+
+    <h2 id="besplatni-pregled">Besplatni pregled weba</h2>
+    <p>Pošalji adresu svog weba i u roku 24 sata (radnim danom) dobiješ <b>5 konkretnih stvari koje treba popraviti</b>: od toga ima li web CSV cjenik i bazne cijene, preko brzine na mobitelu, do zastarjelih podataka u podnožju. Besplatno i bez obveze.</p>
+    <p class="cta"><a class="btn" href="/usluga/?u=pregled">Zatraži pregled</a></p>
+
+    <h2>Kako usporediti ponude za web</h2>
+    <p>Prije nego potpišeš bilo čiju ponudu, pa i našu, pitaj ovih šest stvari:</p>
+    <ol>
+      <li><b>Koja je ukupna cijena</b> i je li PDV uračunat?</li>
+      <li><b>Što je točno u opsegu:</b> koliko stranica, tko piše tekstove, koliko krugova izmjena?</li>
+      <li><b>Koliko košta druga godina:</b> hosting, domena, održavanje, licence?</li>
+      <li><b>Tko je vlasnik</b> domene, dizajna i koda kad suradnja završi?</li>
+      <li><b>Kako ćeš znati radi li web:</b> postoji li mjerenje posjeta i upita?</li>
+      <li><b>Jesu li pokrivene zakonske obveze:</b> podaci o obrtu, privatnost, kolačići, CSV cjenik i bazne cijene?</li>
+    </ol>
+    <p>Kod nas su odgovori na ovoj stranici i u <a href="/uvjeti.html">uvjetima poslovanja</a>.</p>
+
+    <h2>Česta pitanja</h2>
+    <div class="faq">
+      <details><summary>Što je bazna cijena?</summary><p>Bazna cijena, u javnosti poznata kao sidrena cijena, je cijena koja je za istu uslugu vrijedila 10. rujna 2026. Ako je usluga u ponudi od kasnije, bazna je cijena s dana prve ponude i uz nju se navodi taj datum. Od 17. studenoga 2026. ističe se uz svaku cijenu. Više u članku <a href="/blog/sidrena-cijena-csv-cjenik/">bazna cijena i CSV cjenik</a>.</p></details>
+      <details><summary>Zašto su naše bazne cijene jednake današnjima?</summary><p>Jer od prve ponude nismo mijenjali cijene. TMBingo je pokrenut krajem listopada 2026., pa je bazna cijena ona s dana kad je usluga prvi put ponuđena.</p></details>
+      <details><summary>Jesu li u cijene uračunati porezi?</summary><p>Da. Obrt Studio23k nije u sustavu PDV-a, pa su sve cijene konačne.</p></details>
+      <details><summary>Koliko traje izrada web stranice?</summary><p>Web za 14 dana gotov je za 14 dana od odobrenog briefa i uplate. Uobičajeni rok na tržištu je 5 do 9 tjedana.</p></details>
+    </div>
+  </main>
+  <footer class="foot lbl">
+    <p class="a">TMBingo je usluga obrta<br>Studio23k, vl. Tonći Morić<br>OIB 13393375189<br>Jakova Gotovca 18, 23000 Zadar<br><a href="mailto:info@tmbingo.com">info@tmbingo.com</a><br><span class="dim">Bazne cijene: sve cijene na ovoj stranici jednake su baznim cijenama, s datumima u </span><a href="/cjenik/">cjeniku</a></p>
+    <nav class="b" aria-label="Usluge"><a class="dim" href="/usluge/">Usluge</a><a href="/izrada-web-stranica-zadar/">Izrada web stranica</a><a href="/izrada-web-trgovine/">Izrada web trgovine</a><a href="/drustvene-mreze-zadar/">Društvene mreže</a><a href="/graficki-dizajn-zadar/">Logo i grafički dizajn</a><a href="/branding-zadar/">Branding i vizualni identitet</a><a href="/tiskani-materijali-zadar/">Tiskani materijali</a><a href="/web-banneri/">Web banneri</a><a href="/newsletter/">Newsletter</a><a href="/seo-optimizacija-zadar/">SEO optimizacija</a><a href="/web-hosting/">Web hosting</a><a href="/odrzavanje-web-stranica/">Održavanje web stranica</a><a href="/paket/">Paketi i narudžba</a></nav>
+    <nav class="c" aria-label="Više"><span class="dim">Više</span><a href="/cjenik/">Cjenik</a><a href="/blog/">Blog</a><a href="https://www.facebook.com/TMBingodotcom/" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/tmbingo_design_studio/" target="_blank" rel="noopener">Instagram</a><a href="/uvjeti.html">Uvjeti</a><a href="/privatnost.html">Privatnost</a></nav>
+  </footer>
+</div>
+<script type="module">
+import { STAVKE, eur } from '/app/cjenik.mjs';
+var C = Object.fromEntries(STAVKE.map(function (s) { return [s.sifra, s.cijena]; }));
+var f = document.getElementById('calc');
+function v(n) { var el = f.querySelector('[name=' + n + ']:checked'); return el ? el.value : ''; }
+function racunaj() {
+  var jedno = 0, od = false, mj = 0, rok = 0, stavke = [];
+  var web = v('web'), logo = v('logo'), csv = v('csv'), poslije = v('poslije');
+  var lok = Math.max(1, Math.min(50, parseInt(f.lok.value, 10) || 1));
+  if (web === 'web') { jedno += C['TMB-WEB14']; rok = 14; stavke.push('Web za 14 dana (' + eur(C['TMB-WEB14']) + ')'); }
+  if (web === 'trgovina') { jedno += C['TMB-TRGOVINA']; od = true; rok = 30; stavke.push('Web trgovina (od ' + eur(C['TMB-TRGOVINA']) + ')'); }
+  if (web === 'izmjene') { stavke.push('Izmjene na postojećem webu (' + eur(C['TMB-SAT']) + ' po satu, procjena u ponudi)'); }
+  if (logo === 'logo') { jedno += C['TMB-LOGO']; rok = Math.max(rok, 7); stavke.push('Logo (' + eur(C['TMB-LOGO']) + ')'); }
+  if (logo === 'identitet') { jedno += C['TMB-IDENTITET']; rok = Math.max(rok, 14); stavke.push('Vizualni identitet (' + eur(C['TMB-IDENTITET']) + ')'); }
+  if (csv === 'da') {
+    var c = C['TMB-CJENIK'] + (lok - 1) * C['TMB-CJENIK-LOK'];
+    jedno += c; rok = Math.max(rok, 2);
+    stavke.push('CSV cjenik i sidrena cijena, ' + lok + (lok === 1 ? ' lokacija' : ' lokacije') + ' (' + eur(c) + ')');
+  }
+  if (poslije === 'start') { mj = C['TMB-START-M']; stavke.push('Start paket (' + eur(mj) + ' mjesečno)'); }
+  document.getElementById('rIznos').textContent = (od ? 'od ' : '') + eur(jedno) + (web === 'izmjene' ? ' + sati' : '');
+  document.getElementById('rMj').textContent = mj ? '+ ' + eur(mj) + ' mjesečno, bez obveze trajanja' : 'Jednokratno, bez pretplate';
+  document.getElementById('rRok').textContent = rok ? 'Rok: ' + (rok === 2 ? '2 radna dana' : (rok === 30 ? 'oko 30 dana' : rok + ' dana')) + ' od odobrenog briefa i uplate' : 'Rok: po dogovoru';
+  var paket = (web === 'web' || web === 'trgovina') && (logo !== 'ne' || poslije === 'start');
+  document.getElementById('rPaket').textContent = paket ? 'Za usporedbu: web, logo, održavanje i društvene mreže dobiješ i u TMBingo paketu za ' + eur(C['TMB-PAKET-M']) + ' mjesečno, bez obveze trajanja.' : '';
+  var opis = 'Izračun s tmbingo.com/cjenik:\n- ' + stavke.join('\n- ') + '\nOkvirno: ' + document.getElementById('rIznos').textContent + (mj ? ' + ' + eur(mj) + ' mjesečno' : '') + '\n\nO mom poslu i webu: ';
+  document.getElementById('rUpit').href = '/usluga/?u=izracun&opis=' + encodeURIComponent(opis);
+}
+f.addEventListener('input', racunaj);
+f.addEventListener('change', racunaj);
+racunaj();
+</script>
+</body>
+</html>

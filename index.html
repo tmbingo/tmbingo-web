@@ -31,7 +31,7 @@
   "logo": "https://tmbingo.com/assets/apple-touch-icon.png",
   "image": "https://tmbingo.com/assets/og-image.jpg",
   "email": "info@tmbingo.com",
-  "priceRange": "199 € – 1.490 €",
+  "priceRange": "40 € – 7.490 €",
   "currenciesAccepted": "EUR",
   "address": {
    "@type": "PostalAddress",
@@ -149,6 +149,14 @@
      "price": "1490",
      "priceCurrency": "EUR",
      "url": "https://tmbingo.com/paket/"
+    },
+    {
+     "@type": "Offer",
+     "name": "CSV cjenik i sidrena cijena",
+     "description": "CSV cjenik na webu i bazna cijena uz cijene, do 50 stavki, jedna lokacija, rok 2 radna dana. Svaka dodatna lokacija 49 €.",
+     "price": "94",
+     "priceCurrency": "EUR",
+     "url": "https://tmbingo.com/usluga/?u=cjenik"
     }
    ]
   }
@@ -214,6 +222,14 @@
     "acceptedAnswer": {
      "@type": "Answer",
      "text": "Sjedište nam je u Zadru i najviše radimo za firme iz Zadra i okolice, ali radimo i za klijente iz cijele Hrvatske, jer se sve dogovara e-mailom i video pozivom. Više o tome na stranici izrada web stranica u Zadru."
+    }
+   },
+   {
+    "@type": "Question",
+    "name": "Imate li cjenik s baznim cijenama?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "Da. Sve cijene, bazne cijene i rokovi su na stranici Cjenik (tmbingo.com/cjenik/), a isti cjenik je i u CSV datoteci. Ako ga trebaš i za svoj web, CSV cjenik i baznu cijenu postavljamo za 94 € u 2 radna dana."
     }
    }
   ]
@@ -405,6 +421,7 @@ a.u:hover { color: var(--green); }
 .extra .large { grid-column: 1 / -1; }
 .extra .card .amt { font-size: clamp(40px, 4vw, 64px); }
 .extra .card .sub { color: var(--grey); font-size: 16px; line-height: 1.45; }
+.card .bz { font-size: 12px; margin-top: -4px; }
 .extra .rok { border-top: 1px solid var(--line-d); padding-top: 10px; }
 .extra .rok .dim { color: var(--mid); margin-right: 6px; }
 .extra .cards { row-gap: 56px; }
@@ -499,7 +516,7 @@ a.u:hover { color: var(--green); }
 <div class="menu" id="menu" aria-hidden="true">
   <div class="grid"><span class="lbl c1">TMBingo</span><span class="lbl c3">Izbornik</span><button class="lbl close c11" type="button" id="closeMenu">Zatvori</button></div>
   <nav class="grid" aria-label="Izbornik"><div class="links full">
-    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#cijene">Cijene</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="/blog/">Blog</a><a href="#kontakt">Kontakt</a><a href="/app/">Prijava</a>
+    <a href="#usluge">Usluge</a><a href="#paket">Paket</a><a href="#cijene">Cijene</a><a href="/cjenik/">Cjenik</a><a href="#radovi">Radovi</a><a href="#pitanja">Pitanja</a><a href="/blog/">Blog</a><a href="#kontakt">Kontakt</a><a href="/app/">Prijava</a>
   </div></nav>
   <div class="grid"><span class="lbl c1">info@tmbingo.com</span><span class="lbl c3 dim">Bez obveze trajanja · od 199 € / mj</span></div>
 </div>
@@ -570,10 +587,10 @@ a.u:hover { color: var(--green); }
       <div class="plans-l full">
         <div class="per lbl" role="radiogroup" aria-label="Način plaćanja"><button type="button" data-per="mjesecno" class="on" aria-checked="true" role="radio">Mjesečno</button><button type="button" data-per="godisnje" aria-checked="false" role="radio">Godišnje <span>2 mjeseca gratis</span></button></div>
         <div class="cards">
-          <a class="card" href="/paket/?p=start" data-p="start"><span class="lbl">Start</span><b class="amt" data-m="199 €" data-g="1.990 €">199 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><span class="sub">Društvene mreže i održavanje weba</span><ul><li>8 objava mjesečno</li><li>Održavanje postojećeg weba</li><li>Jedan zadatak u isto vrijeme</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
-          <a class="card featured" href="/paket/?p=tmbingo" data-p="tmbingo"><span class="lbl">TMBingo paket <em>Najčešći izbor</em></span><b class="amt" data-m="399 €" data-g="3.990 €">399 €</b><small class="lbl dim" data-m="mjesečno · umjesto 1890 € plaće dizajnera" data-g="godišnje · umjesto 1890 € plaće dizajnera mjesečno">mjesečno · umjesto 1890 € plaće dizajnera</small><span class="sub">Web, dizajn i društvene mreže</span><ul><li>Web, hosting i održavanje</li><li>Logo, branding, tiskovine</li><li>Zadaci redom, jedan po jedan</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
-          <a class="card" href="/paket/?p=pro" data-p="pro"><span class="lbl">Pro</span><b class="amt" data-m="749 €" data-g="7.490 €">749 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><span class="sub">Kad treba više i brže</span><ul><li>Sve iz TMBingo paketa</li><li>Dva zadatka u isto vrijeme</li><li>Prednost i mjesečni plan</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
-          <a class="card" href="/paket/?p=web" data-p="web"><span class="lbl">Web za 14 dana</span><b class="amt">1.490 €</b><small class="lbl dim">jednokratno</small><span class="sub">Nova web stranica, bez pretplate</span><ul><li>Gotovo za 14 dana</li><li>Dizajn prvo u Figmi</li><li>Plaća se jednom</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
+          <a class="card" href="/paket/?p=start" data-p="start"><span class="lbl">Start</span><b class="amt" data-m="199 €" data-g="1.990 €">199 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><small class="lbl dim bz" data-m="Bazna cijena 199 € (31. 10. 2026.)" data-g="Bazna cijena 1.990 € (31. 10. 2026.)">Bazna cijena 199 € (31. 10. 2026.)</small><span class="sub">Društvene mreže i održavanje weba</span><ul><li>8 objava mjesečno</li><li>Održavanje postojećeg weba</li><li>Jedan zadatak u isto vrijeme</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
+          <a class="card featured" href="/paket/?p=tmbingo" data-p="tmbingo"><span class="lbl">TMBingo paket <em>Najčešći izbor</em></span><b class="amt" data-m="399 €" data-g="3.990 €">399 €</b><small class="lbl dim" data-m="mjesečno · umjesto 1890 € plaće dizajnera" data-g="godišnje · umjesto 1890 € plaće dizajnera mjesečno">mjesečno · umjesto 1890 € plaće dizajnera</small><small class="lbl dim bz" data-m="Bazna cijena 399 € (29. 10. 2026.)" data-g="Bazna cijena 3.990 € (31. 10. 2026.)">Bazna cijena 399 € (29. 10. 2026.)</small><span class="sub">Web, dizajn i društvene mreže</span><ul><li>Web, hosting i održavanje</li><li>Logo, branding, tiskovine</li><li>Zadaci redom, jedan po jedan</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
+          <a class="card" href="/paket/?p=pro" data-p="pro"><span class="lbl">Pro</span><b class="amt" data-m="749 €" data-g="7.490 €">749 €</b><small class="lbl dim" data-m="mjesečno" data-g="godišnje">mjesečno</small><small class="lbl dim bz" data-m="Bazna cijena 749 € (31. 10. 2026.)" data-g="Bazna cijena 7.490 € (31. 10. 2026.)">Bazna cijena 749 € (31. 10. 2026.)</small><span class="sub">Kad treba više i brže</span><ul><li>Sve iz TMBingo paketa</li><li>Dva zadatka u isto vrijeme</li><li>Prednost i mjesečni plan</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
+          <a class="card" href="/paket/?p=web" data-p="web"><span class="lbl">Web za 14 dana</span><b class="amt">1.490 €</b><small class="lbl dim">jednokratno</small><small class="lbl dim bz">Bazna cijena 1.490 € (31. 10. 2026.)</small><span class="sub">Nova web stranica, bez pretplate</span><ul><li>Gotovo za 14 dana, ne za 5 do 9 tjedana</li><li>Dizajn prvo u Figmi</li><li>Plaća se jednom</li></ul><span class="go lbl" data-ti="Odaberi →" data-vi="Odaberite →">Odaberi →</span></a>
         </div>
       </div>
       <div class="slots">
@@ -609,17 +626,20 @@ a.u:hover { color: var(--green); }
       <p class="lbl c3 dim" data-scramble>Jedan posao, jedna cijena.<br>Bez pretplate.</p>
       <h2 class="large" data-ti="Ne treba ti paket? Pojedinačne poslove radimo po fiksnoj cijeni, a i ovdje svaki rad prvo vidiš u Figmi." data-vi="Ne treba Vam paket? Pojedinačne poslove radimo po fiksnoj cijeni, a i ovdje svaki rad prvo vidite u Figmi.">Ne treba ti paket? Pojedinačne poslove radimo po fiksnoj cijeni, a i ovdje svaki rad prvo vidiš u Figmi.</h2>
       <div class="cards full">
-          <a class="card xc" href="/usluga/?u=logo"><span class="lbl">Logo</span><b class="amt">290 €</b><small class="lbl dim">jednokratno</small><span class="sub">Znak i logotip u dvije-tri varijante, s revizijama dok ne sjedne.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 7 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
-          <a class="card xc" href="/usluga/?u=identitet"><span class="lbl">Vizualni identitet</span><b class="amt">690 €</b><small class="lbl dim">jednokratno</small><span class="sub">Logo, boje, fontovi, pravila korištenja i predlošci za mreže.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 14 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
-          <a class="card xc" href="/usluga/?u=tiskovina"><span class="lbl">Tiskovina</span><b class="amt">od 90 €</b><small class="lbl dim">po dizajnu</small><span class="sub">Vizitka, letak, jelovnik ili plakat, pripremljeno za tisak.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 3 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
-          <a class="card xc" href="/usluga/?u=objave"><span class="lbl">Objave za mreže</span><b class="amt">149 €</b><small class="lbl dim">set od 8 objava</small><span class="sub">Dizajnirane objave za Facebook i Instagram, bez pretplate.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 5 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
-          <a class="card xc" href="/usluga/?u=banneri"><span class="lbl">Web banneri</span><b class="amt">99 €</b><small class="lbl dim">set dimenzija</small><span class="sub">Oglas za Facebook, Instagram i Google u svim potrebnim veličinama.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 3 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
-          <a class="card xc" href="/usluga/?u=trgovina"><span class="lbl">Web trgovina</span><b class="amt">od 2.490 €</b><small class="lbl dim">jednokratno</small><span class="sub">Katalog, košarica, kartično plaćanje i dostava. Dizajn prvo u Figmi.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 30 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
-          <a class="card xc" href="/usluga/?u=crm"><span class="lbl">CRM po mjeri</span><b class="amt">od 1.200 €</b><small class="lbl dim">jednokratno</small><span class="sub">Sustav za upite, zadatke i klijente. Ostaje tvoj, bez pretplate po korisniku.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> po dogovoru</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
-          <a class="card xc" href="/usluga/?u=sat"><span class="lbl">Rad po satu</span><b class="amt">40 €</b><small class="lbl dim">po satu</small><span class="sub">Izmjene na postojećem webu, hitni popravci i sve što nije gore.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> po dogovoru</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=logo"><span class="lbl">Logo</span><b class="amt">290 €</b><small class="lbl dim">jednokratno</small><small class="lbl dim bz">Bazna cijena 290 € (5. 11. 2026.)</small><span class="sub">Znak i logotip u dvije-tri varijante, s revizijama dok ne sjedne.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 7 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=identitet"><span class="lbl">Vizualni identitet</span><b class="amt">690 €</b><small class="lbl dim">jednokratno</small><small class="lbl dim bz">Bazna cijena 690 € (5. 11. 2026.)</small><span class="sub">Logo, boje, fontovi, pravila korištenja i predlošci za mreže.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 14 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=tiskovina"><span class="lbl">Tiskovina</span><b class="amt">od 90 €</b><small class="lbl dim">po dizajnu</small><small class="lbl dim bz">Bazna cijena od 90 € (5. 11. 2026.)</small><span class="sub">Vizitka, letak, jelovnik ili plakat, pripremljeno za tisak.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 3 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=objave"><span class="lbl">Objave za mreže</span><b class="amt">149 €</b><small class="lbl dim">set od 8 objava</small><small class="lbl dim bz">Bazna cijena 149 € (5. 11. 2026.)</small><span class="sub">Dizajnirane objave za Facebook i Instagram, bez pretplate.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 5 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=banneri"><span class="lbl">Web banneri</span><b class="amt">99 €</b><small class="lbl dim">set dimenzija</small><small class="lbl dim bz">Bazna cijena 99 € (5. 11. 2026.)</small><span class="sub">Oglas za Facebook, Instagram i Google u svim potrebnim veličinama.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 3 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=trgovina"><span class="lbl">Web trgovina</span><b class="amt">od 2.490 €</b><small class="lbl dim">jednokratno</small><small class="lbl dim bz">Bazna cijena od 2.490 € (5. 11. 2026.)</small><span class="sub">Katalog, košarica, kartično plaćanje i dostava. Dizajn prvo u Figmi.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 30 dana</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=crm"><span class="lbl">CRM po mjeri</span><b class="amt">od 1.200 €</b><small class="lbl dim">jednokratno</small><small class="lbl dim bz">Bazna cijena od 1.200 € (5. 11. 2026.)</small><span class="sub">Sustav za upite, zadatke i klijente. Ostaje tvoj, bez pretplate po korisniku.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> po dogovoru</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=sat"><span class="lbl">Rad po satu</span><b class="amt">40 €</b><small class="lbl dim">po satu</small><small class="lbl dim bz">Bazna cijena 40 € (5. 11. 2026.)</small><span class="sub">Izmjene na postojećem webu, hitni popravci i sve što nije gore.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> po dogovoru</span><span class="go lbl" data-ti="Odaberi ponudu →" data-vi="Odaberite ponudu →">Odaberi ponudu →</span></a>
+          <a class="card xc" href="/usluga/?u=cjenik"><span class="lbl">CSV cjenik i sidrena cijena <em>Novo</em></span><b class="amt">94 €</b><small class="lbl dim">jednokratno · +49 € po lokaciji</small><small class="lbl dim bz">Bazna cijena 94 € (17. 11. 2026.)</small><span class="sub">CSV cjenik na tvom webu i bazna cijena uz svaku cijenu, kako propis traži od 17. 11. 2026.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 2 radna dana</span><span class="go lbl" data-ti="Naruči →" data-vi="Naručite →">Naruči →</span></a>
+          <a class="card xc" href="/usluga/?u=pregled"><span class="lbl">Pregled weba</span><b class="amt">0 €</b><small class="lbl dim">besplatno</small><span class="sub">Pošalji adresu weba i dobiješ 5 konkretnih stvari koje treba popraviti, uključujući CSV cjenik.</span><span class="rok lbl"><span class="dim">Rok isporuke</span> 24 sata</span><span class="go lbl" data-ti="Zatraži pregled →" data-vi="Zatražite pregled →">Zatraži pregled →</span></a>
       </div>
       <div class="note full">
         <p>Cijene su u eurima i konačne. PDV nije obračunat temeljem čl. 90. st. 2. Zakona o porezu na dodanu vrijednost, obrt Studio23k nije u sustavu PDV-a.</p>
+        <p>Uz svaku cijenu je i bazna cijena (sidrena cijena): cijena na 10. 9. 2026. ili, za usluge ponuđene kasnije, na dan prve ponude. Sve cijene su i u <a href="/cjenik/">cjeniku s kalkulatorom</a> i u <a href="/cjenik/cjenik.csv">CSV datoteci</a>. Bez skrivenih troškova.</p>
         <p class="dim">Rok teče od odobrenog briefa i uplate. Točan opseg i rok <span data-ti="dobiješ" data-vi="dobivate">dobiješ</span> u ponudi e-mailom. U TMBingo paketu sve ovo, osim CRM-a, ulazi u mjesečnu cijenu.</p>
         <p class="cta"><a class="btn light" href="/usluga/" data-ti="Pošalji upit" data-vi="Pošaljite upit">Pošalji upit</a></p>
       </div>
@@ -648,6 +668,8 @@ a.u:hover { color: var(--green); }
   <section class="blog grid" id="blog" aria-label="Blog">
     <div class="head"><p class="lbl" data-scramble>Blog</p><p class="lbl" data-scramble>Savjeti za male firme, obrte i turizam.</p></div>
     <ul class="posts">
+      <li><a href="/blog/sidrena-cijena-csv-cjenik/">Bazna (sidrena) cijena i CSV cjenik na webu: što obrt mora napraviti<span>Zakon · 16. 11. 2026.</span></a></li>
+      <li><a href="/blog/web-za-14-dana/">Web za 14 dana: kako izgleda svaki dan izrade<span>Web · 16. 11. 2026.</span></a></li>
       <li><a href="/blog/web-stranica-za-apartmane/">Web stranica za apartmane: kako do direktnih rezervacija<span>Web · 11. 11. 2026.</span></a></li>
       <li><a href="/blog/google-business-profile-vodic/">Kako se pojaviti na Google karti: vodič za Google Business Profile<span>SEO · 11. 11. 2026.</span></a></li>
       <li><a href="/blog/web-stranica-za-restoran/">Web stranica za restoran: što gosti traže<span>Web · 11. 11. 2026.</span></a></li>
@@ -660,6 +682,7 @@ a.u:hover { color: var(--green); }
     <p class="lbl" data-scramble>Česta pitanja</p>
     <div class="qs">
       <details><summary><span class="lbl">01</span>Razgovaram li s čovjekom ili s AI-jem?</summary><p>Upite, ponude i dogovor vodi Bingo, naš AI asistent. Uvijek se predstavi kao AI asistent, a mi ga od milja zovemo AE asistent, jer je AE u Dalmaciji odgovor na sve. Dizajn i izradu radi Tonći osobno.</p></details>
+      <details><summary><span class="lbl">07</span>Imate li cjenik s baznim cijenama?</summary><p>Da. Sve cijene, bazne cijene i rokovi su na stranici <a href="/cjenik/">Cjenik</a>, a isti cjenik je i u CSV datoteci. Ako ga trebaš i za svoj web, CSV cjenik i baznu cijenu postavljamo za 94 € u 2 radna dana.</p></details>
       <details><summary><span class="lbl">02</span>Zašto je tako povoljno?</summary><p>Administraciju, tekstove i komunikaciju radi AI, pa Tonći svaki dan dizajnira umjesto da piše mailove. Ušteda ide <span data-ti="tebi" data-vi="Vama">tebi</span>.</p></details>
       <details><summary><span class="lbl">03</span>Zašto samo 10 klijenata mjesečno?</summary><p>Jer dizajn radi čovjek. Preko 10 ne bismo stigli raditi kvalitetno. Kad su mjesta popunjena, stavljamo <span data-ti="te" data-vi="Vas">te</span> na listu za idući mjesec.</p></details>
       <details><summary><span class="lbl">04</span>Zašto komunikacija ide e-mailom?</summary><p>Zbog transparentnosti. Svaki dogovor, rok i izmjena ostaju zapisani.</p></details>
@@ -682,7 +705,7 @@ a.u:hover { color: var(--green); }
       </div>
     </div>
     <dl class="lbl c3">
-      <div><dt>Odgovor</dt><dd>Bingo, AI asistent, isti dan</dd></div>
+      <div><dt>Odgovor</dt><dd>Ponuda s cijenom i rokom u 24 h</dd></div>
       <div><dt>Dizajn i izrada</dt><dd>Tonći</dd></div>
     </dl>
     <dl class="lbl c7">
@@ -690,7 +713,7 @@ a.u:hover { color: var(--green); }
       <div class="partner"><dt>Partneri projekta</dt><dd><a href="https://zdguide.com" target="_blank" rel="noopener"><img src="assets/partner-zdr.png" alt="ZDR guide"></a></dd></div>
     </dl>
     <p class="giant" aria-hidden="true"><span>tmbingo</span></p>
-    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a</span><span class="links"><a href="/blog/">Blog</a><a href="/app/">Prijava za klijente</a><a href="uvjeti.html">Uvjeti</a><a href="privatnost.html">Privatnost</a><a href="kolacici.html">Kolačići</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
+    <div class="bottom lbl"><span>simple. unique.</span><span class="dim">Obveznik nije u sustavu PDV-a · bez skrivenih troškova</span><span class="links"><a href="/cjenik/">Cjenik</a><a href="/cjenik/cjenik.csv">Cjenik (CSV)</a><a href="/blog/">Blog</a><a href="/app/">Prijava za klijente</a><a href="uvjeti.html">Uvjeti</a><a href="privatnost.html">Privatnost</a><a href="kolacici.html">Kolačići</a><a href="#vrh">Natrag na vrh ↑</a></span></div>
   </div>
 </footer>
 

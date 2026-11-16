@@ -42,6 +42,17 @@ pa otvori http://localhost:8000.
 - `llms.txt` – sažetak za AI alate (ChatGPT, Perplexity, Claude)
 - Strukturirani podaci (JSON-LD) su u `<head>` svake stranice. **Kad mijenjaš cijene paketa, promijeni ih i tamo, u podstranicama i u `llms.txt`.**
 
+## Cjenik i bazne cijene (od 17. 11. 2026.)
+
+Propis traži baznu (sidrenu) cijenu uz svaku cijenu i CSV cjenik na webu. Sve je u jednoj datoteci:
+
+1. Promijeni cijenu u `app/cjenik.mjs` (polja `bazna` i `datum` ne diraj), u `app/paketi.mjs` ili `app/usluge.mjs` i na naslovnoj.
+2. Povećaj `VERZIJA` i upiši `VRIJEDI_OD` u `app/cjenik.mjs`.
+3. Pokreni `node cjenik/izradi.mjs`: napravi novi CSV (`cjenik/<OIB>_..._<datum>.csv` i `cjenik/cjenik.csv`), stari premjesti u `cjenik/arhiv/` i osvježi tablicu na `/cjenik/`.
+4. Commit i objava isti dan, najkasnije do 11 sati. Arhivu ne briši bar mjesec dana.
+
+Nova usluga ili paket: dodaj stavku u `app/cjenik.mjs` s današnjim datumom kao datumom bazne cijene.
+
 ## Pravne stranice
 
 - `uvjeti.html` – uvjeti poslovanja, pravo na raskid i obrazac
