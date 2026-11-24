@@ -2,6 +2,7 @@
 // Cijene i bazne cijene za /cjenik/ i CSV su u app/cjenik.mjs, pa ih kod promjene ispravi i tamo.
 // Naslovna (index.html, sekcija #cijene) ima iste podatke upisane ručno, pa ih kod promjene ispravi i tamo.
 export const USLUGE = {
+  landing: { naziv: 'Landing page', cijena: 'od 299 €', bazna: 'od 299 € (25. 11. 2026.)', jedinica: 'jednokratno', rok: '7 dana', kratko: 'Web stranica na jednoj stranici: ponuda, o tebi, galerija, recenzije i kontakt. Dizajn prvo u Figmi.', pitanje: 'Čime se baviš i što posjetitelj treba napraviti na stranici (nazvati, poslati upit, rezervirati)? Imaš li domenu, tekstove i fotografije?' },
   logo: { naziv: 'Logo', cijena: '290 €', bazna: '290 € (5. 11. 2026.)', jedinica: 'jednokratno', rok: '7 dana', kratko: 'Znak i logotip u dvije-tri varijante, s revizijama dok ne sjedne.', pitanje: 'Čime se baviš i kakav dojam logo treba ostaviti? Ako imaš primjere koji ti se sviđaju, zalijepi linkove.' },
   identitet: { naziv: 'Vizualni identitet', cijena: '690 €', bazna: '690 € (5. 11. 2026.)', jedinica: 'jednokratno', rok: '14 dana', kratko: 'Logo, boje, fontovi, pravila korištenja i predlošci za mreže.', pitanje: 'Opiši posao, kome se obraćaš i gdje će se identitet koristiti (web, tisak, mreže, vozila…).' },
   tiskovina: { naziv: 'Tiskovina', cijena: 'od 90 €', bazna: 'od 90 € (5. 11. 2026.)', jedinica: 'po dizajnu', rok: '3 dana', kratko: 'Vizitka, letak, jelovnik ili plakat, pripremljeno za tisak.', pitanje: 'Što treba (vizitka, letak, jelovnik…), u kojoj veličini i koliko stranica? Imaš li tekst i fotografije?' },

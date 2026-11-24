@@ -4,4 +4,20 @@ Allow: /
 Disallow: /app/
 Disallow: /api/
 
+# AI pretraživači i asistenti su dobrodošli (ChatGPT, Perplexity, Claude, Gemini, Copilot)
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
+Allow: /
+Disallow: /app/
+Disallow: /api/
+
 Sitemap: https://tmbingo.com/sitemap.xml

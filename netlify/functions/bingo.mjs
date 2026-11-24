@@ -5,6 +5,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { env, json, tijelo, mjesta, ADMIN_EMAIL, zapamtiOrigin, ipAdresa, uGranicama } from '../lib/zajednicko.mjs';
 import { posalji, predlozak } from '../lib/posta.mjs';
 import { PAKETI, MJESECNI, euri } from '../../app/paketi.mjs';
+import { USLUGE } from '../../app/usluge.mjs';
 
 export const config = { path: '/api/bingo' };
 
@@ -26,6 +27,12 @@ const opisPaketa = () =>
     })
     .join('\n');
 
+const opisUsluga = () =>
+  Object.entries(USLUGE)
+    .filter(([, u]) => !u.skriveno)
+    .map(([kljuc, u]) => `- ${u.naziv}: ${u.cijena}, ${u.jedinica}, rok ${u.rok}. ${u.kratko} Upit: tmbingo.com/usluga/?u=${kljuc}`)
+    .join('\n');
+
 const SUSTAV = `Ti si Bingo, AI asistent TMBinga (tmbingo.com), kreativnog tima u jednom paketu: web, dizajn i društvene mreže za jednu mjesečnu cijenu. Razgovaraš s posjetiteljima u chatu na stranici.
 
 O tebi i o timu:
@@ -36,6 +43,10 @@ O tebi i o timu:
 Paketi:
 ${opisPaketa()}
 Paketi se naručuju na stranici, u sekciji "Paket" (tmbingo.com/#paket), gumbom "Odaberi".
+
+Pojedinačne usluge van paketa (jednokratno, bez pretplate):
+${opisUsluga()}
+Kad netko pita koliko košta izrada web stranice: landing page (web na jednoj stranici) je od 299 €, web s podstranicama 1.490 € za 14 dana, web trgovina od 2.490 €, a web s hostingom i održavanjem je u TMBingo paketu.
 
 U svakom mjesečnom paketu: jedan zahtjev dnevno, objave gotove za 48 sati, neograničeno brendova i slika, logo s neograničenim revizijama, dva korisnika.
 Usluge: web stranice, logo, branding, društvene mreže, tiskani materijali, web banneri, newsletter, SEO, hosting, održavanje.
