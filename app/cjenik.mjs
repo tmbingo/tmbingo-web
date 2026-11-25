@@ -17,9 +17,9 @@ export const OBRT = {
 };
 
 // verzija CSV-a: povećaj za 1 kod svake objave novog cjenika
-export const VERZIJA = 1;
+export const VERZIJA = 2;
 // kada cjenik stupa na snagu (ide u ime datoteke, oblik GGGGMMDD_SSMM)
-export const VRIJEDI_OD = { datum: '2026-11-17', vrijeme: '08:00' };
+export const VRIJEDI_OD = { datum: '2026-11-25', vrijeme: '08:00' };
 
 export const GRUPE = {
   paketi: 'TMBingo paketi (bez obveze trajanja)',
@@ -35,6 +35,7 @@ export const STAVKE = [
   { sifra: 'TMB-PAKET-G', grupa: 'paketi', naziv: 'TMBingo paket, godišnje plaćanje', opseg: '12 mjeseci, 2 mjeseca gratis', jedinica: 'godišnje', cijena: 3990, bazna: 3990, datum: '2026-10-31' },
   { sifra: 'TMB-PRO-M', grupa: 'paketi', naziv: 'Pro paket', opseg: 'Sve iz TMBingo paketa, dva zadatka istovremeno, prednost', jedinica: 'mjesečno', cijena: 749, bazna: 749, datum: '2026-10-31' },
   { sifra: 'TMB-PRO-G', grupa: 'paketi', naziv: 'Pro paket, godišnje plaćanje', opseg: '12 mjeseci, 2 mjeseca gratis', jedinica: 'godišnje', cijena: 7490, bazna: 7490, datum: '2026-10-31' },
+  { sifra: 'TMB-LANDING', grupa: 'jednokratno', naziv: 'Landing page', opseg: 'Web stranica na jednoj stranici, do 5 sekcija, dizajn prvo u Figmi, kontakt obrazac i osnovni SEO, rok 7 dana', jedinica: 'jednokratno', od: true, cijena: 299, bazna: 299, datum: '2026-11-25' },
   { sifra: 'TMB-WEB14', grupa: 'jednokratno', naziv: 'Web za 14 dana', opseg: 'Nova web stranica, dizajn prvo u Figmi, gotovo za 14 dana', jedinica: 'jednokratno', cijena: 1490, bazna: 1490, datum: '2026-10-31' },
   { sifra: 'TMB-LOGO', grupa: 'jednokratno', naziv: 'Logo', opseg: 'Znak i logotip u dvije-tri varijante, rok 7 dana', jedinica: 'jednokratno', cijena: 290, bazna: 290, datum: '2026-11-05' },
   { sifra: 'TMB-IDENTITET', grupa: 'jednokratno', naziv: 'Vizualni identitet', opseg: 'Logo, boje, fontovi, pravila korištenja, predlošci za mreže, rok 14 dana', jedinica: 'jednokratno', cijena: 690, bazna: 690, datum: '2026-11-05' },
