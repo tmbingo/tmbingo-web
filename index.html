@@ -476,12 +476,15 @@ a.u:hover { color: var(--green); }
 .work .head { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; margin-bottom: 104px; }
 .work .head > :first-child { grid-column: 1 / span 6; }
 .work .head > :last-child { grid-column: 7 / span 3; }
-.shot { position: relative; overflow: hidden; background: #eee; aspect-ratio: 4 / 5; max-width: 100%; }
-.shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
-.shot:hover img { transform: scale(1.04); }
-.shot .lbl { position: absolute; left: 10px; bottom: 10px; background: #000; color: #fff; padding: 2px 6px; font-size: 12px; }
-.w1 { grid-column: 1 / span 4; } .w2 { grid-column: 5 / span 4; } .w3 { grid-column: 9 / span 4; }
-.w2 { background: #d9a2a3; } .w1 { background: #fff; } .w1 img { object-fit: contain; }
+.cases { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 16px; }
+.cases a { display: grid; gap: 6px; text-decoration: none; color: inherit; }
+.case-img { display: block; overflow: hidden; aspect-ratio: 4 / 3; background: #eee; margin-bottom: 8px; }
+.case-img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+.cases a:hover img { transform: scale(1.04); }
+.case-t { font: 500 20px/1.2 var(--body); }
+.case-t::after { content: " ↗"; color: var(--mid); font-size: .8em; }
+.cases a:hover .case-t { color: var(--green); }
+.cases .lbl { color: var(--mid); }
 .projects { grid-column: 7 / -1; margin-top: 64px; border-top: 1px solid var(--line); }
 .projects li { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding-block: 16px; border-bottom: 1px solid var(--line); font: 500 20px/1.2 var(--body); }
 .projects li a { text-decoration: none; }
@@ -490,7 +493,7 @@ a.u:hover { color: var(--green); }
 .projects li span { font: 400 12px/1.6 var(--tech); letter-spacing: .09em; text-transform: uppercase; color: var(--mid); }
 .clients { grid-column: 1 / span 5; margin-top: 64px; display: grid; gap: 18px; }
 .clients p { font-size: 15px; color: #444; max-width: 46ch; }
-@media (max-width: 800px) { .work .head > :first-child { grid-column: 1 / span 3; } .work .head > :last-child { grid-column: 4 / span 3; } .w1, .w2, .w3 { grid-column: span 6; } .w3 { display: none; } .projects, .clients { grid-column: 1 / -1; } }
+@media (max-width: 800px) { .work .head > :first-child { grid-column: 1 / span 3; } .work .head > :last-child { grid-column: 4 / span 3; } .cases { grid-template-columns: 1fr; gap: 32px; } .projects, .clients { grid-column: 1 / -1; } }
 
 /* FAQ */
 .faq { padding-block: 16px 140px; }
@@ -597,18 +600,22 @@ a.u:hover { color: var(--green); }
       <li data-img="3"><a href="/drustvene-mreze-zadar/">Društvene mreže</a></li>
       <li data-img="4"><a href="/tiskani-materijali-zadar/">Tiskani materijali</a></li>
       <li data-img="5"><a href="/web-banneri/">Web banneri</a></li>
-      <li data-img="1"><a href="/newsletter/">Newsletter</a></li>
-      <li data-img="0"><a href="/seo-optimizacija-zadar/">SEO</a></li>
-      <li data-img="2"><a href="/web-hosting/">Hosting</a></li>
-      <li data-img="5"><a href="/odrzavanje-web-stranica/">Održavanje</a></li>
+      <li data-img="6"><a href="/newsletter/">Newsletter</a></li>
+      <li data-img="7"><a href="/seo-optimizacija-zadar/">SEO</a></li>
+      <li data-img="8"><a href="/web-hosting/">Hosting</a></li>
+      <li data-img="9"><a href="/odrzavanje-web-stranica/">Održavanje</a></li>
     </ol>
     <div class="thumbs" id="thumbs" aria-hidden="true">
-      <img class="on" src="assets/rad-2.jpg" alt="">
-      <img src="assets/hero-4.jpg" alt="">
-      <img src="assets/rad-3.jpg" alt="">
-      <img src="assets/hero-2.jpg" alt="">
-      <img src="assets/hero-3.jpg" alt="">
-      <img src="assets/team-3.jpg" alt="">
+      <img class="on" src="assets/usluge/web.jpg" alt="" width="800" height="800">
+      <img src="assets/usluge/logo.jpg" alt="" width="800" height="800" loading="lazy">
+      <img src="assets/usluge/branding.jpg" alt="" width="800" height="800" loading="lazy">
+      <img src="assets/usluge/mreze.jpg" alt="" width="800" height="800" loading="lazy">
+      <img src="assets/usluge/tisak.jpg" alt="" width="800" height="800" loading="lazy">
+      <img src="assets/usluge/banneri.jpg" alt="" width="800" height="800" loading="lazy">
+      <img src="assets/usluge/newsletter.jpg" alt="" width="800" height="800" loading="lazy">
+      <img src="assets/usluge/seo.jpg" alt="" width="800" height="800" loading="lazy">
+      <img src="assets/usluge/hosting.jpg" alt="" width="800" height="800" loading="lazy">
+      <img src="assets/usluge/odrzavanje.jpg" alt="" width="800" height="800" loading="lazy">
     </div>
   </section>
 
@@ -684,15 +691,22 @@ a.u:hover { color: var(--green); }
 
   <section class="work grid" id="radovi">
     <div class="head"><p class="lbl" data-scramble>Radovi</p><p class="lbl" data-scramble>Izdvojeni projekti</p></div>
-    <div class="shot w1"><img src="assets/rad-1.jpg" alt="Mobilna web stranica"><span class="lbl">Web</span></div>
-    <div class="shot w2"><img src="assets/rad-2.jpg" alt="Web trgovina na laptopu"><span class="lbl">Web trgovina</span></div>
-    <div class="shot w3"><img src="assets/rad-3.jpg" alt="Stranice web trgovine obuće"><span class="lbl">E-commerce</span></div>
+    <ul class="cases">
+      <li><a href="https://frida-zadar.hr/" target="_blank" rel="noopener"><span class="case-img"><img src="assets/radovi/frida.jpg" alt="Web stranica Frida na laptopu i mobitelu" width="1200" height="900" loading="lazy"></span><span class="case-t">Frida</span><span class="lbl">Web · upravljanje zgradama</span></a></li>
+      <li><a href="https://antuntun-zadar.com/" target="_blank" rel="noopener"><span class="case-img"><img src="assets/radovi/antuntun.jpg" alt="Web stranica Antuntun na laptopu i mobitelu" width="1200" height="900" loading="lazy"></span><span class="case-t">Antuntun</span><span class="lbl">Identitet · Web</span></a></li>
+      <li><a href="https://dalmaticamobility.com/" target="_blank" rel="noopener"><span class="case-img"><img src="assets/radovi/dalmatica.jpg" alt="Web stranica Dalmatica Mobility na laptopu i mobitelu" width="1200" height="900" loading="lazy"></span><span class="case-t">Dalmatica Mobility</span><span class="lbl">Web · selidbe</span></a></li>
+      <li><a href="https://protexzadar.hr/" target="_blank" rel="noopener"><span class="case-img"><img src="assets/radovi/protex.jpg" alt="Web stranica Protex na laptopu i mobitelu" width="1200" height="900" loading="lazy"></span><span class="case-t">Protex</span><span class="lbl">Web · videonadzor</span></a></li>
+      <li><a href="https://l-design.hr/en/" target="_blank" rel="noopener"><span class="case-img"><img src="assets/radovi/ldesign.jpg" alt="Web stranica L-Design na laptopu i mobitelu" width="1200" height="900" loading="lazy"></span><span class="case-t">L-Design</span><span class="lbl">Web · tapeciranje i nautika</span></a></li>
+      <li><a href="https://focx.store/" target="_blank" rel="noopener"><span class="case-img"><img src="assets/radovi/focx.jpg" alt="Web stranica Focx na laptopu i mobitelu" width="1200" height="900" loading="lazy"></span><span class="case-t">Focx</span><span class="lbl">Web trgovina</span></a></li>
+      <li><a href="https://goveer.com/" target="_blank" rel="noopener"><span class="case-img"><img src="assets/radovi/goveer.jpg" alt="Web stranica Goveer na laptopu i mobitelu" width="1200" height="900" loading="lazy"></span><span class="case-t">Goveer</span><span class="lbl">Web trgovina</span></a></li>
+      <li><a href="https://dizajnpro.net/" target="_blank" rel="noopener"><span class="case-img"><img src="assets/radovi/dizajnpro.jpg" alt="Web stranica DizajnPro na laptopu i mobitelu" width="1200" height="900" loading="lazy"></span><span class="case-t">DizajnPro</span><span class="lbl">Web trgovina</span></a></li>
+    </ul>
     <div class="clients">
       <p class="lbl dim">Klijenti</p>
-      <p>Riva Rafting Centar, Zrmanja Adventures, Mićanovi Dvori, DizajnPro, LanaMar, ZadarSub, Goveer, Focx, Skroće, Malta, Lastavica, Protex, SolHome, L-Design, Dalmatica Mobility, Calimero Sport, Rildo, Marco Polo's, Manhatta.</p>
+      <p>Frida, Antuntun, Riva Rafting Centar, Zrmanja Adventures, Mićanovi Dvori, DizajnPro, LanaMar, ZadarSub, Goveer, Focx, Skroće, Malta, Lastavica, Protex, SolHome, L-Design, Dalmatica Mobility, Calimero Sport, Rildo, Marco Polo's, Manhatta.</p>
     </div>
     <ul class="projects">
-      <li>Antuntun<span>Identitet · Web</span></li>
+      <li><a href="https://antuntun-zadar.com/" target="_blank" rel="noopener">Antuntun</a><span>Identitet · Web</span></li>
       <li><a href="https://zdguide.com" target="_blank" rel="noopener">Zadar Region Guide</a><span>Identitet · Web</span></li>
       <li>Mile<span>Identitet</span></li>
       <li>TST Group<span>Identitet</span></li>
