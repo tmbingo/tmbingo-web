@@ -19,9 +19,6 @@
 .rok { border-top: 1px solid var(--line); padding-top: 12px; }
 .rok .dim { color: var(--mid); margin-right: 8px; }
 .plan .rokk { color: var(--mid); font-size: 12px; }
-.next { counter-reset: n; display: grid; gap: 0; margin-top: 32px; max-width: 760px; }
-.next li { counter-increment: n; display: grid; grid-template-columns: 48px 1fr; border-top: 1px solid var(--line); padding: 14px 0; }
-.next li::before { content: "0" counter(n); font: 400 13px/1.6 var(--tech); color: var(--mid); }
 @media (max-width: 900px) { .order { grid-template-columns: 1fr; gap: 40px; } .sum { position: static; } }
 @media (max-width: 560px) { .plan .kratko { display: none; } .plan.on .kratko { display: block; } }
 </style>
@@ -66,16 +63,6 @@
   </div>
   </div>
 
-  <section id="done" hidden>
-    <p class="lbl ok" style="margin-bottom:16px">Upit je poslan</p>
-    <p class="lbl" id="doneNaziv" style="margin-bottom:12px"></p>
-    <ol class="next">
-      <li><span>Pregledamo tvoje zahtjeve. Potvrdu upita smo ti poslali i na e-mail.</span></li>
-      <li><span>U roku 24 sata (radnim danom) šaljemo ponudu s točnim opsegom, cijenom i rokom.</span></li>
-      <li><span>Kad ponudu prihvatiš, prvi prijedlog dobiješ u Figmi.</span></li>
-    </ol>
-    <p style="margin-top:32px"><a class="btn ghost" href="/">Natrag na naslovnu</a></p>
-  </section>
 </main>
 
 <script src="/app/config.js"></script>
@@ -127,11 +114,9 @@ f.onsubmit = async function (ev) {
     var r = await fetch('/api/upit', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d) });
     var j = await r.json().catch(function () { return {}; });
     if (!r.ok) throw new Error(j.greska || 'Upit nije poslan. Pokušaj ponovno ili piši na info@tmbingo.com.');
-    document.getElementById('doneNaziv').textContent = j.naziv || USLUGE[usluga].naziv;
-    document.getElementById('order').hidden = true;
-    document.getElementById('done').hidden = false;
-    document.getElementById('naslov').textContent = 'Hvala, upit je stigao';
-    window.scrollTo(0, 0);
+    // Stranica potvrde /hvala/ (URL za konverziju u kampanjama).
+    try { sessionStorage.setItem('tmb-hvala', JSON.stringify({ vrsta: 'upit', naziv: j.naziv || USLUGE[usluga].naziv })); } catch (x) {}
+    location.replace('/hvala/?vrsta=upit');
   } catch (err) {
     captcha.reset(); e.textContent = err.message; e.hidden = false; b.disabled = false; b.textContent = 'Pošalji upit';
   }

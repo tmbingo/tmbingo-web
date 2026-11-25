@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hvala · TMBingo</title>
+<!-- Stranica potvrde za kampanje (konverzija). Dolazi se samo nakon poslane narudžbe (/paket/) ili upita (/usluga/).
+     Ne indeksira se, nije u sitemap.xml ni u izborniku. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/app/app.css">
+<style>
+.next { counter-reset: n; display: grid; gap: 0; margin-top: 32px; max-width: 760px; }
+.next li { counter-increment: n; display: grid; grid-template-columns: 48px 1fr; border-top: 1px solid var(--line); padding: 14px 0; }
+.next li::before { content: "0" counter(n); font: 400 13px/1.6 var(--tech); color: var(--mid); }
+.uvod { max-width: 52ch; margin: 0 0 8px; }
+.links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap in"><a class="logo" href="/"><img src="/assets/logo-light.png" alt="TMBingo" width="63" height="20"></a><nav class="lbl" aria-label="Izbornik"><a href="/">Naslovna</a><a href="/cjenik/">Cjenik</a></nav><div class="me lbl"><a href="/app/" style="text-decoration:none">Prijava</a></div></div></header>
+
+<main class="wrap" id="vrh">
+  <div class="head"><p class="lbl dim" id="oznaka">TMBingo</p><h1 id="naslov">Hvala, javljamo se uskoro</h1></div>
+
+  <!-- Narudžba paketa: podaci za uplatu -->
+  <section id="paket" hidden>
+    <p class="lbl ok" style="margin-bottom:16px">Narudžba je zaprimljena</p>
+    <div id="slip"></div>
+    <ol class="next">
+      <li><span>Uplati iznos skeniranjem barkoda ili QR koda, ili ručno prema podacima iznad. Iste podatke smo ti poslali i na e-mail.</span></li>
+      <li><span>Čim uplata stigne, potvrdimo je i pošaljemo ti link za prijavu u TMBingo CRM.</span></li>
+      <li><span>Dodaš prvi zadatak, a mi ti se javljamo istog dana.</span></li>
+    </ol>
+  </section>
+
+  <!-- Upit za uslugu ili ponudu -->
+  <section id="upit" hidden>
+    <p class="lbl ok" style="margin-bottom:16px">Upit je poslan</p>
+    <p class="lbl" id="upitNaziv" style="margin-bottom:12px"></p>
+    <ol class="next">
+      <li><span>Pregledamo tvoje zahtjeve. Potvrdu upita smo ti poslali i na e-mail.</span></li>
+      <li><span>U roku 24 sata (radnim danom) šaljemo ponudu s točnim opsegom, cijenom i rokom.</span></li>
+      <li><span>Kad ponudu prihvatiš, prvi prijedlog dobiješ u Figmi.</span></li>
+    </ol>
+  </section>
+
+  <!-- Otvoreno bez podataka (npr. ponovno učitano kasnije) -->
+  <section id="opce">
+    <p class="uvod">Tvoja poruka je stigla do nas. Potvrdu smo ti poslali na e-mail, a javljamo ti se u roku 24 sata, radnim danom. Ako ne vidiš naš e-mail, pogledaj i mapu neželjene pošte ili piši na <a href="mailto:info@tmbingo.com">info@tmbingo.com</a>.</p>
+  </section>
+
+  <div class="links"><a class="btn ghost" href="/">Natrag na naslovnu</a><a class="btn ghost" href="/blog/">Čitaj blog</a></div>
+</main>
+
+<script src="/app/uplata.js"></script>
+<script>
+(function () {
+  // /paket/ i /usluga/ nakon uspješnog slanja spreme odgovor u sessionStorage i preusmjere ovamo.
+  var d = null;
+  try { d = JSON.parse(sessionStorage.getItem('tmb-hvala') || 'null'); } catch (e) {}
+  if (!d) return;
+  var $ = function (id) { return document.getElementById(id); };
+  if (d.vrsta === 'paket' && d.uplata) {
+    $('oznaka').textContent = 'TMBingo paketi';
+    $('naslov').textContent = 'Hvala, još samo uplata';
+    $('slip').innerHTML = '<p class="lbl" style="margin-bottom:12px"></p>' + window.TMB_UPLATA(d.uplata);
+    $('slip').firstChild.textContent = d.naziv || '';
+    $('paket').hidden = false; $('opce').hidden = true;
+  } else if (d.vrsta === 'upit') {
+    $('oznaka').textContent = 'Usluge van paketa';
+    $('naslov').textContent = 'Hvala, upit je stigao';
+    $('upitNaziv').textContent = d.naziv || '';
+    $('upit').hidden = false; $('opce').hidden = true;
+  }
+})();
+</script>
+</body>
+</html>

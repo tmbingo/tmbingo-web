@@ -32,3 +32,10 @@
     Content-Type = "text/csv; charset=utf-8"
     Cache-Control = "public, max-age=300"
     Access-Control-Allow-Origin = "*"
+
+# Stranica potvrde za kampanje (konverzija): ne indeksira se i ne kešira (podaci za uplatu)
+[[headers]]
+  for = "/hvala/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
