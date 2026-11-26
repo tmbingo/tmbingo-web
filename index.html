@@ -264,6 +264,14 @@
      "@type": "Answer",
      "text": "Da. Sve cijene, bazne cijene i rokovi su na stranici Cjenik (tmbingo.com/cjenik/), a isti cjenik je i u CSV datoteci. Ako ga trebaš i za svoj web, CSV cjenik i baznu cijenu postavljamo za 94 € u 2 radna dana."
     }
+   },
+   {
+    "@type": "Question",
+    "name": "Što ako mi treba veći projekt?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "TMBingo je paket za male firme studija Studio23k. Za veće projekte po mjeri, poput web platformi, aplikacija, većih trgovina ili novog brenda, isti tim radi kroz Studio23k (studio23k.eu), s ponudom za svaki projekt."
+    }
    }
   ]
  }
@@ -331,7 +339,8 @@ html.no-pre .pre { display: none; }
 /* Header */
 .top { position: absolute; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 20; color: var(--white); padding-top: 16px; }
 .top nav ul { display: grid; gap: 2px; }
-.top nav a:hover, .menu a:hover { color: var(--green); }
+.top nav a:hover, .menu a:hover, .top .by:hover { color: var(--green); }
+.top .by { border-bottom: 1px solid currentColor; }
 .burger { justify-self: end; width: 22px; height: 14px; display: grid; align-content: space-between; background: none; border: 0; padding: 0; cursor: pointer; color: inherit; }
 .burger i { display: block; height: 1.5px; background: currentColor; }
 .chip {
@@ -543,7 +552,7 @@ a.u:hover { color: var(--green); }
 <body>
 
 <div class="pre" id="pre" aria-hidden="true">
-  <div class="row lbl"><span data-type>TMBingo</span><span data-type>Kreativni tim</span></div>
+  <div class="row lbl"><span data-type>TMBingo</span><span data-type>by Studio23k</span></div>
   <div class="mask"><img src="assets/logo-light.png" alt=""></div>
 </div>
 
@@ -567,7 +576,7 @@ a.u:hover { color: var(--green); }
   </div>
   <div class="top grid">
     <a class="lbl c1" href="#vrh">TMBingo</a>
-    <span class="lbl c3">Kreativni tim</span>
+    <span class="lbl c3">Kreativni tim · <a class="by" href="https://studio23k.eu" target="_blank" rel="noopener">by Studio23k</a></span>
     <nav class="lbl c7" aria-label="Glavna navigacija"><ul><li><a href="#usluge">Usluge</a></li><li><a href="#paket">Paket</a></li><li><a href="/cjenik/">Cjenik</a></li><li><a href="#radovi">Radovi</a></li><li><a href="#pitanja">Pitanja</a></li><li><a href="/blog/">Blog</a></li><li><a href="#kontakt">Kontakt</a></li></ul></nav>
     <button class="burger c11 open-menu" type="button" aria-label="Otvori izbornik"><i></i><i></i></button>
   </div>
@@ -738,6 +747,7 @@ a.u:hover { color: var(--green); }
       <details><summary><span class="lbl">04</span>Zašto komunikacija ide e-mailom?</summary><p>Zbog transparentnosti. Svaki dogovor, rok i izmjena ostaju zapisani.</p></details>
       <details><summary><span class="lbl">05</span>Mogu li pauzirati ili otkazati?</summary><p>Da, u bilo kojem trenutku i bez penala. Nema dugoročnog ugovora ni minimalnog trajanja, otkaz vrijedi od idućeg mjeseca. Detalji su u <a href="uvjeti.html">uvjetima poslovanja</a>.</p></details>
       <details><summary><span class="lbl">06</span>Radite li izradu web stranica samo za Zadar?</summary><p>Sjedište nam je u Zadru i najviše radimo za firme iz Zadra i okolice, ali radimo i za klijente iz cijele Hrvatske, jer se sve dogovara e-mailom i video pozivom. Više o tome na stranici <a href="/izrada-web-stranica-zadar/">izrada web stranica u Zadru</a>.</p></details>
+      <details><summary><span class="lbl">09</span>Što ako mi treba veći projekt?</summary><p>TMBingo je paket za male firme studija Studio23k. Za veće projekte po mjeri, poput web platformi, aplikacija, većih trgovina ili novog brenda, isti tim radi kroz <a href="https://studio23k.eu" target="_blank" rel="noopener">Studio23k</a>, s ponudom za svaki projekt.</p></details>
     </div>
   </section>
 </main>
@@ -759,7 +769,7 @@ a.u:hover { color: var(--green); }
       <div><dt>Dizajn i izrada</dt><dd>Tonći</dd></div>
     </dl>
     <dl class="lbl c7">
-      <div><dt>Made by</dt><dd><a href="https://studio23k.eu" target="_blank" rel="noopener">Studio23k</a></dd></div>
+      <div><dt>TMBingo by Studio23k</dt><dd><a href="https://studio23k.eu" target="_blank" rel="noopener">Veći projekti: studio23k.eu ↗</a></dd></div>
       <div class="partner"><dt>Partneri projekta</dt><dd><a href="https://zdguide.com" target="_blank" rel="noopener"><img src="assets/partner-zdr.png" alt="ZDR guide"></a></dd></div>
     </dl>
     <p class="giant" aria-hidden="true"><span>tmbingo</span></p>
